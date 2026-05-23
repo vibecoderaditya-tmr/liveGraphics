@@ -315,7 +315,7 @@
 
   <div class="header">
     <div class="header-tag">TMR Esports // Map Control</div>
-    <h1>Map <span>Rand</span></h1>
+    <h1>Map <span>Randomizer</span></h1>
     <div class="header-line"></div>
   </div>
 
@@ -423,7 +423,7 @@
     // Clear previous state in Firebase
     statusRef.set('offline');
     commandRef.set('idle');
-    window.open('randomizer.html', '_blank');
+    window.open('randomMap.html', '_blank');
     document.getElementById('btnHint').textContent = 'Waiting for randomizer to load...';
     document.getElementById('startBtn').disabled = true;
     document.getElementById('startBtn').classList.remove('ready');
