@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Map Overview</title>
+	<link rel="icon" type="image/x-icon" href="icon.ico">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        /* ── Logo ── */
+        --logo-size: 200px;
+        /* increase to make team logo bigger, decrease to shrink it */
+
+        /* ── Overlay (shown on BOOYAH boxes) ── */
+        --overlay-color: rgba(0, 0, 0, 0.5);
+        /* increase alpha (0.5 → 0.8) to make overlay darker on winner boxes */
+        --map-blur: 3px;
+        /* blur on map image when team has won — increase for stronger blur, 0px to disable */
+
+        /* ── Bottom gradient (always shown on every box) ── */
+        --bottom-gradient: linear-gradient(
+          to top,
+          rgba(0, 0, 0, 0.75) 0%,
+          rgba(0, 0, 0, 0) 55%
+        );
+        /* first rgba alpha = how dark the bottom is (0.75 = dark, 0 = invisible) */
+        /* 55% = how far up the gradient reaches — increase to cover more of the box */
+
+        /* ── Ribbon (BOOYAH / UPCOMING) — top left of each box ── */
+        --ribbon-bg-booyah: #000000e1;
+        --ribbon-bg-upcoming: #000000;
+        --ribbon-width: fit-content;
+        /* auto-sizes to text — set a fixed px value to lock width */
+        --ribbon-height: 55px;
+        --ribbon-padding-x: 24px;
+        /* horizontal padding inside ribbon — increase for more space around text */
+        --ribbon-skew: 10%;
+        --ribbon-top: 0px;
+        --ribbon-left: 0px;
+        --label-font-family: Arial, sans-serif;
+        --label-font-size: 23px;
+        --label-font-weight: 900;
+        --label-letter-spacing: 2px;
+        --label-color-booyah: #ffd700;
+        --label-color-upcoming: #ffffff;
+        --label-text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+
+        /* ── Game Badge — top right of each box ── */
+        --badge-font-family: Arial, sans-serif;
+        --badge-font-size: 20px;
+        --badge-font-weight: 800;
+        --badge-letter-spacing: 1.5px;
+        --badge-color: #ffffff;
+        --badge-bg: #333333;
+        --badge-bg-image: none;
+        --badge-width: 120px;
+        --badge-height: 44px;
+        --badge-skew: 12%;
+        --badge-top: 0px;
+        --badge-right: 0px;
+
+        /* ── Map Label — bottom right of each box ── */
+        --map-label-font-family: Arial, sans-serif;
+        --map-label-font-size: 23px;
+        --map-label-font-weight: 700;
+        --map-label-letter-spacing: 2px;
+        --map-label-color: #ffffff;
+        --map-label-bg: #7b2fbe;
+        --map-label-bg-image: none;
+        --map-label-width: 190px;
+        --map-label-height: 44px;
+        --map-label-skew: 7%;
+        --map-label-right: 0px;
+        --map-label-bottom: 0px;
+
+        /* ── Box ── */
+        --box-height: 155px;
+        --box-bg: #222;
+        --box-border-radius: 6px;
+
+        /* ── Layout ── */
+        --grid-gap: 20px;
+        --grid-padding: 16px;
+        --grid-width: 25%;
+
+        /* ── Animation timing ── */
+        --slide-duration: 0.5s;
+        /* how long each box takes to slide in or out */
+        --slide-stagger: 0.15s;
+        /* delay between each box sliding in/out one by one */
+        --stay-duration: 15s;
+        /* how long boxes stay fully visible on screen */
+        --hide-duration: 15s;
+        /* how long boxes stay hidden off-screen before next cycle */
+      }
+
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+      }
+
+      .main {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: var(--grid-gap);
+        padding: var(--grid-padding);
+        width: var(--grid-width);
+        border-radius: 8px;
+      }
+
+      .box {
+        position: relative;
+        width: 100%;
+        height: var(--box-height);
+        overflow: visible;
+        clip-path: inset(0px);
+        border-radius: var(--box-border-radius);
+        background: var(--box-bg);
+        /* start off-screen to the left */
+        transform: translateX(-120%);
+      }
+
+      .box img.map-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+        border-radius: var(--box-border-radius);
+        transition: filter 0.4s ease;
+      }
+      .box.has-tag img.map-img {
+        filter: blur(var(--map-blur));
+      }
+
+      /* Dark overlay — only on BOOYAH boxes */
+      .box .overlay {
+        position: absolute;
+        inset: 0;
+        background: var(--overlay-color);
+        display: none;
+        z-index: 1;
+        border-radius: var(--box-border-radius);
+      }
+      .box.has-tag .overlay {
+        display: block;
+      }
+
+      /* Bottom gradient — always on every box */
+      .box .bottom-grad {
+        position: absolute;
+        inset: 0;
+        background: var(--bottom-gradient);
+        z-index: 2;
+        pointer-events: none;
+        border-radius: var(--box-border-radius);
+      }
+
+      /* ── Team logo ── */
+      .team-logo {
+        position: absolute;
+        top: -20px;
+        left: 14px;
+        width: var(--logo-size);
+        height: var(--logo-size);
+        object-fit: contain;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7));
+        display: none;
+        z-index: 3;
+      }
+      .team-logo.visible {
+        display: block;
+      }
+
+      /* ── BOOYAH / UPCOMING ribbon — top left ── */
+      .box .status-label {
+        position: absolute;
+        top: var(--ribbon-top);
+        left: var(--ribbon-left);
+        width: var(--ribbon-width);
+        height: var(--ribbon-height);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 var(--ribbon-padding-x);
+        /* padding-x adds breathing room — ribbon grows with text automatically */
+        font-family: var(--label-font-family);
+        font-size: var(--label-font-size);
+        font-weight: var(--label-font-weight);
+        letter-spacing: var(--label-letter-spacing);
+        text-shadow: var(--label-text-shadow);
+        white-space: nowrap;
+        clip-path: polygon(
+          0% 0%,
+          100% 0%,
+          calc(100% - var(--ribbon-skew)) 100%,
+          0% 100%
+        );
+        z-index: 6;
+      }
+      .box.has-tag .status-label {
+        color: var(--label-color-booyah);
+        background: var(--ribbon-bg-booyah);
+      }
+      .box:not(.has-tag) .status-label {
+        color: var(--label-color-upcoming);
+        background: var(--ribbon-bg-upcoming);
+      }
+      .box .status-label:empty {
+        display: none;
+      }
+      .box.has-tag .status-label {
+        display: none;
+      }
+
+      /* ── GAME N badge — top right ── */
+      .box .game-badge {
+        position: absolute;
+        top: var(--badge-top);
+        right: var(--badge-right);
+        width: var(--badge-width);
+        height: var(--badge-height);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--badge-font-family);
+        font-size: var(--badge-font-size);
+        font-weight: var(--badge-font-weight);
+        letter-spacing: var(--badge-letter-spacing);
+        color: var(--badge-color);
+        background-color: var(--badge-bg);
+        background-image: var(--badge-bg-image);
+        background-size: 100% 100%;
+        background-position: center;
+        white-space: nowrap;
+        clip-path: polygon(
+          14% 10%,
+          93% 5%,
+          98% 91%,
+          -21% 99%
+        );
+        z-index: 6;
+        /* z-index 6 = above overlay (1), gradient (2), logo (3), and ribbon (6) */
+      }
+
+      /* ── Map label — bottom right ── */
+      .box span.map-label {
+        position: absolute;
+        bottom: var(--map-label-bottom);
+        right: var(--map-label-right);
+        width: var(--map-label-width);
+        height: var(--map-label-height);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--map-label-font-family);
+        font-size: var(--map-label-font-size);
+        font-weight: var(--map-label-font-weight);
+        letter-spacing: var(--map-label-letter-spacing);
+        color: var(--map-label-color);
+        background-color: var(--map-label-bg);
+        background-image: var(--map-label-bg-image);
+        background-size: 100% 100%;
+        background-position: center;
+        white-space: nowrap;
+        clip-path: polygon(
+          15% -20%,
+          90% -15%,
+          95% 90%,
+          -10% 120%
+        );
+        z-index: 6;
+      }
+
+      /* ── DEBUG PANEL ── */
+      #debug {
+        position: fixed;
+        top: 10px;
+        right: 10px;
+        width: 420px;
+        background: rgba(0, 0, 0, 0.85);
+        color: #0f0;
+        font: 13px/1.5 monospace;
+        padding: 12px 16px;
+        border-radius: 8px;
+        z-index: 999;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+      #debug .err  { color: #f66; }
+      #debug .warn { color: #fa0; }
+      #debug .ok   { color: #0f0; }
+      #debug h3 { color: #fff; margin-bottom: 6px; font-size: 14px; }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+
+      <div class="box" id="box1">
+        <img class="map-img" src="maps/bermuda.webp" alt="" />
+        <div class="overlay"></div>
+        <div class="bottom-grad"></div>
+        <div class="status-label" id="label1"></div>
+        <span class="game-badge">GAME 1</span>
+        <img class="team-logo" id="logo1" src="" alt="" />
+        <span class="map-label match1">BERMUDA</span>
+      </div>
+
+      <div class="box" id="box2">
+        <img class="map-img" src="maps/purgatory.webp" alt="" />
+        <div class="overlay"></div>
+        <div class="bottom-grad"></div>
+        <div class="status-label" id="label2"></div>
+        <span class="game-badge">GAME 2</span>
+        <img class="team-logo" id="logo2" src="" alt="" />
+        <span class="map-label match2">PURGATORY</span>
+      </div>
+
+      <div class="box" id="box3">
+        <img class="map-img" src="maps/kalahari.webp" alt="" />
+        <div class="overlay"></div>
+        <div class="bottom-grad"></div>
+        <div class="status-label" id="label3"></div>
+        <span class="game-badge">GAME 3</span>
+        <img class="team-logo" id="logo3" src="" alt="" />
+        <span class="map-label match3">KALAHARI</span>
+      </div>
+
+      <div class="box" id="box4">
+        <img class="map-img" src="maps/nexterra.webp" alt="" />
+        <div class="overlay"></div>
+        <div class="bottom-grad"></div>
+        <div class="status-label" id="label4"></div>
+        <span class="game-badge">GAME 4</span>
+        <img class="team-logo" id="logo4" src="" alt="" />
+        <span class="map-label match4">NEXTERRA</span>
+      </div>
+
+      <div class="box" id="box5">
+        <img class="map-img" src="maps/solara.webp" alt="" />
+        <div class="overlay"></div>
+        <div class="bottom-grad"></div>
+        <div class="status-label" id="label5"></div>
+        <span class="game-badge">GAME 5</span>
+        <img class="team-logo" id="logo5" src="" alt="" />
+        <span class="map-label match5">SOLARA</span>
+      </div>
+
+      <div class="box" id="box6">
+        <img class="map-img" src="maps/random.webp" alt="" />
+        <div class="overlay"></div>
+        <div class="bottom-grad"></div>
+        <div class="status-label" id="label6"></div>
+        <span class="game-badge">GAME 6</span>
+        <img class="team-logo" id="logo6" src="" alt="" />
+        <span class="map-label match6">RANDOM</span>
+      </div>
+
+    </div>
+
+    <div id="debug">
+      <h3>🔍 DEBUG</h3>
+      <span id="debug-body">Waiting for first fetch…</span>
+    </div>
+
+    <script>
+      // ─── Random map for box 6 — picked once on load, fixed until page reload ───
+      const FIXED_MAPS = [
+        { name: "BERMUDA",   img: "maps/bermuda.webp"   },
+        { name: "PURGATORY", img: "maps/purgatory.webp" },
+        { name: "KALAHARI",  img: "maps/kalahari.webp"  },
+        { name: "NEXTERRA",  img: "maps/nexterra.webp"  },
+        { name: "SOLARA",    img: "maps/solara.webp"    },
+        // random.webp intentionally excluded
+      ];
+      const RANDOM_MAP = FIXED_MAPS[Math.floor(Math.random() * FIXED_MAPS.length)];
+      // fixed for this session — changes only on page reload
+
+      // ─── Animation config — reads from CSS :root vars ───────────────────────
+      const style       = getComputedStyle(document.documentElement);
+      const parseSec    = v => parseFloat(v.trim().replace('s','')) * 1000;
+      const SLIDE_DUR   = parseSec(style.getPropertyValue('--slide-duration'));   // per box slide time
+      const STAGGER     = parseSec(style.getPropertyValue('--slide-stagger'));    // delay between boxes
+      const STAY_DUR    = parseSec(style.getPropertyValue('--stay-duration'));    // visible time
+      const HIDE_DUR    = parseSec(style.getPropertyValue('--hide-duration'));    // hidden time
+
+      const NUM_BOXES   = 6;
+      const allBoxes    = Array.from({ length: NUM_BOXES }, (_, i) => document.getElementById(`box${i + 1}`));
+
+      // Slide a single box in (translateX 0) or out (translateX -120%)
+      function slideBox(box, inOrOut, delay) {
+        setTimeout(() => {
+          box.style.transition = `transform ${SLIDE_DUR}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+          box.style.transform  = inOrOut === 'in' ? 'translateX(0%)' : 'translateX(-120%)';
+        }, delay);
+      }
+
+      // Slide all boxes IN — box 1 first, box 6 last
+      function slideAllIn() {
+        allBoxes.forEach((box, i) => {
+          slideBox(box, 'in', i * STAGGER);
+        });
+      }
+
+      // Slide all boxes OUT — box 6 first, box 1 last (reverse order)
+      function slideAllOut() {
+        allBoxes.forEach((box, i) => {
+          const reverseIndex = NUM_BOXES - 1 - i;
+          slideBox(allBoxes[reverseIndex], 'out', i * STAGGER);
+        });
+      }
+
+      // Full cycle: slide in → stay → slide out → hide → repeat
+      function runCycle() {
+        // 1. Slide all boxes in one by one
+        slideAllIn();
+
+        // 2. After all boxes are in + stay duration, start sliding out
+        const allInTime  = NUM_BOXES * STAGGER + SLIDE_DUR;
+        const slideOutAt = allInTime + STAY_DUR;
+
+        setTimeout(() => {
+          slideAllOut();
+        }, slideOutAt);
+
+        // 3. After all boxes are out + hide duration, repeat
+        const allOutTime = slideOutAt + NUM_BOXES * STAGGER + SLIDE_DUR;
+        const nextCycle  = allOutTime + HIDE_DUR;
+
+        setTimeout(() => {
+          runCycle();
+        }, nextCycle);
+      }
+
+      // ─── Firebase fetch ──────────────────────────────────────────────────────
+      // Animation starts only after first fetch completes — so boxes are
+      // already populated with correct state before they slide in
+      const WEB_APP_URL  = "https://script.google.com/macros/s/AKfycbz1JmA3BlqI4xqFll5FZHCVY-iPQDO5OU6DH0gRYPTqd8bqMa_TWz5Gzw3lvVYALcXtlA/exec";
+      const POLL_INTERVAL = 3000;
+      const LOGO_FOLDER   = "logos";
+      const LOGO_EXT      = ".webp";
+
+      const showDebug = !location.search.includes("nodebug");
+      if (!showDebug) document.getElementById("debug").style.display = "none";
+
+      const logos  = Array.from({ length: NUM_BOXES }, (_, i) => document.getElementById(`logo${i + 1}`));
+      const boxes  = allBoxes;
+      const labels = Array.from({ length: NUM_BOXES }, (_, i) => document.getElementById(`label${i + 1}`));
+
+      const dbEl = document.getElementById("debug-body");
+      let lastLog = "";
+
+      function log(lines) {
+        const text = lines.join("\n");
+        if (text === lastLog) return;
+        lastLog = text;
+        dbEl.innerHTML = lines.map((l) => {
+          if (l.startsWith("❌")) return `<span class="err">${l}</span>`;
+          if (l.startsWith("⚠️")) return `<span class="warn">${l}</span>`;
+          if (l.startsWith("✅")) return `<span class="ok">${l}</span>`;
+          return l;
+        }).join("\n");
+      }
+
+      function applyLogo(logoEl, boxEl, labelEl, tag, logLines, idx) {
+        if (tag) {
+          boxEl.classList.add("has-tag");
+          labelEl.innerHTML = `<span class="upcoming-text">BOOYAH</span>`;
+
+          const path = `${LOGO_FOLDER}/${tag}${LOGO_EXT}`;
+          logLines.push(`[${idx + 1}] tag="${tag}" → ${path}`);
+
+          if (logoEl.getAttribute("data-tag") !== tag) {
+            logoEl.setAttribute("data-tag", tag);
+            logoEl.src = path;
+          }
+
+          logoEl.onerror = () => {
+            logoEl.classList.remove("visible");
+            log([...logLines, `❌ [${idx + 1}] Image load FAILED: ${path}`]);
+          };
+          logoEl.onload = () => {
+            logoEl.classList.add("visible");
+            log([...logLines, `✅ [${idx + 1}] Image loaded OK: ${path}`]);
+          };
+
+          if (logoEl.complete && logoEl.naturalWidth > 0) {
+            logoEl.classList.add("visible");
+          }
+        } else {
+          logLines.push(`[${idx + 1}] tag="" — no logo`);
+          boxEl.classList.remove("has-tag");
+          labelEl.innerHTML = `<span class="upcoming-text">UPCOMING</span>`;
+          logoEl.src = "";
+          logoEl.setAttribute("data-tag", "");
+          logoEl.classList.remove("visible");
+        }
+      }
+
+      async function fetchAndUpdate(firstFetch = false) {
+        const logLines = [`⏱ ${new Date().toLocaleTimeString()} — fetching…`];
+        log(logLines);
+
+        try {
+          const url = `${WEB_APP_URL}?_cb=${Date.now()}`;
+          logLines.push(`URL: ${url.slice(0, 80)}…`);
+
+          const res = await fetch(url);
+          logLines.push(`HTTP status: ${res.status}`);
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+          const text = await res.text();
+          logLines.push(`Raw response (first 200):\n${text.slice(0, 200)}`);
+
+          let data;
+          try { data = JSON.parse(text); }
+          catch (e) { throw new Error(`JSON parse failed: ${e.message}`); }
+
+          if (!data.tags || !Array.isArray(data.tags)) {
+            throw new Error(`No "tags" array in response. Keys: ${Object.keys(data).join(", ")}`);
+          }
+
+          logLines.push(`✅ Got ${data.tags.length} tags: [${data.tags.join(", ")}]`);
+
+          let emptyCount = 0;
+
+          data.tags.forEach((tag, i) => {
+            if (!logos[i]) return;
+
+            if (tag) {
+              // Has a winner — show logo, hide ribbon
+              applyLogo(logos[i], boxes[i], labels[i], tag, logLines, i);
+            } else {
+              emptyCount++;
+              boxes[i].classList.remove("has-tag");
+              logos[i].src = "";
+              logos[i].setAttribute("data-tag", "");
+              logos[i].classList.remove("visible");
+
+              if (emptyCount === 1) {
+                // First empty — COMING AHEAD
+                // If box 6 (i===5), swap map image + label to random fixed pick
+                if (i === 5) {
+                  logLines.push(`[${i + 1}] tag="" — COMING AHEAD (random: ${RANDOM_MAP.name})`);
+                  boxes[i].querySelector('.map-img').src = RANDOM_MAP.img;
+                  boxes[i].querySelector('.map-label').textContent = RANDOM_MAP.name;
+                } else {
+                  logLines.push(`[${i + 1}] tag="" — COMING AHEAD`);
+                }
+                labels[i].innerHTML = `<span class="upcoming-text">COMING AHEAD</span>`;
+              } else {
+                // All other empty boxes — UPCOMING
+                logLines.push(`[${i + 1}] tag="" — UPCOMING`);
+                labels[i].innerHTML = `<span class="upcoming-text">UPCOMING</span>`;
+              }
+            }
+          });
+
+          log(logLines);
+        } catch (err) {
+          logLines.push(`❌ FETCH ERROR: ${err.message}`);
+          log(logLines);
+          console.warn("Web App fetch failed:", err.message);
+        } finally {
+          // Start animation only after first fetch — success or fail
+          if (firstFetch) runCycle();
+        }
+      }
+
+      // First fetch — wait for it to finish, then kick off animation cycle
+      fetchAndUpdate(true);
+      setInterval(() => fetchAndUpdate(false), POLL_INTERVAL);
+    </script>
+  </body>
+</html>

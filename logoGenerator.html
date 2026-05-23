@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Generator - Image Processor</title>
+    <link rel="icon" type="image/x-icon" href="icon.ico">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Logo Generator</h1>
+        <p class="subtitle">Upload images, process them for HeadPics & BackpackPics</p>
+
+        <div class="upload-section">
+            <div id="dropZone" class="drop-zone">
+                <div class="drop-content">
+                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="17 8 12 3 7 8"></polyline>
+                        <line x1="12" y1="3" x2="12" y2="15"></line>
+                    </svg>
+                    <p>Drag & Drop images here</p>
+                    <span>or</span>
+                    <label class="upload-btn">
+                        Browse Files
+                        <input type="file" id="fileInput" multiple accept="image/*" hidden>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <div id="previewSection" class="preview-section hidden">
+            <h2>Uploaded Images (<span id="fileCount">0</span>)</h2>
+            <div id="imageList" class="image-list"></div>
+
+            <div class="process-buttons hidden" id="processBtnWrapper">
+                <button id="processBtn" class="btn btn-primary">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                    Generate Files
+                </button>
+            </div>
+
+            <div id="progressArea" class="progress-area hidden">
+                <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill"></div>
+                </div>
+                <p id="progressText">Generating...</p>
+            </div>
+        </div>
+
+        <div id="downloadSection" class="download-section hidden">
+            <h2>Download Processed Images</h2>
+            <button id="downloadBtn" class="btn btn-primary">
+                Download All
+            </button>
+            <button id="resetBtn" class="btn btn-outline">Reset</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
