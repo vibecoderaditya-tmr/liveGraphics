@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TMR — Map Control</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="icon" type="image/x-icon" href="icon.ico">
 <style>
   :root {
     --bg:      #2e3e4d;
@@ -315,7 +314,7 @@
 
   <div class="header">
     <div class="header-tag">TMR Esports // Map Control</div>
-    <h1>Map <span>Randomizer</span></h1>
+    <h1>Map <span>Rand</span></h1>
     <div class="header-line"></div>
   </div>
 
@@ -368,46 +367,69 @@
 
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <script>
-  var randomizerWindow = null;
+  // ── Firebase Config ── REPLACE WITH YOUR OWN ──────────────
+  var firebaseConfig = {
+    apiKey:            "YOUR_API_KEY",
+    authDomain:        "YOUR_AUTH_DOMAIN",
+    databaseURL:       "YOUR_DATABASE_URL",
+    projectId:         "YOUR_PROJECT_ID",
+    storageBucket:     "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId:             "YOUR_APP_ID"
+  };
+  // ──────────────────────────────────────────────────────────
 
-  window.addEventListener('message', function(e) {
-    if (e.data && e.data.type === 'MAP_SELECTED') {
-      var el = document.getElementById('lastResult');
-      el.innerHTML = 'Last selected → <strong>' + e.data.map + '</strong>';
-      el.classList.add('has-result');
-      // Reset buttons after result received
-      document.getElementById('startBtn').disabled = true;
-      document.getElementById('startBtn').classList.remove('ready');
-      document.getElementById('btnHint').textContent = 'Launch randomizer first';
+  firebase.initializeApp(firebaseConfig);
+  var db         = firebase.database();
+  var statusRef  = db.ref('/maprand/status');
+  var commandRef = db.ref('/maprand/command');
+  var resultRef  = db.ref('/maprand/result');
+
+  // Listen for randomizer ready
+  statusRef.on('value', function(snap) {
+    var val = snap.val();
+    var startBtn = document.getElementById('startBtn');
+    var btnHint  = document.getElementById('btnHint');
+    if (val === 'ready') {
+      startBtn.disabled = false;
+      startBtn.classList.add('ready');
+      btnHint.textContent = 'Randomizer ready — press Start';
+    } else if (val === 'spinning') {
+      startBtn.disabled = true;
+      startBtn.classList.remove('ready');
+      btnHint.textContent = 'Spinning...';
+    } else {
+      startBtn.disabled = true;
+      startBtn.classList.remove('ready');
+      btnHint.textContent = 'Launch randomizer first';
     }
-    if (e.data && e.data.type === 'RANDOMIZER_READY') {
-      // Randomizer loaded and waiting — enable Start button
-      document.getElementById('startBtn').disabled = false;
-      document.getElementById('startBtn').classList.add('ready');
-      document.getElementById('btnHint').textContent = 'Randomizer ready — press Start';
+  });
+
+  // Listen for result
+  resultRef.on('value', function(snap) {
+    var val = snap.val();
+    if (val && val !== 'none') {
+      var el = document.getElementById('lastResult');
+      el.innerHTML = 'Last selected → <strong>' + val + '</strong>';
+      el.classList.add('has-result');
     }
   });
 
   function launchRandomizer() {
-    if (randomizerWindow && !randomizerWindow.closed) {
-      randomizerWindow.focus();
-      return;
-    }
-    randomizerWindow = window.open('randomizer.html', '_blank');
+    // Clear previous state in Firebase
+    statusRef.set('offline');
+    commandRef.set('idle');
+    window.open('randomizer.html', '_blank');
     document.getElementById('btnHint').textContent = 'Waiting for randomizer to load...';
     document.getElementById('startBtn').disabled = true;
     document.getElementById('startBtn').classList.remove('ready');
   }
 
   function startRandomizing() {
-    if (!randomizerWindow || randomizerWindow.closed) {
-      document.getElementById('btnHint').textContent = 'Randomizer window was closed — relaunch';
-      document.getElementById('startBtn').disabled = true;
-      document.getElementById('startBtn').classList.remove('ready');
-      return;
-    }
-    randomizerWindow.postMessage({ type: 'START_SPIN' }, '*');
+    commandRef.set('spin');
     document.getElementById('startBtn').disabled = true;
     document.getElementById('startBtn').classList.remove('ready');
     document.getElementById('btnHint').textContent = 'Spinning...';

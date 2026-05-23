@@ -5,7 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TMR — Map Randomizer</title>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@300;400;600;700;800;900&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="icon" type="image/x-icon" href="icon.ico">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
 <style>
   :root {
     --bg:    #2e3e4d;
@@ -408,16 +409,31 @@
       selectedMap = MAPS[winnerIndex].name;
       console.log('Selected map:', selectedMap);
 
-      // Notify dashboard
-      if (window.opener) {
-        try {
-          window.opener.postMessage({ type: 'MAP_SELECTED', map: selectedMap }, '*');
-        } catch(e) {}
-      }
+      // Write result to Firebase
+      resultRef.set(selectedMap);
+      statusRef.set('done');
 
       updateDots(99); // all dots off
     }, 80);
   }
+
+  // ── Firebase Config ── REPLACE WITH YOUR OWN ──────────────
+  var firebaseConfig = {
+    apiKey:            "AIzaSyC21mdsgyIEqXT7ujFbi0xcVAMRZxxqB1I",
+    authDomain:        "tmraditya-1ceb7.firebaseapp.com",
+    databaseURL:       "https://tmraditya-1ceb7-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId:         "tmraditya-1ceb7",
+    storageBucket:     "tmraditya-1ceb7.firebasestorage.app",
+    messagingSenderId: "317037791388",
+    appId:             "1:317037791388:web:755b5a18bb77aa140a4559"
+  };
+  // ──────────────────────────────────────────────────────────
+
+  firebase.initializeApp(firebaseConfig);
+  var db         = firebase.database();
+  var statusRef  = db.ref('/maprand/status');
+  var commandRef = db.ref('/maprand/command');
+  var resultRef  = db.ref('/maprand/result');
 
   // ── Init ───────────────────────────────────────────────────
   window.addEventListener('load', () => {
@@ -427,20 +443,20 @@
     eyebrow.textContent = 'Awaiting signal';
     updateDots(99);
 
-    // Notify dashboard that randomizer is ready
-    if (window.opener) {
-      try {
-        window.opener.postMessage({ type: 'RANDOMIZER_READY' }, '*');
-      } catch(e) {}
-    }
-  });
+    // Tell dashboard randomizer is ready
+    statusRef.set('ready');
+    resultRef.set('none');
+    commandRef.set('idle');
 
-  // Listen for START_SPIN from dashboard
-  window.addEventListener('message', function(e) {
-    if (e.data && e.data.type === 'START_SPIN') {
-      mapBg.style.filter = 'brightness(0.55) saturate(0.85)';
-      startSpin();
-    }
+    // Listen for START_SPIN command from dashboard
+    commandRef.on('value', function(snap) {
+      if (snap.val() === 'spin' && !spinning) {
+        mapBg.style.filter = 'brightness(0.55) saturate(0.85)';
+        statusRef.set('spinning');
+        commandRef.set('idle'); // reset command
+        startSpin();
+      }
+    });
   });
 </script>
 
