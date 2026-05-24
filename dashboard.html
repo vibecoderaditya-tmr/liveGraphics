@@ -182,6 +182,45 @@
     updateTickerUI();
   });
 
+  // ── Panel Toggle ──────────────────────────────────────────
+  var panelOpen = true;
+
+  function togglePanel() {
+    var panel  = document.getElementById("left-panel");
+    var isMobile = window.innerWidth <= 480;
+
+    if (isMobile) {
+      panelOpen = !panelOpen;
+      if (panelOpen) {
+        panel.classList.remove("collapsed");
+        panel.classList.add("mobile-open");
+      } else {
+        panel.classList.remove("mobile-open");
+        panel.classList.add("collapsed");
+      }
+    } else {
+      panelOpen = !panelOpen;
+      if (panelOpen) {
+        panel.classList.remove("collapsed");
+      } else {
+        panel.classList.add("collapsed");
+      }
+    }
+  }
+
+  // Start collapsed on mobile
+  window.addEventListener("resize", function() {
+    var panel = document.getElementById("left-panel");
+    if (!panel) return;
+    if (window.innerWidth <= 480 && panelOpen) {
+      panel.classList.remove("mobile-open");
+      panel.classList.add("collapsed");
+      panelOpen = false;
+    }
+  });
+
+  window.togglePanel  = togglePanel;
+  window.setTicker    = setTicker;
   window.setTicker    = setTicker;
   window.checkPin     = checkPin;
   window.pinKeydown   = pinKeydown;
@@ -659,6 +698,40 @@ body {
   overflow: hidden;
 }
 
+
+/* ── TOGGLE BUTTON ───────────────────────────────────────────────────────── */
+.panel-toggle {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-low);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  flex-shrink: 0;
+}
+
+.panel-toggle:hover {
+  border-color: var(--c3);
+  color: var(--text-mid);
+}
+
+/* ── LEFT PANEL COLLAPSED (desktop) ─────────────────────────────────────── */
+.left-panel {
+  transition: width 0.25s ease, padding 0.25s ease, opacity 0.2s ease;
+  overflow: hidden;
+}
+
+.left-panel.collapsed {
+  width: 0 !important;
+  padding: 0 !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── MOBILE ──────────────────────────────────────────────────────────────── */
 @media (max-width: 480px) {
   .pin-wordmark { font-size: 52px; }
   .pin-card { width: calc(100vw - 40px); }
@@ -669,6 +742,44 @@ body {
   .input-prefix { padding: 0 12px; font-size: 8px; }
   #op-input { font-size: 16px; padding: 16px; }
   #send-btn { padding: 0 16px; font-size: 10px; }
+
+  /* Left panel fullscreen on mobile */
+  .left-panel {
+    position: fixed;
+    inset: 0;
+    width: 100vw !important;
+    height: 100vh;
+    z-index: 100;
+    background: var(--bg);
+    padding: 32px 24px !important;
+    opacity: 1;
+    display: flex;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  .left-panel.mobile-open {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .left-panel.collapsed {
+    width: 100vw !important;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-100%);
+  }
+
+  /* Close btn inside panel on mobile */
+  .panel-close-mobile {
+    display: flex;
+  }
+}
+
+@media (min-width: 481px) {
+  .panel-close-mobile { display: none !important; }
+}
 }
 </style>
 </head>
@@ -692,6 +803,7 @@ body {
 <div id="main-screen">
   <div class="header">
     <div class="header-left">
+      <button class="panel-toggle" id="panel-toggle-btn" onclick="togglePanel()">&#9776;</button>
       <div class="h-logo">TMR</div>
       <div class="h-sep"></div>
       <div class="h-sub">Tournament Match Reporter · Operator</div>
@@ -705,7 +817,11 @@ body {
   <div class="main-body">
 
     <!-- LEFT PANEL -->
-    <div class="left-panel">
+    <div class="left-panel" id="left-panel">
+
+      <!-- Mobile close button -->
+      <button class="panel-close-mobile ticker-btn" onclick="togglePanel()" style="margin-bottom:12px;">✕ Close</button>
+
       <div class="left-panel-section">
         <div class="left-panel-label">Live Ticker</div>
         <div class="ticker-grid">
