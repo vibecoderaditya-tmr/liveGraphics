@@ -1,1 +1,9 @@
 ignore/
+tmr.py
+serviceAccountKey.json
+dist/
+build/
+main.py
+robot.ico
+version.txt
+*.spec
