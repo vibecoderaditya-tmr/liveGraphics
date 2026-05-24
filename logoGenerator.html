@@ -1,67 +1,777 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Logo Generator - Image Processor</title>
-    <link rel="icon" type="image/x-icon" href="icon.ico">
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
+    <link rel="icon" type="image/x-icon" href="icon.ico" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu,
+          sans-serif;
+        background: linear-gradient(135deg, #0d1217 0%, #182028 100%);
+        min-height: 100vh;
+        color: #fff;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        color: #fff;
+      }
+
+      .subtitle {
+        color: #fff;
+        margin-bottom: 30px;
+        opacity: 0.7;
+      }
+
+      .upload-section {
+        margin-bottom: 30px;
+      }
+
+      .drop-zone {
+        border: 3px dashed #2a353d;
+        border-radius: 20px;
+        padding: 60px 20px;
+        background: rgba(20, 22, 23, 0.6);
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+
+      .drop-zone:hover,
+      .drop-zone.dragover {
+        background: rgba(42, 53, 61, 0.3);
+        border-color: #23303c;
+        transform: scale(1.02);
+      }
+
+      .drop-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+      }
+
+      .drop-content svg {
+        color: #fff;
+        opacity: 0.8;
+      }
+
+      .drop-content p {
+        font-size: 1.2rem;
+        color: #fff;
+      }
+
+      .drop-content span {
+        color: #fff;
+        opacity: 0.5;
+      }
+
+      .upload-btn {
+        background: linear-gradient(135deg, #2a353d 0%, #23303c 100%);
+        color: white;
+        padding: 12px 30px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-weight: 600;
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+
+      .upload-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px rgba(42, 53, 61, 0.5);
+      }
+
+      .preview-section,
+      .download-section {
+        background: rgba(16, 21, 27, 0.7);
+        border-radius: 20px;
+        padding: 30px;
+        margin-bottom: 20px;
+      }
+
+      .preview-section h2,
+      .download-section h2 {
+        margin-bottom: 20px;
+        color: #fff;
+      }
+
+      .image-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 15px;
+        margin-bottom: 30px;
+        max-height: 300px;
+        overflow-y: auto;
+        padding: 10px;
+      }
+
+      .image-item {
+        position: relative;
+        aspect-ratio: 1;
+        background: rgba(13, 18, 23, 0.8);
+        border-radius: 10px;
+        overflow: hidden;
+      }
+
+      .image-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        padding: 5px;
+      }
+
+      .image-item .number {
+        position: absolute;
+        top: 5px;
+        left: 5px;
+        background: rgba(42, 53, 61, 0.95);
+        color: white;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: bold;
+      }
+
+      .process-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 15px 25px;
+        border: none;
+        border-radius: 12px;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .btn-primary {
+        background: linear-gradient(135deg, #2a353d 0%, #23303c 100%);
+        color: white;
+      }
+
+      .btn-secondary {
+        background: linear-gradient(135deg, #1f282e 0%, #2a353d 100%);
+        color: white;
+      }
+
+      .btn-success {
+        background: linear-gradient(135deg, #182028 0%, #2d3c4b 100%);
+        color: white;
+      }
+
+      .btn-outline {
+        background: transparent;
+        border: 2px solid #fff;
+        color: #fff;
+      }
+
+      .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(20, 22, 23, 0.5);
+      }
+
+      .btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .progress-area {
+        margin-top: 20px;
+      }
+
+      .progress-bar {
+        width: 100%;
+        height: 10px;
+        background: rgba(20, 22, 23, 0.8);
+        border-radius: 5px;
+        overflow: hidden;
+      }
+
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #2a353d 0%, #23303c 100%);
+        width: 0%;
+        transition: width 0.3s ease;
+      }
+
+      #progressText {
+        margin-top: 10px;
+        color: #fff;
+      }
+
+      .download-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+      }
+
+      .image-item .new-name {
+        position: absolute;
+        bottom: 5px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(13, 18, 23, 0.9);
+        color: #fff;
+        font-size: 9px;
+        padding: 2px 5px;
+        border-radius: 3px;
+        white-space: nowrap;
+        max-width: 90%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      /* Scrollbar styling */
+      .image-list::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .image-list::-webkit-scrollbar-track {
+        background: rgba(20, 22, 23, 0.5);
+        border-radius: 4px;
+      }
+
+      .image-list::-webkit-scrollbar-thumb {
+        background: #2a353d;
+        border-radius: 4px;
+      }
+
+      @media (max-width: 600px) {
+        h1 {
+          font-size: 1.8rem;
+        }
+
+        .process-buttons,
+        .download-buttons {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+          justify-content: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
     <div class="container">
-        <h1>Logo Generator</h1>
-        <p class="subtitle">Upload images, process them for HeadPics & BackpackPics</p>
+      <h1>Logo Generator</h1>
+      <p class="subtitle">
+        Upload images, process them for HeadPics & BackpackPics
+      </p>
 
-        <div class="upload-section">
-            <div id="dropZone" class="drop-zone">
-                <div class="drop-content">
-                    <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="17 8 12 3 7 8"></polyline>
-                        <line x1="12" y1="3" x2="12" y2="15"></line>
-                    </svg>
-                    <p>Drag & Drop images here</p>
-                    <span>or</span>
-                    <label class="upload-btn">
-                        Browse Files
-                        <input type="file" id="fileInput" multiple accept="image/*" hidden>
-                    </label>
-                </div>
-            </div>
+      <div class="upload-section">
+        <div id="dropZone" class="drop-zone">
+          <div class="drop-content">
+            <svg
+              width="64"
+              height="64"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="17 8 12 3 7 8"></polyline>
+              <line x1="12" y1="3" x2="12" y2="15"></line>
+            </svg>
+            <p>Drag & Drop images here</p>
+            <span>or</span>
+            <label class="upload-btn">
+              Browse Files
+              <input
+                type="file"
+                id="fileInput"
+                multiple
+                accept="image/*"
+                hidden
+              />
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div id="previewSection" class="preview-section hidden">
+        <h2>Uploaded Images (<span id="fileCount">0</span>)</h2>
+        <div id="imageList" class="image-list"></div>
+
+        <div class="process-buttons hidden" id="processBtnWrapper">
+          <button id="processBtn" class="btn btn-primary">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            Generate Files
+          </button>
         </div>
 
-        <div id="previewSection" class="preview-section hidden">
-            <h2>Uploaded Images (<span id="fileCount">0</span>)</h2>
-            <div id="imageList" class="image-list"></div>
-
-            <div class="process-buttons hidden" id="processBtnWrapper">
-                <button id="processBtn" class="btn btn-primary">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                        <polyline points="7 10 12 15 17 10"></polyline>
-                        <line x1="12" y1="15" x2="12" y2="3"></line>
-                    </svg>
-                    Generate Files
-                </button>
-            </div>
-
-            <div id="progressArea" class="progress-area hidden">
-                <div class="progress-bar">
-                    <div id="progressFill" class="progress-fill"></div>
-                </div>
-                <p id="progressText">Generating...</p>
-            </div>
+        <div id="progressArea" class="progress-area hidden">
+          <div class="progress-bar">
+            <div id="progressFill" class="progress-fill"></div>
+          </div>
+          <p id="progressText">Generating...</p>
         </div>
+      </div>
 
-        <div id="downloadSection" class="download-section hidden">
-            <h2>Download Processed Images</h2>
-            <button id="downloadBtn" class="btn btn-primary">
-                Download All
-            </button>
-            <button id="resetBtn" class="btn btn-outline">Reset</button>
-        </div>
+      <div id="downloadSection" class="download-section hidden">
+        <h2>Download Processed Images</h2>
+        <button id="downloadBtn" class="btn btn-primary">Download All</button>
+        <button id="resetBtn" class="btn btn-outline">Reset</button>
+      </div>
     </div>
 
-    <script src="script.js"></script>
-</body>
+    <script>
+      // DOM Elements
+      const dropZone = document.getElementById("dropZone");
+      const fileInput = document.getElementById("fileInput");
+      const previewSection = document.getElementById("previewSection");
+      const imageList = document.getElementById("imageList");
+      const fileCount = document.getElementById("fileCount");
+      const processBtn = document.getElementById("processBtn");
+      const processBtnWrapper = document.getElementById("processBtnWrapper");
+      const progressArea = document.getElementById("progressArea");
+      const progressFill = document.getElementById("progressFill");
+      const progressText = document.getElementById("progressText");
+      const downloadSection = document.getElementById("downloadSection");
+      const downloadBtn = document.getElementById("downloadBtn");
+      const resetBtn = document.getElementById("resetBtn");
+
+      // State
+      let uploadedImages = [];
+      let processedHeadPics = [];
+      let processedBackpackPics = [];
+      let gloowallPics = [];
+      let headPicBackground = [];
+      let nameMapping = {};
+
+      // Load JSZip from CDN
+      const jszipScript = document.createElement("script");
+      jszipScript.src =
+        "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js";
+      document.head.appendChild(jszipScript);
+
+      // Embedded name mapping
+      const NAME_DATA = {
+        A: "34",
+        B: "35",
+        C: "36",
+        D: "37",
+        E: "38",
+        F: "39",
+        G: "40",
+        H: "41",
+        I: "42",
+        J: "43",
+        K: "44",
+        L: "45",
+        M: "46",
+        N: "47",
+        O: "48",
+        P: "49",
+        Q: "50",
+        R: "51",
+        S: "52",
+        T: "53",
+        U: "54",
+        V: "55",
+        W: "56",
+        X: "57",
+        Y: "58",
+        Z: "59",
+        ADAM: "04",
+        EVE: "05",
+        ANDREW: "06",
+        KELLY: "07",
+        FORD: "09",
+        NIKITA: "10",
+        MISHA: "12",
+        MAXIM: "30",
+      };
+
+      function loadNameMapping() {
+        for (const key in NAME_DATA) {
+          nameMapping[key.toUpperCase()] = NAME_DATA[key];
+        }
+      }
+      loadNameMapping();
+
+      function getNewFileName(originalName) {
+        const lastDot = originalName.lastIndexOf(".");
+        const baseName =
+          lastDot > 0 ? originalName.substring(0, lastDot) : originalName;
+        const extension =
+          lastDot > 0 ? originalName.substring(lastDot) : ".png";
+        const upperBaseName = baseName.toUpperCase();
+        if (nameMapping[upperBaseName]) {
+          return `9020000${nameMapping[upperBaseName]}${extension}`;
+        }
+        return originalName;
+      }
+
+      function isSpecialImage(filename) {
+        const baseName = filename.toUpperCase().replace(/\.[^/.]+$/, "");
+        return baseName === "GLOO" || baseName === "HEADBG";
+      }
+
+      function getSpecialImageType(filename) {
+        const baseName = filename.toUpperCase().replace(/\.[^/.]+$/, "");
+        if (baseName === "GLOO") return "gloo";
+        if (baseName === "HEADBG") return "headbg";
+        return null;
+      }
+
+      // Event Listeners
+      dropZone.addEventListener("click", () => fileInput.click());
+      dropZone.addEventListener("dragover", (e) => {
+        e.preventDefault();
+        dropZone.classList.add("dragover");
+      });
+      dropZone.addEventListener("dragleave", () => {
+        dropZone.classList.remove("dragover");
+      });
+      dropZone.addEventListener("drop", (e) => {
+        e.preventDefault();
+        dropZone.classList.remove("dragover");
+        handleFiles(Array.from(e.dataTransfer.files));
+      });
+      fileInput.addEventListener("change", (e) => {
+        handleFiles(Array.from(e.target.files));
+      });
+
+      processBtn.addEventListener("click", () => {
+        if (uploadedImages.length === 0) {
+          alert("Please upload images first");
+          return;
+        }
+        processImages();
+      });
+
+      downloadBtn.addEventListener("click", downloadZip);
+      resetBtn.addEventListener("click", reset);
+
+      function handleFiles(files) {
+        const imageFiles = files.filter((f) => f.type.startsWith("image/"));
+        uploadedImages = [...uploadedImages, ...imageFiles];
+
+        if (uploadedImages.length >= 12) {
+          displayImages();
+          previewSection.classList.remove("hidden");
+          processBtnWrapper.classList.remove("hidden");
+        } else {
+          previewSection.classList.add("hidden");
+          processBtnWrapper.classList.add("hidden");
+        }
+
+        downloadSection.classList.add("hidden");
+        processedHeadPics = [];
+        processedBackpackPics = [];
+        gloowallPics = [];
+        headPicBackground = [];
+      }
+
+      function displayImages() {
+        imageList.innerHTML = "";
+        fileCount.textContent = uploadedImages.length;
+        uploadedImages.forEach((file, index) => {
+          const div = document.createElement("div");
+          div.className = "image-item";
+          const img = document.createElement("img");
+          img.src = URL.createObjectURL(file);
+          const number = document.createElement("span");
+          number.className = "number";
+          number.textContent = index + 1;
+          const newName = document.createElement("div");
+          newName.className = "new-name";
+          newName.textContent = getNewFileName(file.name);
+          div.appendChild(img);
+          div.appendChild(number);
+          div.appendChild(newName);
+          imageList.appendChild(div);
+        });
+      }
+
+      function cropTransparent(imageData) {
+        const data = imageData.data;
+        const width = imageData.width;
+        const height = imageData.height;
+        let minX = width,
+          minY = height,
+          maxX = 0,
+          maxY = 0;
+
+        for (let y = 0; y < height; y++) {
+          for (let x = 0; x < width; x++) {
+            const alpha = data[(y * width + x) * 4 + 3];
+            if (alpha > 0) {
+              minX = Math.min(minX, x);
+              minY = Math.min(minY, y);
+              maxX = Math.max(maxX, x);
+              maxY = Math.max(maxY, y);
+            }
+          }
+        }
+
+        if (maxX < minX || maxY < minY) {
+          return { x: 0, y: 0, width: width, height: height };
+        }
+        return {
+          x: minX,
+          y: minY,
+          width: maxX - minX + 1,
+          height: maxY - minY + 1,
+        };
+      }
+
+      function processImages() {
+        progressArea.classList.remove("hidden");
+        processBtn.disabled = true;
+        processedHeadPics = [];
+        processedBackpackPics = [];
+        gloowallPics = [];
+        headPicBackground = [];
+        processNextImage(0, 0, 24);
+      }
+
+      function processNextImage(index, currentStep, totalSteps) {
+        if (index >= uploadedImages.length) {
+          finishProcessing();
+          return;
+        }
+
+        const file = uploadedImages[index];
+        const img = new Image();
+        const isSpecial = isSpecialImage(file.name);
+        const specialType = getSpecialImageType(file.name);
+
+        img.onload = () => {
+          if (isSpecial) {
+            const nameValues = Object.values(nameMapping);
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+
+            nameValues.forEach((value) => {
+              const newFileName = `9020000${value}.png`;
+              if (specialType === "gloo") {
+                gloowallPics.push({ name: newFileName, data: canvas });
+              } else if (specialType === "headbg") {
+                headPicBackground.push({ name: newFileName, data: canvas });
+              }
+            });
+
+            currentStep++;
+            updateProgress(currentStep, totalSteps);
+            setTimeout(
+              () => processNextImage(index + 1, currentStep, totalSteps),
+              50,
+            );
+          } else {
+            const newFileName = getNewFileName(file.name);
+            const canvas = document.createElement("canvas");
+            const ctx = canvas.getContext("2d");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+            const imageData = ctx.getImageData(0, 0, img.width, img.height);
+            const crop = cropTransparent(imageData);
+
+            const headCanvas = resizeAndCenter(img, crop, 110, 100);
+            processedHeadPics.push({ name: newFileName, data: headCanvas });
+            currentStep++;
+            updateProgress(currentStep, totalSteps);
+
+            const backpackCanvas = resizeAndCenterBackpack(img, crop);
+            processedBackpackPics.push({
+              name: newFileName,
+              data: backpackCanvas,
+            });
+            currentStep++;
+            updateProgress(currentStep, totalSteps);
+
+            setTimeout(
+              () => processNextImage(index + 1, currentStep, totalSteps),
+              50,
+            );
+          }
+        };
+
+        img.src = URL.createObjectURL(file);
+      }
+
+      function resizeAndCenter(img, crop, canvasSize, fitSize) {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        canvas.width = canvasSize;
+        canvas.height = canvasSize;
+        ctx.clearRect(0, 0, canvasSize, canvasSize);
+
+        const padding = 10;
+        const availableSize = canvasSize - padding * 2;
+        const size = Math.max(crop.width, crop.height);
+        const scale = fitSize / size;
+        const scaledWidth = crop.width * scale;
+        const scaledHeight = crop.height * scale;
+        const x = padding + (availableSize - scaledWidth) / 2;
+        const y = padding + (availableSize - scaledHeight) / 2;
+
+        ctx.drawImage(
+          img,
+          crop.x,
+          crop.y,
+          crop.width,
+          crop.height,
+          x,
+          y,
+          scaledWidth,
+          scaledHeight,
+        );
+        return canvas;
+      }
+
+      function resizeAndCenterBackpack(img, crop) {
+        const canvas = document.createElement("canvas");
+        const ctx = canvas.getContext("2d");
+        const canvasSize = 990;
+        canvas.width = canvasSize;
+        canvas.height = canvasSize;
+        ctx.clearRect(0, 0, canvasSize, canvasSize);
+
+        const padding = 10;
+        const availableSize = canvasSize - padding * 2;
+        const size = Math.max(crop.width, crop.height);
+        const scale = 990 / size;
+        const scaledWidth = crop.width * scale;
+        const scaledHeight = crop.height * scale;
+        const x = padding + (availableSize - scaledWidth) / 2;
+        const y = padding + (availableSize - scaledHeight) / 2;
+
+        ctx.drawImage(
+          img,
+          crop.x,
+          crop.y,
+          crop.width,
+          crop.height,
+          x,
+          y,
+          scaledWidth,
+          scaledHeight,
+        );
+        return canvas;
+      }
+
+      function updateProgress(current, total) {
+        const percentage = (current / total) * 100;
+        progressFill.style.width = percentage + "%";
+        progressText.textContent = `Processing... ${current}/${total}`;
+      }
+
+      function finishProcessing() {
+        progressFill.style.width = "100%";
+        progressText.textContent = "Processing complete!";
+        setTimeout(() => {
+          progressArea.classList.add("hidden");
+          downloadSection.classList.remove("hidden");
+          processBtn.disabled = false;
+        }, 500);
+      }
+
+      function downloadZip() {
+        if (typeof JSZip === "undefined") {
+          alert("JSZip is still loading. Please wait and try again.");
+          return;
+        }
+
+        const zip = new JSZip();
+        const headFolder = zip.folder("HeadPics");
+        const backpackFolder = zip.folder("BackPackPics");
+        const gloowallFolder = zip.folder("GloowallPics");
+        const headBgFolder = zip.folder("HeadPicBackground");
+
+        processedHeadPics.forEach((image) => {
+          const base64 = image.data.toDataURL("image/png").split(",")[1];
+          headFolder.file(image.name, base64, { base64: true });
+        });
+
+        processedBackpackPics.forEach((image) => {
+          const base64 = image.data.toDataURL("image/png").split(",")[1];
+          backpackFolder.file(image.name, base64, { base64: true });
+        });
+
+        gloowallPics.forEach((image) => {
+          const base64 = image.data.toDataURL("image/png").split(",")[1];
+          gloowallFolder.file(image.name, base64, { base64: true });
+        });
+
+        headPicBackground.forEach((image) => {
+          const base64 = image.data.toDataURL("image/png").split(",")[1];
+          headBgFolder.file(image.name, base64, { base64: true });
+        });
+
+        zip.generateAsync({ type: "blob" }).then((blob) => {
+          const link = document.createElement("a");
+          link.href = URL.createObjectURL(blob);
+          link.download = "LogoAssets.zip";
+          link.click();
+        });
+      }
+
+      function reset() {
+        uploadedImages = [];
+        processedHeadPics = [];
+        processedBackpackPics = [];
+        gloowallPics = [];
+        headPicBackground = [];
+        previewSection.classList.add("hidden");
+        processBtnWrapper.classList.add("hidden");
+        downloadSection.classList.add("hidden");
+        progressArea.classList.add("hidden");
+        progressFill.style.width = "0%";
+        fileInput.value = "";
+        imageList.innerHTML = "";
+      }
+    </script>
+  </body>
 </html>
