@@ -145,6 +145,44 @@
     });
   }
 
+  // ── Live Ticker Firebase ──────────────────────────────────
+  var lgRef    = db.ref("/live-graphics");
+  var stateRef = lgRef.child("state");
+  var animRef  = lgRef.child("animate-from-to");
+
+  var tickerState = null;
+  var tickerAnim  = null;
+
+  function setTicker(key, val) {
+    if (key === "state") {
+      stateRef.set(val);
+      tickerState = val;
+    } else {
+      animRef.set(val);
+      tickerAnim = val;
+    }
+    updateTickerUI();
+  }
+
+  function updateTickerUI() {
+    ["btn-in","btn-out","btn-left","btn-right"].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.classList.remove("ticker-active");
+    });
+    if (tickerState === "IN")    { var e = document.getElementById("btn-in");    if(e) e.classList.add("ticker-active"); }
+    if (tickerState === "OUT")   { var e = document.getElementById("btn-out");   if(e) e.classList.add("ticker-active"); }
+    if (tickerAnim  === "LEFT")  { var e = document.getElementById("btn-left");  if(e) e.classList.add("ticker-active"); }
+    if (tickerAnim  === "RIGHT") { var e = document.getElementById("btn-right"); if(e) e.classList.add("ticker-active"); }
+  }
+
+  lgRef.on("value", function(snap) {
+    var val = snap.val() || {};
+    tickerState = val["state"]           || null;
+    tickerAnim  = val["animate-from-to"] || null;
+    updateTickerUI();
+  });
+
+  window.setTicker    = setTicker;
   window.checkPin     = checkPin;
   window.pinKeydown   = pinKeydown;
   window.sendReply    = sendReply;
@@ -324,13 +362,6 @@ body {
 .shake { animation: shake 0.4s ease; }
 
 /* ── MAIN SCREEN ─────────────────────────────────────────────────────────── */
-#main-screen {
-  display: none;
-  flex-direction: column;
-  height: 100vh;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
 
 /* ── HEADER ──────────────────────────────────────────────────────────────── */
 .header {
@@ -535,6 +566,99 @@ body {
 #send-btn:disabled { opacity: 0.2; cursor: not-allowed; }
 
 /* ── MOBILE ──────────────────────────────────────────────────────────────── */
+
+/* ── TWO-COLUMN LAYOUT ───────────────────────────────────────────────────── */
+#main-screen {
+  display: none;
+  flex-direction: column;
+  height: 100vh;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.main-body {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* ── LEFT PANEL ──────────────────────────────────────────────────────────── */
+.left-panel {
+  width: 200px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 20px 16px;
+  gap: 16px;
+}
+
+.left-panel-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.left-panel-label {
+  font-size: 9px;
+  letter-spacing: 3px;
+  color: var(--text-low);
+  text-transform: uppercase;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* 2x2 ticker grid */
+.ticker-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.ticker-btn {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text-low);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 12px 8px;
+  cursor: pointer;
+  text-align: center;
+  transition: border-color 0.2s, color 0.2s, background 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.ticker-btn:hover {
+  border-color: var(--c3);
+  color: var(--text-mid);
+  background: var(--card);
+}
+
+.ticker-btn:active {
+  background: var(--c2);
+}
+
+.ticker-btn.ticker-active {
+  border-color: var(--text-hi);
+  color: var(--text-hi);
+  background: var(--card);
+  box-shadow:
+    inset 0 1px 0 rgba(98,116,125,0.3),
+    0 0 12px rgba(176,196,207,0.12);
+}
+
+/* ── RIGHT — log + input ─────────────────────────────────────────────────── */
+.right-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 @media (max-width: 480px) {
   .pin-wordmark { font-size: 52px; }
   .pin-card { width: calc(100vw - 40px); }
@@ -578,15 +702,35 @@ body {
     </div>
   </div>
 
-  <div id="log-box"></div>
-  <div id="prompt-box"></div>
+  <div class="main-body">
 
-  <div class="input-bar">
-    <div class="input-prefix">OPR</div>
-    <input id="op-input" type="text"
-           placeholder="Waiting for prompt…" disabled
-           onkeydown="inputKeydown(event)">
-    <button id="send-btn" disabled onclick="sendReply()">Send</button>
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+      <div class="left-panel-section">
+        <div class="left-panel-label">Live Ticker</div>
+        <div class="ticker-grid">
+          <button class="ticker-btn" id="btn-left"  onclick="setTicker('animate-from-to','LEFT')">LEFT</button>
+          <button class="ticker-btn" id="btn-right" onclick="setTicker('animate-from-to','RIGHT')">RIGHT</button>
+          <button class="ticker-btn" id="btn-in"    onclick="setTicker('state','IN')">IN</button>
+          <button class="ticker-btn" id="btn-out"   onclick="setTicker('state','OUT')">OUT</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+      <div id="log-box"></div>
+      <div id="prompt-box"></div>
+
+      <div class="input-bar">
+        <div class="input-prefix">OPR</div>
+        <input id="op-input" type="text"
+               placeholder="Waiting for prompt…" disabled
+               onkeydown="inputKeydown(event)">
+        <button id="send-btn" disabled onclick="sendReply()">Send</button>
+      </div>
+    </div>
+
   </div>
 </div>
 
