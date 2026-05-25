@@ -47,6 +47,18 @@
     lb.scrollTop = lb.scrollHeight;
   }
 
+  function addHtml(html) {
+    var lb   = document.getElementById("log-box");
+    var wrap = document.createElement("div");
+    wrap.className = "log-entry log-bot";
+    var time = new Date().toLocaleTimeString("en-IN", {hour:"2-digit", minute:"2-digit"});
+    wrap.innerHTML =
+      '<span class="log-time">' + time + '</span>' +
+      '<span class="log-text">' + html + '</span>';
+    lb.appendChild(wrap);
+    lb.scrollTop = lb.scrollHeight;
+  }
+
   function escHtml(s) {
     return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
             .replace(/\*\*(.+?)\*\*/g,"<strong>$1</strong>")
@@ -127,7 +139,11 @@
     msgRef.on("value", function(snap) {
       var val = snap.val();
       if (!val || val.ack !== false) return;
-      addLog(val.text, "bot");
+      if (val.type === "html" && val.html) {
+        addHtml(val.html);
+      } else if (val.text) {
+        addLog(val.text, "bot");
+      }
       setStatus(true);
       msgRef.update({ ack: true });
     });
