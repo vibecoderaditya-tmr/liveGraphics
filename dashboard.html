@@ -36,6 +36,10 @@
 
   function addLog(text, type) {
     type = type || "bot";
+    // auto-detect elim/winner events from tmr.py hash messages
+    if (type === "bot" && (text.startsWith("💀") || text.startsWith("🥇"))) {
+      type = "event";
+    }
     var lb   = document.getElementById("log-box");
     var wrap = document.createElement("div");
     wrap.className = "log-entry log-" + type;
@@ -236,7 +240,6 @@
   });
 
   window.togglePanel  = togglePanel;
-  window.setTicker    = setTicker;
   window.setTicker    = setTicker;
   window.checkPin     = checkPin;
   window.pinKeydown   = pinKeydown;
@@ -547,6 +550,8 @@ body {
 .log-opr .log-time { color: var(--accent); opacity: 1; }
 .log-opr .log-text { color: var(--text-hi); }
 .log-sys .log-text { color: var(--text-low); font-size: 11px; font-style: italic; }
+.log-event .log-text { color: var(--text-hi); font-weight: 500; }
+.log-event .log-time { color: var(--text-mid); opacity: 1; }
 
 /* ── PROMPT BOX ──────────────────────────────────────────────────────────── */
 #prompt-box {
@@ -796,7 +801,6 @@ body {
 @media (min-width: 481px) {
   .panel-close-mobile { display: none !important; }
 }
-}
 </style>
 </head>
 <body>
@@ -826,7 +830,7 @@ body {
     </div>
     <div class="status-badge">
       <div class="dot offline" id="status-dot"></div>
-      <span id="status-txt">Standby</span>
+      <span id="status-txt">STANDBY</span>
     </div>
   </div>
 
