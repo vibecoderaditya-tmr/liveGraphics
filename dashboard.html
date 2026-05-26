@@ -245,6 +245,50 @@
   window.pinKeydown   = pinKeydown;
   window.sendReply    = sendReply;
   window.inputKeydown = inputKeydown;
+
+  // ── Force Roster ──────────────────────────────────────────
+  var forceRosterRef  = db.ref("/session/force_roster");
+  var joinCountRef    = db.ref("/session/join_count");
+
+  function forceRoster() {
+    var btn = document.getElementById("btn-force-roster");
+    var st  = document.getElementById("force-roster-status");
+    if (btn.disabled) return;
+    btn.disabled = true;
+    forceRosterRef.set(true);
+    st.textContent = "sent — waiting…";
+    st.style.color = "var(--text-mid)";
+    // Auto-reset status after 5s in case tmr.py clears the flag
+    setTimeout(function() {
+      st.textContent = "";
+    }, 5000);
+  }
+  window.forceRoster = forceRoster;
+
+  // Watch join_count — enables the button and shows live counter during roster-pending phase
+  joinCountRef.on("value", function(snap) {
+    var n      = snap.val();
+    var btn    = document.getElementById("btn-force-roster");
+    var ctr    = document.getElementById("join-counter");
+    var ctrVal = document.getElementById("join-count-val");
+    var st     = document.getElementById("force-roster-status");
+    if (n !== null && n !== undefined) {
+      // Roster pending — arm the button
+      ctrVal.textContent = n;
+      ctr.style.display  = "block";
+      btn.disabled       = false;
+      btn.style.borderColor = "var(--c3)";
+      btn.style.color       = "var(--text-hi)";
+      st.textContent = "";
+    } else {
+      // Roster locked or match over — disarm
+      ctr.style.display     = "none";
+      btn.disabled          = true;
+      btn.style.borderColor = "var(--border)";
+      btn.style.color       = "var(--text-low)";
+      st.textContent        = "";
+    }
+  });
 </script>
 
 <style>
@@ -850,6 +894,19 @@ body {
           <button class="ticker-btn" id="btn-in"    onclick="setTicker('state','IN')">IN</button>
           <button class="ticker-btn" id="btn-out"   onclick="setTicker('state','OUT')">OUT</button>
         </div>
+      </div>
+
+      <div class="left-panel-section">
+        <div class="left-panel-label">Roster</div>
+        <div id="join-counter" style="display:none;font-size:11px;color:var(--text-mid);letter-spacing:1px;padding:6px 0 2px 0;">
+          <span id="join-count-val">0</span> players joined
+        </div>
+        <button class="ticker-btn" id="btn-force-roster"
+                onclick="forceRoster()" disabled
+                style="width:100%;letter-spacing:2px;">
+          Force Roster
+        </button>
+        <div id="force-roster-status" style="font-size:10px;color:var(--text-low);letter-spacing:1px;min-height:14px;margin-top:4px;"></div>
       </div>
     </div>
 
