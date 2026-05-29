@@ -22,7 +22,7 @@
   };
 
   var OPERATOR_PIN = "6558";
--
+
   firebase.initializeApp(firebaseConfig);
   var db = firebase.database();
 
@@ -308,8 +308,8 @@
 
       fetch(SHEETS_WEBAPP_URL, {
         method:  "POST",
-        headers: { "Content-Type": "application/json" },
-        body:    JSON.stringify({ data: payload }),
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body:    "payload=" + encodeURIComponent(JSON.stringify({ data: payload })),
       })
       .then(function(res) { return res.json(); })
       .then(function(resp) {
