@@ -22,7 +22,7 @@
   };
 
   var OPERATOR_PIN = "6558";
-
+-
   firebase.initializeApp(firebaseConfig);
   var db = firebase.database();
 
@@ -240,7 +240,7 @@
   });
 
   // ── Export to Sheets ─────────────────────────────────────────
-  var SHEETS_WEBAPP_URL = "";  // ← paste your Apps Script Web App URL here
+  var SHEETS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycby0HapV0QYMFdPS2Us038HHgB6_IKRKed2pTrHPGiciStXGf6Wn--wxW0wSxVTXRamI5A/exec";  // ← paste your Apps Script Web App URL here
 
   function exportToSheets() {
     var btn = document.getElementById("btn-export-sheets");
