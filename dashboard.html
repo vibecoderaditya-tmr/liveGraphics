@@ -239,16 +239,103 @@
     }
   });
 
-  window.togglePanel  = togglePanel;
-  window.setTicker    = setTicker;
-  window.checkPin     = checkPin;
-  window.pinKeydown   = pinKeydown;
-  window.sendReply    = sendReply;
-  window.inputKeydown = inputKeydown;
+  // ── Export to Sheets ─────────────────────────────────────────
+  var SHEETS_WEBAPP_URL = "";  // ← paste your Apps Script Web App URL here
+
+  function exportToSheets() {
+    var btn = document.getElementById("btn-export-sheets");
+    var st  = document.getElementById("export-sheets-status");
+    if (!SHEETS_WEBAPP_URL) {
+      st.textContent = "no URL set";
+      st.style.color = "var(--text-low)";
+      return;
+    }
+
+    btn.disabled   = true;
+    st.textContent = "reading firebase…";
+    st.style.color = "var(--text-mid)";
+
+    // Read all matchX nodes from Firebase
+    db.ref("/matches").once("value", function(snap) {
+      var allMatches = snap.val() || {};
+
+      // Collect and sort match keys: match1, match2, match3...
+      var matchKeys = Object.keys(allMatches)
+        .filter(function(k) { return /^match\d+$/.test(k); })
+        .sort(function(a, b) {
+          return parseInt(a.replace("match","")) - parseInt(b.replace("match",""));
+        });
+
+      if (matchKeys.length === 0) {
+        st.textContent = "no matches found";
+        st.style.color = "var(--text-low)";
+        btn.disabled = false;
+        return;
+      }
+
+      // Build payload: array of match blocks
+      // Each block = array of 12 rows sorted by 0_hash ascending
+      // Each row = [0_hash, 1_teamTag, 5_totalKills]
+      var payload = [];
+
+      matchKeys.forEach(function(mk) {
+        var mdata = allMatches[mk];
+        var teams = [];
+
+        Object.keys(mdata).forEach(function(key) {
+          var node = mdata[key];
+          if (typeof node !== "object" || node === null) return;
+          if (!node["1_teamTag"]) return;  // skip non-team nodes
+          teams.push({
+            hash:  parseInt(node["0_hash"])  || 99,
+            tag:   node["1_teamTag"]         || "",
+            kills: parseInt(node["5_totalKills"]) || 0,
+          });
+        });
+
+        // Sort ascending by 0_hash (1=winner on top, 12=first elim on bottom)
+        teams.sort(function(a, b) { return a.hash - b.hash; });
+
+        // Pad to 12 rows if needed
+        while (teams.length < 12) {
+          teams.push({ hash: "", tag: "", kills: "" });
+        }
+
+        payload.push({ match: mk, rows: teams });
+      });
+
+      st.textContent = "sending to sheets…";
+
+      fetch(SHEETS_WEBAPP_URL, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json" },
+        body:    JSON.stringify({ data: payload }),
+      })
+      .then(function(res) { return res.json(); })
+      .then(function(resp) {
+        if (resp.status === "ok") {
+          st.textContent = "✓ exported " + matchKeys.length + " match(es)";
+          st.style.color = "var(--text-hi)";
+        } else {
+          st.textContent = "error: " + (resp.message || "unknown");
+          st.style.color = "#7a6a6a";
+        }
+        btn.disabled = false;
+        setTimeout(function() { st.textContent = ""; }, 6000);
+      })
+      .catch(function(err) {
+        st.textContent = "fetch failed";
+        st.style.color = "#7a6a6a";
+        btn.disabled = false;
+        console.error("Export error:", err);
+      });
+    });
+  }
+  window.exportToSheets = exportToSheets;
 
   // ── Force Roster ──────────────────────────────────────────
-  var forceRosterRef  = db.ref("/session/force_roster");
-  var joinCountRef    = db.ref("/session/join_count");
+  var forceRosterRef = db.ref("/session/force_roster");
+  var joinCountRef   = db.ref("/session/join_count");
 
   function forceRoster() {
     var btn = document.getElementById("btn-force-roster");
@@ -258,14 +345,10 @@
     forceRosterRef.set(true);
     st.textContent = "sent — waiting…";
     st.style.color = "var(--text-mid)";
-    // Auto-reset status after 5s in case tmr.py clears the flag
-    setTimeout(function() {
-      st.textContent = "";
-    }, 5000);
+    setTimeout(function() { st.textContent = ""; }, 5000);
   }
   window.forceRoster = forceRoster;
 
-  // Watch join_count — enables the button and shows live counter during roster-pending phase
   joinCountRef.on("value", function(snap) {
     var n      = snap.val();
     var btn    = document.getElementById("btn-force-roster");
@@ -273,15 +356,13 @@
     var ctrVal = document.getElementById("join-count-val");
     var st     = document.getElementById("force-roster-status");
     if (n !== null && n !== undefined) {
-      // Roster pending — arm the button
-      ctrVal.textContent = n;
-      ctr.style.display  = "block";
-      btn.disabled       = false;
+      ctrVal.textContent    = n;
+      ctr.style.display     = "block";
+      btn.disabled          = false;
       btn.style.borderColor = "var(--c3)";
       btn.style.color       = "var(--text-hi)";
-      st.textContent = "";
+      st.textContent        = "";
     } else {
-      // Roster locked or match over — disarm
       ctr.style.display     = "none";
       btn.disabled          = true;
       btn.style.borderColor = "var(--border)";
@@ -907,6 +988,16 @@ body {
           Force Roster
         </button>
         <div id="force-roster-status" style="font-size:10px;color:var(--text-low);letter-spacing:1px;min-height:14px;margin-top:4px;"></div>
+      </div>
+
+      <div class="left-panel-section">
+        <div class="left-panel-label">Export</div>
+        <button class="ticker-btn" id="btn-export-sheets"
+                onclick="exportToSheets()"
+                style="width:100%;letter-spacing:2px;">
+          Export to Sheets
+        </button>
+        <div id="export-sheets-status" style="font-size:10px;color:var(--text-low);letter-spacing:1px;min-height:14px;margin-top:4px;"></div>
       </div>
     </div>
 
