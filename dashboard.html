@@ -229,6 +229,17 @@
   }
 
   // Start collapsed on mobile
+  window.addEventListener("load", function() {
+    if (window.innerWidth <= 480) {
+      var panel = document.getElementById("left-panel");
+      if (panel) {
+        panel.classList.add("collapsed");
+        panel.classList.remove("mobile-open");
+        panelOpen = false;
+      }
+    }
+  });
+
   window.addEventListener("resize", function() {
     var panel = document.getElementById("left-panel");
     if (!panel) return;
@@ -238,6 +249,18 @@
       panelOpen = false;
     }
   });
+
+  // When keyboard opens on mobile, scroll log box to bottom
+  // so input bar stays visible
+  var opInput = document.getElementById ? document.getElementById("op-input") : null;
+  if (opInput) {
+    opInput.addEventListener("focus", function() {
+      setTimeout(function() {
+        var lb = document.getElementById("log-box");
+        if (lb) lb.scrollTop = lb.scrollHeight;
+      }, 300);
+    });
+  }
 
   // ── Export to Sheets ─────────────────────────────────────────
   var SHEETS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycby0HapV0QYMFdPS2Us038HHgB6_IKRKed2pTrHPGiciStXGf6Wn--wxW0wSxVTXRamI5A/exec";  // ← paste your Apps Script Web App URL here
@@ -882,22 +905,102 @@ body {
   .pin-wordmark { font-size: 52px; }
   .pin-card { width: calc(100vw - 40px); }
   .h-sub, .h-sep { display: none; }
-  .header { padding: 0 16px; }
-  #log-box { padding: 14px 16px; }
-  #prompt-box { margin: 0 16px 8px; }
-  .input-prefix { padding: 0 12px; font-size: 8px; }
-  #op-input { font-size: 16px; padding: 16px; }
-  #send-btn { padding: 0 16px; font-size: 10px; }
+  .header { padding: 0 16px; height: 48px; }
+  #log-box { padding: 12px 14px; padding-bottom: 80px; }
+  #prompt-box {
+    margin: 0 14px 6px;
+    font-size: 11px;
+    max-height: 100px;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Fix 100vh issue on mobile browsers with address bar */
+  #main-screen {
+    height: 100%;
+    min-height: -webkit-fill-available;
+    min-height: fill-available;
+  }
+
+  body {
+    height: 100%;
+    min-height: -webkit-fill-available;
+    overflow: hidden;
+  }
+
+  html {
+    height: -webkit-fill-available;
+  }
+
+  /* Right panel fills full height, input bar sticks to bottom */
+  .right-panel {
+    position: relative;
+    height: 100%;
+  }
+
+  #log-box {
+    /* Extra bottom padding so last messages aren't hidden behind fixed input */
+    padding-bottom: 80px;
+  }
+
+  /* Input bar fixed to bottom — always visible even when keyboard opens */
+  .input-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    /* Safe area for notch phones */
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .input-prefix { padding: 0 10px; font-size: 8px; }
+
+  /* 16px minimum prevents iOS zoom on focus */
+  #op-input {
+    font-size: 16px;
+    padding: 14px 14px;
+    -webkit-appearance: none;
+  }
+
+  #send-btn {
+    padding: 0 14px;
+    font-size: 10px;
+    min-width: 60px;
+    /* Bigger tap target */
+    min-height: 50px;
+  }
+
+  /* Prompt box also fixed above input bar when active */
+  #prompt-box {
+    position: fixed;
+    bottom: 52px;
+    left: 0;
+    right: 0;
+    margin: 0;
+    border-left: none;
+    border-right: none;
+    border-top: 1px solid var(--c3);
+    border-bottom: none;
+    border-radius: 0;
+    z-index: 49;
+    max-height: 90px;
+    padding: 10px 14px;
+  }
 
   /* Left panel fullscreen on mobile */
   .left-panel {
     position: fixed;
     inset: 0;
     width: 100vw !important;
-    height: 100vh;
+    height: 100%;
+    min-height: -webkit-fill-available;
     z-index: 100;
     background: var(--bg);
-    padding: 32px 24px !important;
+    padding: 28px 20px !important;
+    overflow-y: auto;
     opacity: 1;
     display: flex;
     transform: translateX(-100%);
@@ -917,10 +1020,21 @@ body {
     transform: translateX(-100%);
   }
 
+  /* Bigger tap targets for all buttons on mobile */
+  .ticker-btn {
+    padding: 14px 8px;
+    font-size: 12px;
+  }
+
   /* Close btn inside panel on mobile */
   .panel-close-mobile {
     display: flex;
   }
+
+  /* Log entries slightly more compact */
+  .log-entry { gap: 10px; }
+  .log-text  { font-size: 12px; }
+  .log-time  { font-size: 8px; }
 }
 
 @media (min-width: 481px) {
