@@ -399,11 +399,11 @@
       st.textContent        = "spinning…";
       st.style.color        = "var(--text-low)";
     } else {
-      btn.disabled          = true;
-      btn.style.borderColor = "var(--border)";
-      btn.style.color       = "var(--text-low)";
-      st.textContent        = "randomizer offline";
-      st.style.color        = "var(--text-low)";
+      btn.disabled          = false;            // ← was true
+	  btn.style.borderColor = "var(--c3)";      // ← match the "ready" style
+	  btn.style.color       = "var(--text-hi)";
+	  st.textContent        = val ? "status: " + val : "ready";
+	  st.style.color        = "var(--text-mid)";
     }
   });
 
@@ -420,6 +420,9 @@
 
   function startMapRand() {
     mapCommandRef.set("spin");
+	setTimeout(function() {
+	mapStatusRef.set("ready");
+	}, 4000);   // adjust to however long your spin animation takes
     var btn = document.getElementById("btn-map-start");
     btn.disabled          = true;
     btn.style.borderColor = "var(--border)";
