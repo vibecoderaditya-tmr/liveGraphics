@@ -36,7 +36,6 @@
 
   function addLog(text, type) {
     type = type || "bot";
-    // auto-detect elim/winner events from tmr.py hash messages
     if (type === "bot" && (text.startsWith("💀") || text.startsWith("🥇"))) {
       type = "event";
     }
@@ -121,10 +120,8 @@
       e.preventDefault();
       sendReply();
     }
-    // Shift+Enter → newline (default textarea behaviour, no action needed)
   }
 
-  // Auto-resize textarea as content grows
   function autoResizeInput() {
     var ta = document.getElementById("op-input");
     if (!ta) return;
@@ -151,7 +148,6 @@
   }
 
   function startListeners() {
-    // watch for clear signal from tmr.py on new run
     db.ref("/session/clear").on("value", function(snap) {
       if (snap.val() === true) {
         document.getElementById("log-box").innerHTML = "";
@@ -227,7 +223,7 @@
   var panelOpen = true;
 
   function togglePanel() {
-    var panel  = document.getElementById("left-panel");
+    var panel    = document.getElementById("left-panel");
     var isMobile = window.innerWidth <= 480;
 
     if (isMobile) {
@@ -249,7 +245,6 @@
     }
   }
 
-  // Start collapsed on mobile
   window.addEventListener("load", function() {
     if (window.innerWidth <= 480) {
       var panel = document.getElementById("left-panel");
@@ -271,8 +266,6 @@
     }
   });
 
-  // When keyboard opens on mobile, scroll log box to bottom
-  // so input bar stays visible
   var opInput = document.getElementById ? document.getElementById("op-input") : null;
   if (opInput) {
     opInput.addEventListener("focus", function() {
@@ -283,8 +276,8 @@
     });
   }
 
-  // ── Export to Sheets ─────────────────────────────────────────
-  var SHEETS_WEBAPP_URL = "";  // ← paste your Apps Script Web App URL here
+  // ── Export to Sheets ──────────────────────────────────────
+  var SHEETS_WEBAPP_URL = "";
 
   function exportToSheets() {
     var btn = document.getElementById("btn-export-sheets");
@@ -299,11 +292,9 @@
     st.textContent = "reading firebase…";
     st.style.color = "var(--text-mid)";
 
-    // Read all matchX nodes from Firebase
     db.ref("/matches").once("value", function(snap) {
       var allMatches = snap.val() || {};
 
-      // Collect and sort match keys: match1, match2, match3...
       var matchKeys = Object.keys(allMatches)
         .filter(function(k) { return /^match\d+$/.test(k); })
         .sort(function(a, b) {
@@ -317,9 +308,6 @@
         return;
       }
 
-      // Build payload: array of match blocks
-      // Each block = array of 12 rows sorted by 0_hash ascending
-      // Each row = [0_hash, 1_teamTag, 5_totalKills]
       var payload = [];
 
       matchKeys.forEach(function(mk) {
@@ -329,18 +317,16 @@
         Object.keys(mdata).forEach(function(key) {
           var node = mdata[key];
           if (typeof node !== "object" || node === null) return;
-          if (!node["1_teamTag"]) return;  // skip non-team nodes
+          if (!node["1_teamTag"]) return;
           teams.push({
-            hash:  parseInt(node["0_hash"])  || 99,
-            tag:   node["1_teamTag"]         || "",
+            hash:  parseInt(node["0_hash"])       || 99,
+            tag:   node["1_teamTag"]              || "",
             kills: parseInt(node["5_totalKills"]) || 0,
           });
         });
 
-        // Sort ascending by 0_hash (1=winner on top, 12=first elim on bottom)
         teams.sort(function(a, b) { return a.hash - b.hash; });
 
-        // Pad to 12 rows if needed
         while (teams.length < 12) {
           teams.push({ hash: "", tag: "", kills: "" });
         }
@@ -378,32 +364,43 @@
   window.exportToSheets = exportToSheets;
 
   // ── Map Randomizer ────────────────────────────────────────
+  // ↓ Change this number to set the default cooldown (how many spins before a map returns)
+  var COOLDOWN  = 3;
+  var ALL_MAPS  = ["Bermuda", "Purgatory", "Kalahari", "Alpine", "Nexterra", "Solara"];
+  var recentMaps = [];  // sliding cooldown queue — tracks recently picked maps
+
   var mapStatusRef  = db.ref("/maprand/status");
   var mapCommandRef = db.ref("/maprand/command");
   var mapResultRef  = db.ref("/maprand/result");
+
+  function getAvailableMaps() {
+    return ALL_MAPS.filter(function(m) { return recentMaps.indexOf(m) === -1; });
+  }
+
+  function updateMapStatusText() {
+    var st    = document.getElementById("map-rand-status");
+    var avail = getAvailableMaps();
+    if (st) {
+      st.textContent = avail.length + " available · " + recentMaps.length + " on cooldown";
+      st.style.color = "var(--text-mid)";
+    }
+  }
 
   mapStatusRef.on("value", function(snap) {
     var val = snap.val();
     var btn = document.getElementById("btn-map-start");
     var st  = document.getElementById("map-rand-status");
-    if (val === "ready") {
-      btn.disabled          = false;
-      btn.style.borderColor = "var(--c3)";
-      btn.style.color       = "var(--text-hi)";
-      st.textContent        = "randomizer ready";
-      st.style.color        = "var(--text-mid)";
-    } else if (val === "spinning") {
+    if (val === "spinning") {
       btn.disabled          = true;
       btn.style.borderColor = "var(--border)";
       btn.style.color       = "var(--text-low)";
       st.textContent        = "spinning…";
       st.style.color        = "var(--text-low)";
     } else {
-      btn.disabled          = false;            // ← was true
-	  btn.style.borderColor = "var(--c3)";      // ← match the "ready" style
-	  btn.style.color       = "var(--text-hi)";
-	  st.textContent        = val ? "status: " + val : "ready";
-	  st.style.color        = "var(--text-mid)";
+      btn.disabled          = false;
+      btn.style.borderColor = "var(--c3)";
+      btn.style.color       = "var(--text-hi)";
+      updateMapStatusText();
     }
   });
 
@@ -411,24 +408,77 @@
     var val = snap.val();
     var el  = document.getElementById("map-rand-result");
     if (val && val !== "none") {
-      el.textContent  = "→ " + val;
-      el.style.color  = "var(--text-hi)";
+      el.textContent = "→ " + val;
+      el.style.color = "var(--text-hi)";
     } else {
-      el.textContent  = "";
+      el.textContent = "";
     }
   });
 
   function startMapRand() {
-    mapCommandRef.set("spin");
-	setTimeout(function() {
-	mapStatusRef.set("ready");
-	}, 7000);   // adjust to however long your spin animation takes
     var btn = document.getElementById("btn-map-start");
+    if (btn.disabled) return;
+
+    // Read cooldown from the UI input field
+    var cdInput = document.getElementById("cooldown-input");
+    if (cdInput) {
+      var parsed = parseInt(cdInput.value);
+      if (!isNaN(parsed) && parsed >= 1 && parsed <= ALL_MAPS.length - 1) {
+        COOLDOWN = parsed;
+      }
+    }
+
+    var avail = getAvailableMaps();
+
+    // Safety: if all maps somehow on cooldown, clear the queue
+    if (avail.length === 0) {
+      recentMaps = [];
+      avail = ALL_MAPS.slice();
+      addLog("🔄 All maps were on cooldown — queue cleared.", "sys");
+    }
+
+    // Pick randomly from available maps
+    var chosen = avail[Math.floor(Math.random() * avail.length)];
+
+    // Push chosen map into the cooldown queue
+    recentMaps.push(chosen);
+
+    // If queue exceeds cooldown size, release the oldest map back into pool
+    var released = null;
+    if (recentMaps.length > COOLDOWN) {
+      released = recentMaps.shift();
+    }
+
+    // Disable button while spinning
     btn.disabled          = true;
     btn.style.borderColor = "var(--border)";
     btn.style.color       = "var(--text-low)";
+    var st = document.getElementById("map-rand-status");
+    st.textContent = "spinning…";
+    st.style.color = "var(--text-low)";
+
+    // Write to Firebase
+    mapCommandRef.set("spin");
+    mapStatusRef.set("spinning");
+    mapResultRef.set(chosen);
+
+    //var logMsg = "🗺️ Map: " + chosen;
+    //if (released) logMsg += " · " + released + " back in pool";
+    //logMsg += " (" + getAvailableMaps().length + " available, " + recentMaps.length + " on cooldown)";
+    //addLog(logMsg, "sys");
+
+    // Re-arm after 3 seconds
+    setTimeout(function() {
+      mapStatusRef.set("ready");
+      btn.disabled          = false;
+      btn.style.borderColor = "var(--c3)";
+      btn.style.color       = "var(--text-hi)";
+      updateMapStatusText();
+    }, 3000);
   }
   window.startMapRand = startMapRand;
+
+  // ── Force Roster ──────────────────────────────────────────
   var forceRosterRef = db.ref("/session/force_roster");
   var joinCountRef   = db.ref("/session/join_count");
 
@@ -468,31 +518,23 @@
 </script>
 
 <style>
-/* ── PALETTE: only the 3 darkest from Lumora ─────────────────────────────
-   #2e3e4d  darkest  — deepest bg
-   #4a5d6b  mid      — surfaces, cards
-   #62747d  slate    — borders, muted elements
-   Text is derived as tints/opacities of these three only.
-────────────────────────────────────────────────────────────────────────── */
-
 :root {
-  --c1: #2e3e4d;   /* darkest */
-  --c2: #4a5d6b;   /* mid     */
-  --c3: #62747d;   /* slate   */
+  --c1: #2e3e4d;
+  --c2: #4a5d6b;
+  --c3: #62747d;
 
-  /* derived — all tints/mixes of the 3 colors, no outside colors */
-  --bg:         #232f3a;           /* darker than c1 for depth */
-  --surface:    var(--c1);         /* #2e3e4d */
-  --card:       #374b5a;           /* between c1 and c2 */
-  --border:     var(--c2);         /* #4a5d6b */
-  --border-hi:  var(--c3);         /* #62747d */
+  --bg:         #232f3a;
+  --surface:    var(--c1);
+  --card:       #374b5a;
+  --border:     var(--c2);
+  --border-hi:  var(--c3);
 
-  --text-hi:    #dde8ef;           /* brighter — primary readable text */
-  --text-mid:   #b0c4cf;           /* mid tint — secondary, log messages */
-  --text-low:   #8fa0ad;           /* muted — timestamps, labels */
+  --text-hi:    #dde8ef;
+  --text-mid:   #b0c4cf;
+  --text-low:   #8fa0ad;
 
-  --accent:     #b0c4cf;           /* tint of c2, used for highlights */
-  --live-dot:   #9ab0bc;           /* slightly lighter tint */
+  --accent:     #b0c4cf;
+  --live-dot:   #9ab0bc;
 
   --font-head:  'Syne', sans-serif;
   --font-mono:  'DM Mono', monospace;
@@ -506,7 +548,6 @@ body {
   font-family: var(--font-mono);
   height: 100vh;
   overflow: hidden;
-  /* subtle diagonal line texture using only the palette */
   background-image: repeating-linear-gradient(
     135deg,
     transparent,
@@ -516,7 +557,7 @@ body {
   );
 }
 
-/* ── PIN SCREEN ──────────────────────────────────────────────────────────── */
+/* ── PIN SCREEN ──────────────────────────────────────────── */
 #pin-screen {
   position: fixed; inset: 0;
   display: flex; flex-direction: column;
@@ -539,7 +580,6 @@ body {
   color: var(--text-hi);
   line-height: 1;
   margin-bottom: 6px;
-  /* double-layer shadow using palette colors only */
   text-shadow:
     0 1px 0 var(--c3),
     0 2px 0 rgba(46,62,77,0.8);
@@ -567,7 +607,6 @@ body {
   border: 1px solid var(--border);
   padding: 32px 28px 28px;
   position: relative;
-  /* inner highlight top edge */
   box-shadow:
     inset 0 1px 0 rgba(98,116,125,0.4),
     0 8px 32px rgba(35,47,58,0.6);
@@ -619,7 +658,7 @@ body {
   box-shadow: inset 0 1px 0 rgba(98,116,125,0.3);
 }
 
-.pin-btn:hover { background: var(--c3); }
+.pin-btn:hover  { background: var(--c3); }
 .pin-btn:active { background: var(--c1); }
 
 #pin-error {
@@ -639,9 +678,7 @@ body {
 }
 .shake { animation: shake 0.4s ease; }
 
-/* ── MAIN SCREEN ─────────────────────────────────────────────────────────── */
-
-/* ── HEADER ──────────────────────────────────────────────────────────────── */
+/* ── HEADER ──────────────────────────────────────────────── */
 .header {
   display: flex;
   align-items: center;
@@ -711,7 +748,7 @@ body {
   text-transform: uppercase;
 }
 
-/* ── LOG AREA ────────────────────────────────────────────────────────────── */
+/* ── LOG AREA ─────────────────────────────────────────────── */
 #log-box {
   flex: 1;
   overflow-y: auto;
@@ -767,13 +804,13 @@ body {
 
 .log-text strong { color: var(--text-hi); font-weight: 500; }
 
-.log-opr .log-time { color: var(--accent); opacity: 1; }
-.log-opr .log-text { color: var(--text-hi); }
-.log-sys .log-text { color: var(--text-low); font-size: 11px; font-style: italic; }
+.log-opr   .log-time { color: var(--accent); opacity: 1; }
+.log-opr   .log-text { color: var(--text-hi); }
+.log-sys   .log-text { color: var(--text-low); font-size: 11px; font-style: italic; }
 .log-event .log-text { color: var(--text-hi); font-weight: 500; }
 .log-event .log-time { color: var(--text-mid); opacity: 1; }
 
-/* ── PROMPT BOX ──────────────────────────────────────────────────────────── */
+/* ── PROMPT BOX ───────────────────────────────────────────── */
 #prompt-box {
   display: none;
   margin: 0 24px 10px;
@@ -790,7 +827,7 @@ body {
   overflow-y: auto;
 }
 
-/* ── INPUT BAR ───────────────────────────────────────────────────────────── */
+/* ── INPUT BAR ────────────────────────────────────────────── */
 .input-bar {
   display: flex;
   flex-shrink: 0;
@@ -830,8 +867,8 @@ body {
 }
 
 #op-input:not(:disabled):focus { background: var(--card); }
-#op-input::placeholder { color: var(--text-low); opacity: 0.6; }
-#op-input:disabled { opacity: 0.3; cursor: not-allowed; }
+#op-input::placeholder          { color: var(--text-low); opacity: 0.6; }
+#op-input:disabled              { opacity: 0.3; cursor: not-allowed; }
 
 #send-btn {
   background: var(--c2);
@@ -850,11 +887,9 @@ body {
 }
 
 #send-btn:hover:not(:disabled) { background: var(--c3); }
-#send-btn:disabled { opacity: 0.2; cursor: not-allowed; }
+#send-btn:disabled              { opacity: 0.2; cursor: not-allowed; }
 
-/* ── MOBILE ──────────────────────────────────────────────────────────────── */
-
-/* ── TWO-COLUMN LAYOUT ───────────────────────────────────────────────────── */
+/* ── TWO-COLUMN LAYOUT ────────────────────────────────────── */
 #main-screen {
   display: none;
   flex-direction: column;
@@ -869,7 +904,7 @@ body {
   overflow: hidden;
 }
 
-/* ── LEFT PANEL ──────────────────────────────────────────────────────────── */
+/* ── LEFT PANEL ───────────────────────────────────────────── */
 .left-panel {
   width: 200px;
   flex-shrink: 0;
@@ -879,6 +914,15 @@ body {
   flex-direction: column;
   padding: 20px 16px;
   gap: 16px;
+  transition: width 0.25s ease, padding 0.25s ease, opacity 0.2s ease;
+  overflow: hidden;
+}
+
+.left-panel.collapsed {
+  width: 0 !important;
+  padding: 0 !important;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .left-panel-section {
@@ -896,7 +940,7 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
-/* 2x2 ticker grid */
+/* 2×2 ticker grid */
 .ticker-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -916,7 +960,6 @@ body {
   cursor: pointer;
   text-align: center;
   transition: border-color 0.2s, color 0.2s, background 0.2s, box-shadow 0.2s;
-  position: relative;
 }
 
 .ticker-btn:hover {
@@ -925,9 +968,7 @@ body {
   background: var(--card);
 }
 
-.ticker-btn:active {
-  background: var(--c2);
-}
+.ticker-btn:active { background: var(--c2); }
 
 .ticker-btn.ticker-active {
   border-color: var(--text-hi);
@@ -938,7 +979,46 @@ body {
     0 0 12px rgba(176,196,207,0.12);
 }
 
-/* ── RIGHT — log + input ─────────────────────────────────────────────────── */
+/* ── COOLDOWN INPUT ───────────────────────────────────────── */
+.cooldown-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cooldown-label {
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text-low);
+  text-transform: uppercase;
+  flex: 1;
+}
+
+#cooldown-input {
+  width: 44px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-bottom: 2px solid var(--c3);
+  color: var(--text-hi);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-align: center;
+  padding: 4px 6px;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+  -moz-appearance: textfield;
+}
+
+#cooldown-input::-webkit-outer-spin-button,
+#cooldown-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+
+#cooldown-input:focus {
+  background: var(--card);
+  border-color: var(--c3);
+  border-bottom-color: var(--text-hi);
+}
+
+/* ── RIGHT PANEL ──────────────────────────────────────────── */
 .right-panel {
   flex: 1;
   display: flex;
@@ -946,8 +1026,7 @@ body {
   overflow: hidden;
 }
 
-
-/* ── TOGGLE BUTTON ───────────────────────────────────────────────────────── */
+/* ── TOGGLE BUTTON ────────────────────────────────────────── */
 .panel-toggle {
   background: none;
   border: 1px solid var(--border);
@@ -966,35 +1045,13 @@ body {
   color: var(--text-mid);
 }
 
-/* ── LEFT PANEL COLLAPSED (desktop) ─────────────────────────────────────── */
-.left-panel {
-  transition: width 0.25s ease, padding 0.25s ease, opacity 0.2s ease;
-  overflow: hidden;
-}
-
-.left-panel.collapsed {
-  width: 0 !important;
-  padding: 0 !important;
-  opacity: 0;
-  pointer-events: none;
-}
-
-/* ── MOBILE ──────────────────────────────────────────────────────────────── */
+/* ── MOBILE ───────────────────────────────────────────────── */
 @media (max-width: 480px) {
   .pin-wordmark { font-size: 52px; }
-  .pin-card { width: calc(100vw - 40px); }
+  .pin-card     { width: calc(100vw - 40px); }
   .h-sub, .h-sep { display: none; }
   .header { padding: 0 16px; height: 48px; }
-  #log-box { padding: 12px 14px; padding-bottom: 80px; }
-  #prompt-box {
-    margin: 0 14px 6px;
-    font-size: 11px;
-    max-height: 100px;
-    position: relative;
-    z-index: 10;
-  }
 
-  /* Fix 100vh issue on mobile browsers with address bar */
   #main-screen {
     height: 100%;
     min-height: -webkit-fill-available;
@@ -1007,37 +1064,26 @@ body {
     overflow: hidden;
   }
 
-  html {
-    height: -webkit-fill-available;
-  }
+  html { height: -webkit-fill-available; }
 
-  /* Right panel fills full height, input bar sticks to bottom */
-  .right-panel {
-    position: relative;
-    height: 100%;
-  }
+  .right-panel { position: relative; height: 100%; }
 
   #log-box {
-    /* Extra bottom padding so last messages aren't hidden behind fixed input */
+    padding: 12px 14px;
     padding-bottom: 80px;
   }
 
-  /* Input bar fixed to bottom — always visible even when keyboard opens */
   .input-bar {
     position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    bottom: 0; left: 0; right: 0;
     z-index: 50;
     background: var(--surface);
     border-top: 1px solid var(--border);
-    /* Safe area for notch phones */
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
   .input-prefix { padding: 0 10px; font-size: 8px; }
 
-  /* 16px minimum prevents iOS zoom on focus */
   #op-input {
     font-size: 16px;
     padding: 14px 14px;
@@ -1050,28 +1096,24 @@ body {
     padding: 0 14px;
     font-size: 10px;
     min-width: 60px;
-    /* Bigger tap target */
     min-height: 50px;
   }
 
-  /* Prompt box also fixed above input bar when active */
   #prompt-box {
     position: fixed;
-    bottom: 52px;
-    left: 0;
-    right: 0;
+    bottom: 52px; left: 0; right: 0;
     margin: 0;
-    border-left: none;
-    border-right: none;
+    border-left: none; border-right: none;
     border-top: 1px solid var(--c3);
     border-bottom: none;
     border-radius: 0;
     z-index: 49;
     max-height: 90px;
     padding: 10px 14px;
+    font-size: 11px;
   }
 
-  /* Left panel fullscreen on mobile */
+  /* Left panel fullscreen slide-in on mobile */
   .left-panel {
     position: fixed;
     inset: 0;
@@ -1101,18 +1143,8 @@ body {
     transform: translateX(-100%);
   }
 
-  /* Bigger tap targets for all buttons on mobile */
-  .ticker-btn {
-    padding: 14px 8px;
-    font-size: 12px;
-  }
-
-  /* Close btn inside panel on mobile */
-  .panel-close-mobile {
-    display: flex;
-  }
-
-  /* Log entries slightly more compact */
+  .ticker-btn     { padding: 14px 8px; font-size: 12px; }
+  .panel-close-mobile { display: flex; }
   .log-entry { gap: 10px; }
   .log-text  { font-size: 12px; }
   .log-time  { font-size: 8px; }
@@ -1159,7 +1191,6 @@ body {
     <!-- LEFT PANEL -->
     <div class="left-panel" id="left-panel">
 
-      <!-- Mobile close button -->
       <button class="panel-close-mobile ticker-btn" onclick="togglePanel()" style="margin-bottom:12px;">✕ Close</button>
 
       <div class="left-panel-section">
@@ -1187,13 +1218,17 @@ body {
 
       <div class="left-panel-section">
         <div class="left-panel-label">Map Randomizer</div>
-        <div id="map-rand-status" style="font-size:10px;color:var(--text-low);letter-spacing:1px;margin-bottom:4px;">randomizer offline</div>
+        <div class="cooldown-row">
+          <span class="cooldown-label">Cooldown</span>
+          <input id="cooldown-input" type="number" min="1" max="5" value="3">
+        </div>
+        <div id="map-rand-status" style="font-size:10px;color:var(--text-mid);letter-spacing:1px;margin-bottom:4px;">ready</div>
         <button class="ticker-btn" id="btn-map-start"
-                onclick="startMapRand()" disabled
+                onclick="startMapRand()"
                 style="width:100%;letter-spacing:2px;">
           Start
         </button>
-        <div id="map-rand-result" style="font-size:10px;color:var(--text-low);letter-spacing:1px;min-height:14px;margin-top:4px;"></div>
+        <div id="map-rand-result" style="font-size:11px;color:var(--text-low);letter-spacing:1px;min-height:14px;margin-top:4px;font-weight:500;"></div>
       </div>
 
       <div class="left-panel-section">
@@ -1205,6 +1240,7 @@ body {
         </button>
         <div id="export-sheets-status" style="font-size:10px;color:var(--text-low);letter-spacing:1px;min-height:14px;margin-top:4px;"></div>
       </div>
+
     </div>
 
     <!-- RIGHT PANEL -->
