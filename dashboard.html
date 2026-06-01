@@ -116,13 +116,34 @@
   }
 
   function pinKeydown(e)   { if (e.key === "Enter") checkPin(); }
-  function inputKeydown(e) { if (e.key === "Enter") sendReply(); }
+  function inputKeydown(e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendReply();
+    }
+    // Shift+Enter → newline (default textarea behaviour, no action needed)
+  }
+
+  // Auto-resize textarea as content grows
+  function autoResizeInput() {
+    var ta = document.getElementById("op-input");
+    if (!ta) return;
+    ta.style.height = "auto";
+    ta.style.height = Math.min(ta.scrollHeight, 160) + "px";
+  }
+
+  window.addEventListener("load", function() {
+    var ta = document.getElementById("op-input");
+    if (ta) ta.addEventListener("input", autoResizeInput);
+  });
 
   function sendReply() {
     if (!awaitingInput) return;
     var val = document.getElementById("op-input").value.trim();
     if (!val) return;
-    document.getElementById("op-input").value = "";
+    var ta = document.getElementById("op-input");
+    ta.value = "";
+    ta.style.height = "auto";
     setInputState(false);
     document.getElementById("prompt-box").style.display = "none";
     addLog(val, "opr");
@@ -263,7 +284,7 @@
   }
 
   // ── Export to Sheets ─────────────────────────────────────────
-  var SHEETS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycby0HapV0QYMFdPS2Us038HHgB6_IKRKed2pTrHPGiciStXGf6Wn--wxW0wSxVTXRamI5A/exec";  // ← paste your Apps Script Web App URL here
+  var SHEETS_WEBAPP_URL = "";  // ← paste your Apps Script Web App URL here
 
   function exportToSheets() {
     var btn = document.getElementById("btn-export-sheets");
@@ -356,7 +377,55 @@
   }
   window.exportToSheets = exportToSheets;
 
-  // ── Force Roster ──────────────────────────────────────────
+  // ── Map Randomizer ────────────────────────────────────────
+  var mapStatusRef  = db.ref("/maprand/status");
+  var mapCommandRef = db.ref("/maprand/command");
+  var mapResultRef  = db.ref("/maprand/result");
+
+  mapStatusRef.on("value", function(snap) {
+    var val = snap.val();
+    var btn = document.getElementById("btn-map-start");
+    var st  = document.getElementById("map-rand-status");
+    if (val === "ready") {
+      btn.disabled          = false;
+      btn.style.borderColor = "var(--c3)";
+      btn.style.color       = "var(--text-hi)";
+      st.textContent        = "randomizer ready";
+      st.style.color        = "var(--text-mid)";
+    } else if (val === "spinning") {
+      btn.disabled          = true;
+      btn.style.borderColor = "var(--border)";
+      btn.style.color       = "var(--text-low)";
+      st.textContent        = "spinning…";
+      st.style.color        = "var(--text-low)";
+    } else {
+      btn.disabled          = true;
+      btn.style.borderColor = "var(--border)";
+      btn.style.color       = "var(--text-low)";
+      st.textContent        = "randomizer offline";
+      st.style.color        = "var(--text-low)";
+    }
+  });
+
+  mapResultRef.on("value", function(snap) {
+    var val = snap.val();
+    var el  = document.getElementById("map-rand-result");
+    if (val && val !== "none") {
+      el.textContent  = "→ " + val;
+      el.style.color  = "var(--text-hi)";
+    } else {
+      el.textContent  = "";
+    }
+  });
+
+  function startMapRand() {
+    mapCommandRef.set("spin");
+    var btn = document.getElementById("btn-map-start");
+    btn.disabled          = true;
+    btn.style.borderColor = "var(--border)";
+    btn.style.color       = "var(--text-low)";
+  }
+  window.startMapRand = startMapRand;
   var forceRosterRef = db.ref("/session/force_roster");
   var joinCountRef   = db.ref("/session/join_count");
 
@@ -748,6 +817,13 @@ body {
   padding: 17px 20px;
   outline: none;
   transition: background 0.15s;
+  resize: none;
+  overflow-y: auto;
+  min-height: 52px;
+  max-height: 160px;
+  line-height: 1.5;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
 }
 
 #op-input:not(:disabled):focus { background: var(--card); }
@@ -963,6 +1039,8 @@ body {
     font-size: 16px;
     padding: 14px 14px;
     -webkit-appearance: none;
+    min-height: 50px;
+    max-height: 120px;
   }
 
   #send-btn {
@@ -1105,6 +1183,17 @@ body {
       </div>
 
       <div class="left-panel-section">
+        <div class="left-panel-label">Map Randomizer</div>
+        <div id="map-rand-status" style="font-size:10px;color:var(--text-low);letter-spacing:1px;margin-bottom:4px;">randomizer offline</div>
+        <button class="ticker-btn" id="btn-map-start"
+                onclick="startMapRand()" disabled
+                style="width:100%;letter-spacing:2px;">
+          Start
+        </button>
+        <div id="map-rand-result" style="font-size:10px;color:var(--text-low);letter-spacing:1px;min-height:14px;margin-top:4px;"></div>
+      </div>
+
+      <div class="left-panel-section">
         <div class="left-panel-label">Export</div>
         <button class="ticker-btn" id="btn-export-sheets"
                 onclick="exportToSheets()"
@@ -1122,9 +1211,9 @@ body {
 
       <div class="input-bar">
         <div class="input-prefix">OPR</div>
-        <input id="op-input" type="text"
+        <textarea id="op-input" rows="1"
                placeholder="Waiting for prompt…" disabled
-               onkeydown="inputKeydown(event)">
+               onkeydown="inputKeydown(event)"></textarea>
         <button id="send-btn" disabled onclick="sendReply()">Send</button>
       </div>
     </div>
