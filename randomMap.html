@@ -294,10 +294,11 @@
   const DOTS = ['d1','d2','d3','d4','d5'];
 
   // ── State ─────────────────────────────────────────────────
-  let selectedMap  = null;
-  let currentIndex = 0;
-  let spinning     = false;
-  let spinTimer    = null;
+  let selectedMap      = null;
+  let currentIndex     = 0;
+  let spinning         = false;
+  let spinTimer        = null;
+  let lastLockedIndex  = -1;   // tracks previously locked map to prevent repeat
 
   // ── DOM refs ──────────────────────────────────────────────
   const mapBg       = document.getElementById('mapBg');
@@ -332,7 +333,10 @@
     if (spinning) return;
     spinning = true;
 
-    const winnerIndex = Math.floor(Math.random() * MAPS.length);
+    let winnerIndex;
+    do {
+      winnerIndex = Math.floor(Math.random() * MAPS.length);
+    } while (winnerIndex === lastLockedIndex && MAPS.length > 1);
 
     stateLabel.textContent = 'Randomizing...';
     stateLabel.className = 'spinning';
@@ -396,7 +400,8 @@
       stateLabel.className = 'locked';
       bottomMap.textContent = MAPS[winnerIndex].name;
 
-      selectedMap = MAPS[winnerIndex].name;
+      selectedMap     = MAPS[winnerIndex].name;
+      lastLockedIndex = winnerIndex;
       console.log('Selected map:', selectedMap);
 
       // Write result to Firebase
