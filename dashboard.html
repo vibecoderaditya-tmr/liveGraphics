@@ -394,13 +394,10 @@
       btn.disabled          = true;
       btn.style.borderColor = "var(--border)";
       btn.style.color       = "var(--text-low)";
-      st.textContent        = "spinning…";
-      st.style.color        = "var(--text-low)";
     } else {
       btn.disabled          = false;
       btn.style.borderColor = "var(--c3)";
       btn.style.color       = "var(--text-hi)";
-      updateMapStatusText();
     }
   });
 
@@ -418,15 +415,6 @@
   function startMapRand() {
     var btn = document.getElementById("btn-map-start");
     if (btn.disabled) return;
-
-    // Read cooldown from the UI input field
-    var cdInput = document.getElementById("cooldown-input");
-    if (cdInput) {
-      var parsed = parseInt(cdInput.value);
-      if (!isNaN(parsed) && parsed >= 1 && parsed <= ALL_MAPS.length - 1) {
-        COOLDOWN = parsed;
-      }
-    }
 
     var avail = getAvailableMaps();
 
@@ -453,9 +441,6 @@
     btn.disabled          = true;
     btn.style.borderColor = "var(--border)";
     btn.style.color       = "var(--text-low)";
-    var st = document.getElementById("map-rand-status");
-    st.textContent = "spinning…";
-    st.style.color = "var(--text-low)";
 
     // Write to Firebase
     mapCommandRef.set("spin");
@@ -473,7 +458,6 @@
       btn.disabled          = false;
       btn.style.borderColor = "var(--c3)";
       btn.style.color       = "var(--text-hi)";
-      updateMapStatusText();
     }, 3000);
   }
   window.startMapRand = startMapRand;
@@ -1218,11 +1202,7 @@ body {
 
       <div class="left-panel-section">
         <div class="left-panel-label">Map Randomizer</div>
-        <div class="cooldown-row">
-          <span class="cooldown-label">Cooldown</span>
-          <input id="cooldown-input" type="number" min="1" max="5" value="3">
-        </div>
-        <div id="map-rand-status" style="font-size:10px;color:var(--text-mid);letter-spacing:1px;margin-bottom:4px;">ready</div>
+
         <button class="ticker-btn" id="btn-map-start"
                 onclick="startMapRand()"
                 style="width:100%;letter-spacing:2px;">

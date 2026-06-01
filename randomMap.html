@@ -283,13 +283,18 @@
   ];
 
   const STAGES = [
-    [80,  1200],
-    [160, 900],
-    [300, 700],
-    [500, 600],
-    [800, 500],
-    [1100, 0],
+    [900,  600],   // 0 — slow start
+    [600,  600],   // 1 — picking up
+    [300,  700],   // 2 — getting fast
+    [140,  800],   // 3 — peak speed
+    [140,  800],   // 4 — peak speed hold
+    [300,  700],   // 5 — slowing down
+    [550,  700],   // 6 — slower
+    [850,  800],   // 7 — crawling
+    [1200,   0],   // 8 — final tick → lock
   ];
+
+  const STAGE_DOTS = [1, 2, 3, 5, 5, 3, 2, 1, 1];
 
   const DOTS = ['d1','d2','d3','d4','d5'];
 
@@ -298,7 +303,7 @@
   let currentIndex     = 0;
   let spinning         = false;
   let spinTimer        = null;
-  let lastLockedIndex  = -1;   // tracks previously locked map to prevent repeat
+  let lastLockedIndex  = -1;
 
   // ── DOM refs ──────────────────────────────────────────────
   const mapBg       = document.getElementById('mapBg');
@@ -322,7 +327,7 @@
 
   // ── Update speed dots ─────────────────────────────────────
   function updateDots(stageIndex) {
-    const activeDots = Math.max(0, 5 - stageIndex);
+    const activeDots = (stageIndex >= STAGE_DOTS.length) ? 0 : STAGE_DOTS[stageIndex];
     DOTS.forEach((id, i) => {
       document.getElementById(id).classList.toggle('active', i < activeDots);
     });
@@ -333,10 +338,13 @@
     if (spinning) return;
     spinning = true;
 
-    let winnerIndex;
+    // Start from a random map (not always index 0)
+    let startIndex;
     do {
-      winnerIndex = Math.floor(Math.random() * MAPS.length);
-    } while (winnerIndex === lastLockedIndex && MAPS.length > 1);
+      startIndex = Math.floor(Math.random() * MAPS.length);
+    } while (startIndex === lastLockedIndex && MAPS.length > 1);
+    currentIndex = startIndex;
+    showMap(currentIndex);
 
     stateLabel.textContent = 'Randomizing...';
     stateLabel.className = 'spinning';
@@ -348,8 +356,9 @@
     let elapsed = 0;
 
     function runStage() {
+      // Last stage: lock whatever is currently showing
       if (stageIndex >= STAGES.length - 1) {
-        lock(winnerIndex);
+        lock(currentIndex);
         return;
       }
 
@@ -377,13 +386,21 @@
     runStage();
   }
 
-  // ── Lock on winner ────────────────────────────────────────
+  // ── Lock on whatever map is currently showing ─────────────
   function lock(winnerIndex) {
     clearInterval(spinTimer);
     spinning = false;
 
-    currentIndex = winnerIndex;
-    showMap(winnerIndex);
+    // If result same as last locked, do one extra flip
+    if (winnerIndex === lastLockedIndex && MAPS.length > 1) {
+      let next;
+      do {
+        next = Math.floor(Math.random() * MAPS.length);
+      } while (next === lastLockedIndex);
+      winnerIndex = next;
+      currentIndex = next;
+      showMap(currentIndex);
+    }
 
     setTimeout(() => {
       mapName.classList.add('locked');
@@ -414,7 +431,9 @@
 
   // ── Init ──────────────────────────────────────────────────
   window.addEventListener('load', () => {
-    showMap(0);
+    const initIndex = Math.floor(Math.random() * MAPS.length);
+    currentIndex = initIndex;
+    showMap(initIndex);
     mapBg.style.filter = 'brightness(0.4) saturate(0.6)';
     stateLabel.textContent = 'Ready';
     eyebrow.textContent = 'Awaiting signal';
