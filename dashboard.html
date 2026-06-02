@@ -478,39 +478,6 @@
   }
   window.forceRoster = forceRoster;
 
-  // ── Champion Rush ─────────────────────────────────────────
-  var crRef      = db.ref("/matches/0_teams");
-  var crThreshold = 0;
-
-  function saveCrThreshold() {
-    var inp = document.getElementById("cr-threshold-input");
-    var st  = document.getElementById("cr-threshold-status");
-    var val = parseInt(inp.value);
-    if (!val || val <= 0) {
-      st.textContent = "enter a valid number";
-      st.style.color = "#7a6a6a";
-      return;
-    }
-    crRef.child("championRushPoint").set(val);
-    crThreshold = val;
-    st.textContent = "✓ saved";
-    st.style.color = "var(--text-hi)";
-    setTimeout(function() { st.textContent = ""; }, 3000);
-  }
-  window.saveCrThreshold = saveCrThreshold;
-
-  crRef.child("championRushPoint").on("value", function(snap) {
-    var val = snap.val();
-    if (val !== null && val !== undefined) {
-      var inp = document.getElementById("cr-threshold-input");
-      var newThr = parseInt(val) || 0;
-      if (inp && newThr > 0) {
-        inp.value = newThr;
-        crThreshold = newThr;
-      }
-    }
-  });
-
   joinCountRef.on("value", function(snap) {
     var n      = snap.val();
     var btn    = document.getElementById("btn-force-roster");
@@ -1029,10 +996,6 @@ body {
 #cooldown-input::-webkit-outer-spin-button,
 #cooldown-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
-#cr-threshold-input::-webkit-outer-spin-button,
-#cr-threshold-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-#cr-threshold-input { -moz-appearance: textfield; }
-
 #cooldown-input:focus {
   background: var(--card);
   border-color: var(--c3);
@@ -1246,17 +1209,6 @@ body {
           Start
         </button>
         <div id="map-rand-result" style="font-size:11px;color:var(--text-low);letter-spacing:1px;min-height:14px;margin-top:4px;font-weight:500;"></div>
-      </div>
-
-      <div class="left-panel-section">
-        <div class="left-panel-label">Champion Rush</div>
-        <div class="cooldown-row">
-          <span class="cooldown-label">Threshold</span>
-          <input id="cr-threshold-input" type="number" min="1" value="—"
-                 style="width:54px;background:var(--bg);border:1px solid var(--border);border-bottom:2px solid var(--c3);color:var(--text-hi);font-family:var(--font-mono);font-size:13px;text-align:center;padding:4px 6px;outline:none;-moz-appearance:textfield;"
-                 onchange="saveCrThreshold()" onkeydown="if(event.key==='Enter')saveCrThreshold()">
-        </div>
-        <div id="cr-threshold-status" style="font-size:10px;color:var(--text-low);letter-spacing:1px;min-height:14px;"></div>
       </div>
 
       <div class="left-panel-section">
