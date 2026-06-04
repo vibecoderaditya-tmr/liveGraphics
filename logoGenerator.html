@@ -383,6 +383,7 @@
       let processedBackpackPics = [];
       let gloowallPics = [];
       let headPicBackground = [];
+      let logosImages = [];
       let nameMapping = {};
 
       // Load JSZip from CDN
@@ -508,6 +509,7 @@
         processedBackpackPics = [];
         gloowallPics = [];
         headPicBackground = [];
+        logosImages = [];
       }
 
       function displayImages() {
@@ -570,6 +572,7 @@
         processedBackpackPics = [];
         gloowallPics = [];
         headPicBackground = [];
+        logosImages = [];
         processNextImage(0, 0, 24);
       }
 
@@ -620,6 +623,9 @@
 
             const headCanvas = resizeAndCenter(img, crop, 110, 100);
             processedHeadPics.push({ name: newFileName, data: headCanvas });
+
+            const logoFileName = newFileName.replace(/\.[^/.]+$/, "") + ".webp";
+            logosImages.push({ name: logoFileName, data: headCanvas });
             currentStep++;
             updateProgress(currentStep, totalSteps);
 
@@ -729,6 +735,7 @@
         const backpackFolder = zip.folder("BackPackPics");
         const gloowallFolder = zip.folder("GloowallPics");
         const headBgFolder = zip.folder("HeadPicBackground");
+        const logosFolder = zip.folder("logos");
 
         processedHeadPics.forEach((image) => {
           const base64 = image.data.toDataURL("image/png").split(",")[1];
@@ -750,6 +757,11 @@
           headBgFolder.file(image.name, base64, { base64: true });
         });
 
+        logosImages.forEach((image) => {
+          const base64 = image.data.toDataURL("image/webp").split(",")[1];
+          logosFolder.file(image.name, base64, { base64: true });
+        });
+
         zip.generateAsync({ type: "blob" }).then((blob) => {
           const link = document.createElement("a");
           link.href = URL.createObjectURL(blob);
@@ -764,6 +776,7 @@
         processedBackpackPics = [];
         gloowallPics = [];
         headPicBackground = [];
+        logosImages = [];
         previewSection.classList.add("hidden");
         processBtnWrapper.classList.add("hidden");
         downloadSection.classList.add("hidden");

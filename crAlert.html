@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Champion Rush · Alert</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700;800&family=Barlow+Condensed:wght@400;500;600;700;800;900&display=swap');
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --accent-color: #a2ff00;
+  --font-titles: 'Rajdhani', sans-serif;
+  --size-ga-title: 34px;
+
+  --ga-body-bg:    linear-gradient(135deg, #2d0050 0%, #3b0066 100%);
+  --ga-ribbon-bg:  linear-gradient(135deg, #a2ff00, #8bcc00);
+  --logo-bg-color: linear-gradient(135deg, #ffffff, #dcdcdc);
+
+  --ga-ribbon-txt: #000000;
+  --ga-main-txt:   #ffffff;
+
+  --alert-height: 130px;
+}
+
+body {
+  width: 1920px; height: 1080px; overflow: hidden; background: #111;
+}
+
+#going-alert {
+  position: absolute; top: 45px; left: 50%; transform: translateX(-50%);
+  width: max-content; max-width: 800px; height: var(--alert-height);
+  display: flex; flex-direction: column; justify-content: flex-end;
+  z-index: 9999;
+}
+
+.ga-top-ribbon {
+  position: absolute; top: -3px; left: 40px;
+  background: var(--ga-ribbon-bg);
+  padding: 3px 32px;
+  transform: skewX(-15deg);
+  z-index: 5;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+.ga-top-ribbon-text {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 900; font-size: 16px;
+  color: var(--ga-ribbon-txt);
+  letter-spacing: 1.2px; text-transform: uppercase;
+  transform: skewX(15deg); display: block;
+}
+
+.ga-main-body {
+  height: calc(var(--alert-height) - 26px);
+  display: flex; align-items: center;
+  background: var(--ga-body-bg);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  clip-path: polygon(8px 0%, 100% 0%, 100% 100%, 0% 100%);
+  padding: 0 145px 0 24px;
+  position: relative;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65);
+  width: 100%;
+}
+
+.ga-crown-badge-circle {
+  width: 62px; height: 62px; border-radius: 50%;
+  border: 3px solid var(--accent-color);
+  background: rgba(0, 0, 0, 0.5);
+  display: flex; align-items: center; justify-content: center;
+  margin-right: 20px; flex-shrink: 0;
+  box-shadow: inset 0 0 14px rgba(162, 255, 0, 0.5), 0 0 14px rgba(162, 255, 0, 0.4);
+}
+.ga-crown-badge-circle svg {
+  width: 36px; height: 36px;
+  fill: var(--accent-color);
+}
+
+.ga-content-text-group {
+  display: flex; flex-direction: column; flex: 1;
+}
+.ga-alert-desc-lbl {
+  font-family: var(--font-titles);
+  font-weight: 800; font-size: var(--size-ga-title);
+  color: var(--ga-main-txt);
+  line-height: 1.1; text-transform: uppercase;
+  letter-spacing: 0.5px; white-space: nowrap;
+}
+.ga-team-name-str {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700; font-size: 16px;
+  color: var(--ga-main-txt);
+  opacity: 0.6; text-transform: uppercase;
+  line-height: 1; margin-top: 5px;
+  letter-spacing: 0.5px; white-space: nowrap;
+}
+
+.ga-right-polygon-card {
+  position: absolute; right: 0; bottom: 0;
+  width: 120px; height: calc(var(--alert-height) - 26px);
+  background: var(--logo-bg-color);
+  clip-path: polygon(25% 0%, 100% 0%, 100% 100%, 0% 100%);
+  display: flex; align-items: center; justify-content: center;
+  padding-left: 24px; z-index: 10;
+}
+.ga-right-polygon-card img { width: 58px; height: 58px; object-fit: contain; }
+.ga-txt-logo-fallback {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 800; font-size: 26px; color: #0d001a;
+}
+</style>
+</head>
+<body>
+
+  <div id="going-alert">
+    <div class="ga-top-ribbon">
+      <div class="ga-top-ribbon-text" id="ga-ribbon-string">CHAMPION RUSH</div>
+    </div>
+    <div class="ga-main-body">
+      <div class="ga-crown-badge-circle">
+        <svg viewBox="0 0 24 24"><path d="M2 4l3 12h14l3-12-5 4-4-6-4 6-5-4zm17 14h-14v2h14v-2z"/></svg>
+      </div>
+      <div class="ga-content-text-group">
+        <div class="ga-alert-desc-lbl" id="ga-alert-desc-text">ACTIVATED FOR NEXT GAME</div>
+        <div class="ga-team-name-str" id="ga-title-name">GODLIKE ESPORTS</div>
+      </div>
+    </div>
+    <div class="ga-right-polygon-card" id="ga-logo-slot">
+      <div class="ga-txt-logo-fallback">GODL</div>
+    </div>
+  </div>
+
+</body>
+</html>
