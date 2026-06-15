@@ -494,14 +494,14 @@
       return;
     }
 
-    // Collect teams that have a winRate field
+    // Collect teams that have a winRate field (only show teams with >0%)
     var teams = [];
     Object.keys(val).forEach(function(key) {
       var node = val[key];
       if (typeof node !== "object" || node === null) return;
       if (!node["winRate"] || !node["1_teamTag"]) return;
       var pct = parseFloat(node["winRate"]);
-      if (isNaN(pct)) return;
+      if (isNaN(pct) || pct <= 0) return;
       teams.push({
         tag:      node["1_teamTag"],
         name:     node["4_teamName"] || node["1_teamTag"],
