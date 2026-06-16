@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Map Overview</title>
 	<link rel="icon" type="image/x-icon" href="icon.ico">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700;800;900&display=swap" rel="stylesheet">
     <style>
       * {
         margin: 0;
@@ -13,6 +16,11 @@
       }
 
       :root {
+        /* ── Global theme ── */
+        --font-family: 'Lexend', Arial, sans-serif;
+        --bg-color: transparent;
+        --text-color: #e0e0e0;
+
         /* ── Logo ── */
         --logo-size: 100px;
 
@@ -36,7 +44,7 @@
         --ribbon-skew: 10%;
         --ribbon-top: 0px;
         --ribbon-left: 0px;
-        --label-font-family: Arial, sans-serif;
+        --label-font-family: var(--font-family);
         --label-font-size: 23px;
         --label-font-weight: 900;
         --label-letter-spacing: 2px;
@@ -45,7 +53,7 @@
         --label-text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
 
         /* ── Game Badge — top right of each box ── */
-        --badge-font-family: Arial, sans-serif;
+        --badge-font-family: var(--font-family);
         --badge-font-size: 20px;
         --badge-font-weight: 800;
         --badge-letter-spacing: 1.5px;
@@ -59,7 +67,7 @@
         --badge-right: 0px;
 
         /* ── Map Label — bottom right of each box ── */
-        --map-label-font-family: Arial, sans-serif;
+        --map-label-font-family: var(--font-family);
         --map-label-font-size: 23px;
         --map-label-font-weight: 700;
         --map-label-letter-spacing: 2px;
@@ -81,6 +89,18 @@
         --grid-gap: 15px;
         --grid-padding: 10px;
         --grid-width: 25%;
+
+        /* ── Standings table ── */
+        --standings-bg: #1a1a1a;
+        --standings-border: #333;
+        --standings-header-bg: #222;
+        --standings-header-color: #ffd700;
+        --standings-col-header-bg: #2a2a2a;
+        --standings-row-height: 60px;
+        --standings-alt-row: #1e1e1e;
+        --standings-text: var(--text-color);
+        --standings-text-dim: #888;
+        --standings-font-family: var(--font-family);
 
         /* ── Animation timing ── */
         --slide-duration: 0.5s;
@@ -300,6 +320,120 @@
         z-index: 6;
       }
 
+      /* ── Standings table — rows slide in/out with stagger, same as boxes ── */
+      .standings {
+        position: relative;
+        width: var(--grid-width);
+        padding: var(--grid-padding);
+        display: none;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .standings.visible {
+        display: flex;
+      }
+      .standings-header {
+        background: var(--standings-header-bg);
+        border: 1px solid var(--standings-border);
+        border-bottom: 2px solid var(--standings-header-color);
+        padding: 10px 14px;
+        text-align: center;
+        font-family: var(--standings-font-family);
+        font-size: 22px;
+        font-weight: 900;
+        letter-spacing: 3px;
+        color: var(--standings-header-color);
+        text-transform: uppercase;
+        margin-bottom: 4px;
+        border-radius: 6px 6px 0 0;
+        /* header doesn't slide — always visible with the container */
+      }
+      .standings-col-header {
+        display: flex;
+        align-items: center;
+        padding: 10px 14px;
+        font-family: var(--standings-font-family);
+        font-size: 14px;
+        font-weight: 800;
+        letter-spacing: 2px;
+        color: var(--standings-text-dim);
+        text-transform: uppercase;
+        background: var(--standings-col-header-bg);
+        border: 1px solid var(--standings-border);
+        border-radius: 4px;
+        margin-bottom: 4px;
+      }
+      .standings-col-header .sth-rank {
+        width: 40px;
+        text-align: center;
+        flex-shrink: 0;
+      }
+      .standings-col-header .sth-teams {
+        flex: 1;
+        padding: 0 10px;
+        text-align: center;
+      }
+      .standings-col-header .sth-pts {
+        width: 60px;
+        text-align: center;
+        flex-shrink: 0;
+      }
+      .standings-body {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+      }
+      .standings-row {
+        display: flex;
+        align-items: center;
+        padding: 0 14px;
+        height: var(--standings-row-height);
+        background: var(--standings-bg);
+        border: 1px solid var(--standings-border);
+        border-radius: 4px;
+        font-family: var(--standings-font-family);
+        font-size: 18px;
+        color: var(--standings-text);
+        /* start invisible, offset by slide-offset (same as .box) */
+        opacity: 0;
+        transform: translateX(var(--slide-offset));
+      }
+      .standings-row:nth-child(even) {
+        background: var(--standings-alt-row);
+      }
+      .standings-rank {
+        width: 40px;
+        text-align: center;
+        font-weight: 800;
+        color: var(--standings-text-dim);
+        flex-shrink: 0;
+      }
+      .standings-logo {
+        width: 42px;
+        height: 42px;
+        object-fit: contain;
+        flex-shrink: 0;
+        margin: 0 10px 0 20px;
+        filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));
+      }
+      .standings-name {
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        padding: 0 4px;
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: 1px;
+      }
+      .standings-pts {
+        width: 60px;
+        text-align: center;
+        font-weight: 700;
+        color: var(--standings-text);
+        flex-shrink: 0;
+      }
+
       /* ── DEBUG PANEL ── */
       #debug {
         position: fixed;
@@ -414,12 +548,93 @@
 
     </div>
 
+    <!-- STANDINGS TABLE -->
+    <div class="standings" id="standings">
+      <div class="standings-header">STANDINGS</div>
+      <div class="standings-col-header">
+        <span class="sth-rank">RANK</span>
+        <span class="sth-teams">TEAMS</span>
+        <span class="sth-pts">TOTAL PTS</span>
+      </div>
+      <div class="standings-body" id="standings-body">
+        <!-- 12 rows populated by JS -->
+      </div>
+    </div>
+
     <div id="debug">
       <h3>🔍 DEBUG</h3>
       <span id="debug-body">Waiting for first fetch…</span>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
     <script>
+      // ─── Firebase init ───────────────────────────────────────────────────────
+      firebase.initializeApp({
+        apiKey:            "AIzaSyC21mdsgyIEqXT7ujFbi0xcVAMRZxxqB1I",
+        authDomain:        "tmraditya-1ceb7.firebaseapp.com",
+        databaseURL:       "https://tmraditya-1ceb7-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId:         "tmraditya-1ceb7",
+        storageBucket:     "tmraditya-1ceb7.firebasestorage.app",
+        messagingSenderId: "317037791388",
+        appId:             "1:317037791388:web:755b5a18bb77aa140a4559"
+      });
+      var fbDb = firebase.database();
+
+      // ─── Standings data fetcher (from matches/0_teams) ─────────────────────
+      var LOGO_FOLDER = "logos";
+      var LOGO_EXT    = ".webp";
+
+      function fetchStandings() {
+        fbDb.ref("/matches/0_teams").once("value", function(snap) {
+          var teams = snap.val();
+          if (!teams) return;
+
+          var entries = Object.keys(teams).map(function(tag) {
+            var t = teams[tag];
+            return {
+              tag:      tag,
+              name:     t["1_teamName"] || tag,
+              rank:     parseInt(t["0_rank"]) || 99,
+              totalPts: parseInt(t["5_totalPoints"]) || 0
+            };
+          });
+
+          entries.sort(function(a, b) { return b.totalPts - a.totalPts; });
+
+          for (var i = 0; i < 12; i++) {
+            var row = document.getElementById("srow-" + i);
+            if (!row) continue;
+
+            var rankEl  = row.querySelector(".standings-rank");
+            var logoEl  = document.getElementById("slogo-" + i);
+            var nameEl  = document.getElementById("sname-" + i);
+            var ptsEl   = document.getElementById("spts-" + i);
+
+            if (i < entries.length) {
+              var e = entries[i];
+              if (rankEl) rankEl.textContent = "#" + (i + 1);
+              if (logoEl) {
+                logoEl.src = LOGO_FOLDER + "/" + e.tag + LOGO_EXT;
+                logoEl.onerror = function() { this.style.display = "none"; };
+                logoEl.style.display = "block";
+              }
+              if (nameEl) nameEl.textContent = e.name;
+              if (ptsEl)  ptsEl.textContent  = e.totalPts;
+            } else {
+              if (rankEl) rankEl.textContent = "";
+              if (logoEl) logoEl.style.display = "none";
+              if (nameEl) nameEl.textContent = "—";
+              if (ptsEl)  ptsEl.textContent  = "";
+            }
+          }
+        });
+      }
+
+      // fetch immediately then every 5s
+      fetchStandings();
+      setInterval(fetchStandings, 5000);
+
       // ─── Random map for box 6 — picked once on load, fixed until page reload ───
       const FIXED_MAPS = [
         { name: "BERMUDA",   img: "maps/bermuda.webp"   },
@@ -444,6 +659,57 @@
 
       const NUM_BOXES   = 8;
       const allBoxes    = Array.from({ length: NUM_BOXES }, (_, i) => document.getElementById(`box${i + 1}`));
+
+      // ─── Standings table (12 rows, each slides like a box) ─────────────────
+      const standingsEl  = document.getElementById("standings");
+      const standingsBody = document.getElementById("standings-body");
+      let standingsRows = [];
+
+      function buildStandingsRows() {
+        standingsBody.innerHTML = "";
+        standingsRows = [];
+        for (let i = 0; i < 12; i++) {
+          const row = document.createElement("div");
+          row.className = "standings-row";
+          row.id = "srow-" + i;
+          row.innerHTML =
+            '<span class="standings-rank">#' + (i + 1) + '</span>' +
+            '<img class="standings-logo" id="slogo-' + i + '" src="" alt="">' +
+            '<span class="standings-name" id="sname-' + i + '">—</span>' +
+            '<span class="standings-pts" id="spts-' + i + '">0</span>';
+          standingsBody.appendChild(row);
+          standingsRows.push(row);
+        }
+      }
+      buildStandingsRows();
+
+      // Slide a single standings row in or out (same as slideBox for maps)
+      function slideStandingsRow(row, inOrOut, delay) {
+        setTimeout(() => {
+          row.style.transition = `opacity ${SLIDE_DUR}ms ease, transform ${SLIDE_DUR}ms ease`;
+          if (inOrOut === 'in') {
+            row.style.opacity = '1';
+            row.style.transform = 'translateX(0)';
+          } else {
+            row.style.opacity = '0';
+            row.style.transform = `translateX(${SLIDE_OFFSET})`;
+          }
+        }, delay);
+      }
+
+      function slideStandingsIn() {
+        standingsEl.style.display = "flex";
+        standingsRows.forEach((row, i) => {
+          slideStandingsRow(row, 'in', i * STAGGER);
+        });
+      }
+
+      function slideStandingsOut() {
+        standingsRows.forEach((row, i) => {
+          const reverseIndex = standingsRows.length - 1 - i;
+          slideStandingsRow(standingsRows[reverseIndex], 'out', i * STAGGER);
+        });
+      }
 
       // Slide a single box in (opacity 1, translateX 0) or out (opacity 0, translateX = SLIDE_OFFSET)
       function slideBox(box, inOrOut, delay) {
@@ -474,30 +740,50 @@
         });
       }
 
-      // Full cycle: slide in → stay → slide out → hide → repeat
+      // Full cycle: maps in → stay → out → standings in → stay → out → repeat
       function runCycle() {
         slideAllIn();
 
-        const allInTime  = NUM_BOXES * STAGGER + SLIDE_DUR;
-        const slideOutAt = allInTime + STAY_DUR;
+        const mapsInTime  = NUM_BOXES * STAGGER + SLIDE_DUR;
+        const mapsOutTime = mapsInTime + STAY_DUR;
 
         setTimeout(() => {
           slideAllOut();
-        }, slideOutAt);
+        }, mapsOutTime);
 
-        const allOutTime = slideOutAt + NUM_BOXES * STAGGER + SLIDE_DUR;
-        const nextCycle  = allOutTime + HIDE_DUR;
+        const mapsDone = mapsOutTime + NUM_BOXES * STAGGER + SLIDE_DUR;
+
+        // clear maps display after they slide out
+        setTimeout(() => {
+          document.querySelector(".main").style.display = "none";
+        }, mapsDone);
+
+        // standings slide in after maps are fully out
+        const NUM_STANDINGS = 12;
+        const standsInAt = mapsDone;
+        setTimeout(() => {
+          slideStandingsIn();
+        }, standsInAt);
+
+        const standsInTime  = standsInAt + NUM_STANDINGS * STAGGER + SLIDE_DUR;
+        const standsOutTime = standsInTime + STAY_DUR;
 
         setTimeout(() => {
+          slideStandingsOut();
+        }, standsOutTime);
+
+        const standsDone = standsOutTime + NUM_STANDINGS * STAGGER + SLIDE_DUR + HIDE_DUR;
+
+        setTimeout(() => {
+          standingsEl.style.display = "none";
+          document.querySelector(".main").style.display = "grid";
           runCycle();
-        }, nextCycle);
+        }, standsDone);
       }
 
       // ─── Firebase fetch ──────────────────────────────────────────────────────
       const WEB_APP_URL  = "https://script.google.com/macros/s/AKfycbz1JmA3BlqI4xqFll5FZHCVY-iPQDO5OU6DH0gRYPTqd8bqMa_TWz5Gzw3lvVYALcXtlA/exec";
       const POLL_INTERVAL = 3000;
-      const LOGO_FOLDER   = "logos";
-      const LOGO_EXT      = ".webp";
 
       const showDebug = !location.search.includes("nodebug");
       if (!showDebug) document.getElementById("debug").style.display = "none";
