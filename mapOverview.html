@@ -4,38 +4,24 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Map Overview</title>
-	<link rel="icon" type="image/x-icon" href="icon.ico">
+    <link rel="icon" type="image/x-icon" href="/icon.ico">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700;800;900&display=swap" rel="stylesheet">
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
+      * { margin: 0; padding: 0; box-sizing: border-box; }
 
       :root {
-        /* ── Global theme ── */
         --font-family: 'Lexend', Arial, sans-serif;
-        --bg-color: transparent;
         --text-color: #e0e0e0;
 
-        /* ── Logo ── */
         --logo-size: 100px;
 
-        /* ── Overlay (shown on BOOYAH boxes) ── */
         --overlay-color: rgba(0, 0, 0, 0.5);
         --map-blur: 3px;
 
-        /* ── Bottom gradient (always shown on every box) ── */
-        --bottom-gradient: linear-gradient(
-          to top,
-          rgba(0, 0, 0, 0.75) 0%,
-          rgba(0, 0, 0, 0) 55%
-        );
+        --bottom-gradient: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0) 55%);
 
-        /* ── Ribbon (BOOYAH / UPCOMING) — top left of each box ── */
         --ribbon-bg-booyah: #000000e1;
         --ribbon-bg-upcoming: #000000;
         --ribbon-width: fit-content;
@@ -50,9 +36,8 @@
         --label-letter-spacing: 2px;
         --label-color-booyah: #ffd700;
         --label-color-upcoming: #ffffff;
-        --label-text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+        --label-text-shadow: 0 1px 4px rgba(0,0,0,0.9);
 
-        /* ── Game Badge — top right of each box ── */
         --badge-font-family: var(--font-family);
         --badge-font-size: 20px;
         --badge-font-weight: 800;
@@ -62,11 +47,9 @@
         --badge-bg-image: none;
         --badge-width: 120px;
         --badge-height: 44px;
-        --badge-skew: 12%;
         --badge-top: 0px;
         --badge-right: 0px;
 
-        /* ── Map Label — bottom right of each box ── */
         --map-label-font-family: var(--font-family);
         --map-label-font-size: 23px;
         --map-label-font-weight: 700;
@@ -80,17 +63,14 @@
         --map-label-right: 0px;
         --map-label-bottom: 0px;
 
-        /* ── Box ── */
         --box-height: 115px;
         --box-bg: #222;
         --box-border-radius: 6px;
 
-        /* ── Layout ── */
         --grid-gap: 15px;
         --grid-padding: 10px;
         --grid-width: 25%;
 
-        /* ── Standings table ── */
         --standings-bg: #1a1a1a;
         --standings-border: #333;
         --standings-header-bg: #222;
@@ -102,21 +82,16 @@
         --standings-text-dim: #888;
         --standings-font-family: var(--font-family);
 
-        /* ── Animation timing ── */
         --slide-duration: 0.5s;
         --slide-stagger: 0.15s;
         --stay-duration: 15s;
-        --hide-duration: 15s;
 
         /*
-         * ── Slide offset ──
-         * Controls WHERE boxes come FROM and go TO during animation.
-         * Positive value  (+120px) → slides in from the RIGHT, exits to the RIGHT
-         * Negative value  (-120px) → slides in from the LEFT,  exits to the LEFT
+         * Positive (+120px) → slides from RIGHT, exits RIGHT
+         * Negative (-120px) → slides from LEFT,  exits LEFT
          */
         --slide-offset: -120px;
 
-        /* ── Booyah image (right of team logo) ── */
         --booyah-img-height: 135px;
         --booyah-img-top: -25px;
       }
@@ -127,7 +102,7 @@
         overflow: hidden;
         display: flex;
         align-items: flex-end;
-		padding-bottom: 20px;
+        padding-bottom: 20px;
       }
 
       .main {
@@ -139,6 +114,7 @@
         border-radius: 8px;
       }
 
+      /* ── Map boxes ── */
       .box {
         position: relative;
         width: 100%;
@@ -147,91 +123,54 @@
         clip-path: inset(0px);
         border-radius: var(--box-border-radius);
         background: var(--box-bg);
-        /* start fully invisible, offset by --slide-offset */
         opacity: 0;
         transform: translateX(var(--slide-offset));
       }
-
       .box img.map-img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        object-position: center;
+        width: 100%; height: 100%;
+        object-fit: cover; object-position: center;
         display: block;
         border-radius: var(--box-border-radius);
         transition: filter 0.4s ease;
       }
-      .box.has-tag img.map-img {
-        filter: blur(var(--map-blur));
-      }
-
-      /* Dark overlay — only on BOOYAH boxes */
+      .box.has-tag img.map-img { filter: blur(var(--map-blur)); }
       .box .overlay {
-        position: absolute;
-        inset: 0;
+        position: absolute; inset: 0;
         background: var(--overlay-color);
-        display: none;
-        z-index: 1;
+        display: none; z-index: 1;
         border-radius: var(--box-border-radius);
       }
-      .box.has-tag .overlay {
-        display: block;
-      }
-
-      /* Bottom gradient — always on every box */
+      .box.has-tag .overlay { display: block; }
       .box .bottom-grad {
-        position: absolute;
-        inset: 0;
+        position: absolute; inset: 0;
         background: var(--bottom-gradient);
-        z-index: 2;
-        pointer-events: none;
+        z-index: 2; pointer-events: none;
         border-radius: var(--box-border-radius);
       }
-
-      /* ── Team logo ── */
       .team-logo {
         position: absolute;
-        top: 5px;
-        left: 20px;
-        width: var(--logo-size);
-        height: var(--logo-size);
+        top: 5px; left: 20px;
+        width: var(--logo-size); height: var(--logo-size);
         object-fit: contain;
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7));
-        display: none;
-        z-index: 3;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.7));
+        display: none; z-index: 3;
       }
-      .team-logo.visible {
-        display: block;
-      }
-
-      /* ── Booyah image — right of team logo, only on BOOYAH boxes ── */
+      .team-logo.visible { display: block; }
       .booyah-img {
         position: absolute;
         top: var(--booyah-img-top);
-        /* sits right after the logo: logo left(14px) + logo-size(150px) + small gap(8px) */
         left: calc(14px + var(--logo-size) + 8px);
-        height: var(--booyah-img-height);
-        width: auto;
+        height: var(--booyah-img-height); width: auto;
         object-fit: contain;
-        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7));
-        display: none;
-        z-index: 4;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.7));
+        display: none; z-index: 4;
       }
-      /* Only show when the box has the BOOYAH tag AND the team logo is visible */
-      .box.has-tag .team-logo.visible ~ .booyah-img {
-        display: block;
-      }
-
-      /* ── BOOYAH / UPCOMING ribbon — top left ── */
+      .box.has-tag .team-logo.visible ~ .booyah-img { display: block; }
       .box .status-label {
         position: absolute;
-        top: var(--ribbon-top);
-        left: var(--ribbon-left);
-        width: var(--ribbon-width);
-        height: var(--ribbon-height);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        top: var(--ribbon-top); left: var(--ribbon-left);
+        width: var(--ribbon-width); height: var(--ribbon-height);
+        display: flex; align-items: center; justify-content: center;
         padding: 0 var(--ribbon-padding-x);
         font-family: var(--label-font-family);
         font-size: var(--label-font-size);
@@ -239,39 +178,17 @@
         letter-spacing: var(--label-letter-spacing);
         text-shadow: var(--label-text-shadow);
         white-space: nowrap;
-        clip-path: polygon(
-          0% 0%,
-          100% 0%,
-          calc(100% - var(--ribbon-skew)) 100%,
-          0% 100%
-        );
+        clip-path: polygon(0% 0%, 100% 0%, calc(100% - var(--ribbon-skew)) 100%, 0% 100%);
         z-index: 6;
       }
-      .box.has-tag .status-label {
-        color: var(--label-color-booyah);
-        background: var(--ribbon-bg-booyah);
-      }
-      .box:not(.has-tag) .status-label {
-        color: var(--label-color-upcoming);
-        background: var(--ribbon-bg-upcoming);
-      }
-      .box .status-label:empty {
-        display: none;
-      }
-      .box.has-tag .status-label {
-        display: none;
-      }
-
-      /* ── GAME N badge — top right ── */
+      .box.has-tag .status-label     { color: var(--label-color-booyah);   background: var(--ribbon-bg-booyah);   display: none; }
+      .box:not(.has-tag) .status-label { color: var(--label-color-upcoming); background: var(--ribbon-bg-upcoming); }
+      .box .status-label:empty { display: none; }
       .box .game-badge {
         position: absolute;
-        top: var(--badge-top);
-        right: var(--badge-right);
-        width: var(--badge-width);
-        height: var(--badge-height);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        top: var(--badge-top); right: var(--badge-right);
+        width: var(--badge-width); height: var(--badge-height);
+        display: flex; align-items: center; justify-content: center;
         font-family: var(--badge-font-family);
         font-size: var(--badge-font-size);
         font-weight: var(--badge-font-weight);
@@ -279,28 +196,16 @@
         color: var(--badge-color);
         background-color: var(--badge-bg);
         background-image: var(--badge-bg-image);
-        background-size: 100% 100%;
-        background-position: center;
+        background-size: 100% 100%; background-position: center;
         white-space: nowrap;
-        clip-path: polygon(
-          14% 10%,
-          93% 5%,
-          98% 91%,
-          -21% 99%
-        );
+        clip-path: polygon(14% 10%, 93% 5%, 98% 91%, -21% 99%);
         z-index: 6;
       }
-
-      /* ── Map label — bottom right ── */
       .box span.map-label {
         position: absolute;
-        bottom: var(--map-label-bottom);
-        right: var(--map-label-right);
-        width: var(--map-label-width);
-        height: var(--map-label-height);
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        bottom: var(--map-label-bottom); right: var(--map-label-right);
+        width: var(--map-label-width); height: var(--map-label-height);
+        display: flex; align-items: center; justify-content: center;
         font-family: var(--map-label-font-family);
         font-size: var(--map-label-font-size);
         font-weight: var(--map-label-font-weight);
@@ -308,19 +213,13 @@
         color: var(--map-label-color);
         background-color: var(--map-label-bg);
         background-image: var(--map-label-bg-image);
-        background-size: 100% 100%;
-        background-position: center;
+        background-size: 100% 100%; background-position: center;
         white-space: nowrap;
-        clip-path: polygon(
-          15% -20%,
-          90% -15%,
-          95% 90%,
-          -10% 120%
-        );
+        clip-path: polygon(15% -20%, 90% -15%, 95% 90%, -10% 120%);
         z-index: 6;
       }
 
-      /* ── Standings table — rows slide in/out with stagger, same as boxes ── */
+      /* ── Standings ── */
       .standings {
         position: relative;
         width: var(--grid-width);
@@ -329,9 +228,7 @@
         flex-direction: column;
         gap: 2px;
       }
-      .standings.visible {
-        display: flex;
-      }
+      /* Title + col-header both animate — start hidden like rows */
       .standings-header {
         background: var(--standings-header-bg);
         border: 1px solid var(--standings-border);
@@ -339,22 +236,20 @@
         padding: 10px 14px;
         text-align: center;
         font-family: var(--standings-font-family);
-        font-size: 22px;
-        font-weight: 900;
+        font-size: 22px; font-weight: 900;
         letter-spacing: 3px;
         color: var(--standings-header-color);
         text-transform: uppercase;
         margin-bottom: 4px;
         border-radius: 6px 6px 0 0;
-        /* header doesn't slide — always visible with the container */
+        opacity: 0;
+        transform: translateX(var(--slide-offset));
       }
       .standings-col-header {
-        display: flex;
-        align-items: center;
+        display: flex; align-items: center;
         padding: 10px 14px;
         font-family: var(--standings-font-family);
-        font-size: 14px;
-        font-weight: 800;
+        font-size: 14px; font-weight: 800;
         letter-spacing: 2px;
         color: var(--standings-text-dim);
         text-transform: uppercase;
@@ -362,92 +257,39 @@
         border: 1px solid var(--standings-border);
         border-radius: 4px;
         margin-bottom: 4px;
+        opacity: 0;
+        transform: translateX(var(--slide-offset));
       }
-      .standings-col-header .sth-rank {
-        width: 40px;
-        text-align: center;
-        flex-shrink: 0;
-      }
-      .standings-col-header .sth-teams {
-        flex: 1;
-        padding: 0 10px;
-        text-align: center;
-      }
-      .standings-col-header .sth-pts {
-        width: 60px;
-        text-align: center;
-        flex-shrink: 0;
-      }
-      .standings-body {
-        display: flex;
-        flex-direction: column;
-        gap: 2px;
-      }
+      .standings-col-header .sth-rank  { width: 40px; text-align: center; flex-shrink: 0; }
+      .standings-col-header .sth-teams { flex: 1; padding: 0 10px; text-align: center; }
+      .standings-col-header .sth-pts   { width: 60px; text-align: center; flex-shrink: 0; }
+      .standings-body { display: flex; flex-direction: column; gap: 2px; }
       .standings-row {
-        display: flex;
-        align-items: center;
+        display: flex; align-items: center;
         padding: 0 14px;
         height: var(--standings-row-height);
         background: var(--standings-bg);
         border: 1px solid var(--standings-border);
         border-radius: 4px;
         font-family: var(--standings-font-family);
-        font-size: 18px;
-        color: var(--standings-text);
-        /* start invisible, offset by slide-offset (same as .box) */
+        font-size: 18px; color: var(--standings-text);
         opacity: 0;
         transform: translateX(var(--slide-offset));
       }
-      .standings-row:nth-child(even) {
-        background: var(--standings-alt-row);
-      }
-      .standings-rank {
-        width: 40px;
-        text-align: center;
-        font-weight: 800;
-        color: var(--standings-text-dim);
-        flex-shrink: 0;
-      }
-      .standings-logo {
-        width: 42px;
-        height: 42px;
-        object-fit: contain;
-        flex-shrink: 0;
-        margin: 0 10px 0 20px;
-        filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));
-      }
-      .standings-name {
-        flex: 1;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        padding: 0 4px;
-        font-size: 17px;
-        font-weight: 700;
-        letter-spacing: 1px;
-      }
-      .standings-pts {
-        width: 60px;
-        text-align: center;
-        font-weight: 700;
-        color: var(--standings-text);
-        flex-shrink: 0;
-      }
+      .standings-row:nth-child(even) { background: var(--standings-alt-row); }
+      .standings-rank { width: 40px; text-align: center; font-weight: 800; color: var(--standings-text-dim); flex-shrink: 0; }
+      .standings-logo { width: 42px; height: 42px; object-fit: contain; flex-shrink: 0; margin: 0 10px 0 20px; filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5)); }
+      .standings-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 4px; font-size: 17px; font-weight: 700; letter-spacing: 1px; }
+      .standings-pts  { width: 60px; text-align: center; font-weight: 700; flex-shrink: 0; }
 
-      /* ── DEBUG PANEL ── */
+      /* ── Debug panel ── */
       #debug {
-        position: fixed;
-        top: 10px;
-        right: 10px;
+        position: fixed; top: 10px; right: 10px;
         width: 420px;
-        background: rgba(0, 0, 0, 0.85);
-        color: #0f0;
+        background: rgba(0,0,0,0.85); color: #0f0;
         font: 13px/1.5 monospace;
-        padding: 12px 16px;
-        border-radius: 8px;
-        z-index: 999;
-        white-space: pre-wrap;
-        word-break: break-all;
+        padding: 12px 16px; border-radius: 8px;
+        z-index: 999; white-space: pre-wrap; word-break: break-all;
       }
       #debug .err  { color: #f66; }
       #debug .warn { color: #fa0; }
@@ -456,120 +298,99 @@
     </style>
   </head>
   <body>
-    <div class="main">
 
+    <div class="main">
       <div class="box" id="box1">
-        <img class="map-img" src="maps/bermuda.webp" alt="" />
-        <div class="overlay"></div>
-        <div class="bottom-grad"></div>
+        <img class="map-img" id="mapimg1" src="" alt="" />
+        <div class="overlay"></div><div class="bottom-grad"></div>
         <div class="status-label" id="label1"></div>
         <span class="game-badge">GAME 1</span>
         <img class="team-logo" id="logo1" src="" alt="" />
-        <img class="booyah-img" src="maps/booyah.webp" alt="" />
-        <span class="map-label match1">BERMUDA</span>
+        <img class="booyah-img" id="booyahimg1" src="" alt="" />
+        <span class="map-label" id="maplabel1">BERMUDA</span>
       </div>
-
       <div class="box" id="box2">
-        <img class="map-img" src="maps/purgatory.webp" alt="" />
-        <div class="overlay"></div>
-        <div class="bottom-grad"></div>
+        <img class="map-img" id="mapimg2" src="" alt="" />
+        <div class="overlay"></div><div class="bottom-grad"></div>
         <div class="status-label" id="label2"></div>
         <span class="game-badge">GAME 2</span>
         <img class="team-logo" id="logo2" src="" alt="" />
-        <img class="booyah-img" src="maps/booyah.webp" alt="" />
-        <span class="map-label match2">PURGATORY</span>
+        <img class="booyah-img" id="booyahimg2" src="" alt="" />
+        <span class="map-label" id="maplabel2">PURGATORY</span>
       </div>
-
       <div class="box" id="box3">
-        <img class="map-img" src="maps/kalahari.webp" alt="" />
-        <div class="overlay"></div>
-        <div class="bottom-grad"></div>
+        <img class="map-img" id="mapimg3" src="" alt="" />
+        <div class="overlay"></div><div class="bottom-grad"></div>
         <div class="status-label" id="label3"></div>
         <span class="game-badge">GAME 3</span>
         <img class="team-logo" id="logo3" src="" alt="" />
-        <img class="booyah-img" src="maps/booyah.webp" alt="" />
-        <span class="map-label match3">KALAHARI</span>
+        <img class="booyah-img" id="booyahimg3" src="" alt="" />
+        <span class="map-label" id="maplabel3">KALAHARI</span>
       </div>
-
       <div class="box" id="box4">
-        <img class="map-img" src="maps/nexterra.webp" alt="" />
-        <div class="overlay"></div>
-        <div class="bottom-grad"></div>
+        <img class="map-img" id="mapimg4" src="" alt="" />
+        <div class="overlay"></div><div class="bottom-grad"></div>
         <div class="status-label" id="label4"></div>
         <span class="game-badge">GAME 4</span>
         <img class="team-logo" id="logo4" src="" alt="" />
-        <img class="booyah-img" src="maps/booyah.webp" alt="" />
-        <span class="map-label match4">NEXTERRA</span>
+        <img class="booyah-img" id="booyahimg4" src="" alt="" />
+        <span class="map-label" id="maplabel4">NEXTERRA</span>
       </div>
-
       <div class="box" id="box5">
-        <img class="map-img" src="maps/solara.webp" alt="" />
-        <div class="overlay"></div>
-        <div class="bottom-grad"></div>
+        <img class="map-img" id="mapimg5" src="" alt="" />
+        <div class="overlay"></div><div class="bottom-grad"></div>
         <div class="status-label" id="label5"></div>
         <span class="game-badge">GAME 5</span>
         <img class="team-logo" id="logo5" src="" alt="" />
-        <img class="booyah-img" src="maps/booyah.webp" alt="" />
-        <span class="map-label match5">SOLARA</span>
+        <img class="booyah-img" id="booyahimg5" src="" alt="" />
+        <span class="map-label" id="maplabel5">SOLARA</span>
       </div>
-
       <div class="box" id="box6">
-        <img class="map-img" src="maps/random.webp" alt="" />
-        <div class="overlay"></div>
-        <div class="bottom-grad"></div>
+        <img class="map-img" id="mapimg6" src="" alt="" />
+        <div class="overlay"></div><div class="bottom-grad"></div>
         <div class="status-label" id="label6"></div>
         <span class="game-badge">GAME 6</span>
         <img class="team-logo" id="logo6" src="" alt="" />
-        <img class="booyah-img" src="maps/booyah.webp" alt="" />
-        <span class="map-label match6">RANDOM</span>
+        <img class="booyah-img" id="booyahimg6" src="" alt="" />
+        <span class="map-label" id="maplabel6">RANDOM</span>
       </div>
-	  
-	  <div class="box" id="box7">
-        <img class="map-img" src="maps/random.webp" alt="" />
-        <div class="overlay"></div>
-        <div class="bottom-grad"></div>
+      <div class="box" id="box7">
+        <img class="map-img" id="mapimg7" src="" alt="" />
+        <div class="overlay"></div><div class="bottom-grad"></div>
         <div class="status-label" id="label7"></div>
         <span class="game-badge">GAME 7</span>
         <img class="team-logo" id="logo7" src="" alt="" />
-        <img class="booyah-img" src="maps/booyah.webp" alt="" />
-        <span class="map-label match7">RANDOM</span>
+        <img class="booyah-img" id="booyahimg7" src="" alt="" />
+        <span class="map-label" id="maplabel7">RANDOM</span>
       </div>
-	  
-	  <div class="box" id="box8">
-        <img class="map-img" src="maps/random.webp" alt="" />
-        <div class="overlay"></div>
-        <div class="bottom-grad"></div>
+      <div class="box" id="box8">
+        <img class="map-img" id="mapimg8" src="" alt="" />
+        <div class="overlay"></div><div class="bottom-grad"></div>
         <div class="status-label" id="label8"></div>
         <span class="game-badge">GAME 8</span>
         <img class="team-logo" id="logo8" src="" alt="" />
-        <img class="booyah-img" src="maps/booyah.webp" alt="" />
-        <span class="map-label match8">RANDOM</span>
+        <img class="booyah-img" id="booyahimg8" src="" alt="" />
+        <span class="map-label" id="maplabel8">RANDOM</span>
       </div>
-
     </div>
 
     <!-- STANDINGS TABLE -->
     <div class="standings" id="standings">
-      <div class="standings-header">STANDINGS</div>
-      <div class="standings-col-header">
+      <div class="standings-header" id="standings-title">STANDINGS</div>
+      <div class="standings-col-header" id="standings-col-header">
         <span class="sth-rank">RANK</span>
         <span class="sth-teams">TEAMS</span>
         <span class="sth-pts">TOTAL PTS</span>
       </div>
-      <div class="standings-body" id="standings-body">
-        <!-- 12 rows populated by JS -->
-      </div>
+      <div class="standings-body" id="standings-body"></div>
     </div>
 
-    <div id="debug">
-      <h3>🔍 DEBUG</h3>
-      <span id="debug-body">Waiting for first fetch…</span>
-    </div>
+    <div id="debug"><h3>🔍 DEBUG</h3><span id="debug-body">Initialising…</span></div>
 
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
     <script>
-      // ─── Firebase init ───────────────────────────────────────────────────────
+      // ─── Firebase ────────────────────────────────────────────────────────────
       firebase.initializeApp({
         apiKey:            "AIzaSyC21mdsgyIEqXT7ujFbi0xcVAMRZxxqB1I",
         authDomain:        "tmraditya-1ceb7.firebaseapp.com",
@@ -579,45 +400,194 @@
         messagingSenderId: "317037791388",
         appId:             "1:317037791388:web:755b5a18bb77aa140a4559"
       });
-      var fbDb = firebase.database();
+      const fbDb = firebase.database();
 
-      // ─── Standings data fetcher (from matches/0_teams) ─────────────────────
-      var LOGO_FOLDER = "logos";
-      var LOGO_EXT    = ".webp";
+      // ─── Constants ───────────────────────────────────────────────────────────
+      const NUM_BOXES  = 8;
+      const NUM_STANDS = 12;
+      const POLL_MS    = 3000;
 
+      /*
+       * PATH HANDLING — works in two contexts:
+       *
+       * 1) Served over http(s) (Vercel, or a local dev server like
+       *    `vercel dev` / `npx http-server` / `python -m http.server`):
+       *    we use ABSOLUTE paths ("/logos/", "/maps/"). These resolve from
+       *    the site root no matter which subfolder this HTML file lives in
+       *    (e.g. /overlays/mapOverview.html still finds /logos/TAG.webp).
+       *
+       * 2) Opened directly as a file (double-clicked, file:///F:/...):
+       *    absolute paths break because the browser treats "/" as the
+       *    drive root, not a server root. In this case we fall back to a
+       *    path RELATIVE to this HTML file's own location, so double-
+       *    clicking the file works for a quick local check without needing
+       *    a server running. Adjust ASSET_DIR below if your folder layout
+       *    differs (see comment under it).
+       */
+      const isFileProtocol = location.protocol === "file:";
+
+      // If opened via file://, build a base path relative to this HTML
+      // file's own folder. This assumes logos/ and maps/ sit in the SAME
+      // folder as this HTML file when testing locally via double-click.
+      // If they don't, either move them next to this file for local
+      // testing, or just run a local server instead (recommended) —
+      // see chat for `vercel dev` / `http-server` instructions.
+      function fileRelativeDir() {
+        const path = location.pathname; // e.g. /F:/site/overlays/mapOverview.html
+        return path.substring(0, path.lastIndexOf("/") + 1);
+      }
+
+      const LOGO_BASE = isFileProtocol ? `${fileRelativeDir()}logos/` : "/logos/";
+      const MAP_BASE  = isFileProtocol ? `${fileRelativeDir()}maps/`  : "/maps/";
+      const LOGO_EXT  = ".webp";
+
+      /*
+       * CASE-INSENSITIVE IMAGE LOADING
+       * ───────────────────────────────
+       * Vercel's filesystem (Linux) is case-sensitive, so "Bermuda.webp"
+       * and "bermuda.webp" are different files to the server. To support
+       * filenames saved in ANY case without renaming anything, we try a
+       * short list of casing variants in order and fall through to the
+       * next one on load failure, until one succeeds (or all fail).
+       *
+       * setImgWithCaseFallback(imgEl, base, name, ext)
+       *   - imgEl: the <img> element to set
+       *   - base:  folder path, e.g. MAP_BASE or LOGO_BASE
+       *   - name:  filename WITHOUT extension, in its natural/lowercase form
+       *   - ext:   extension including the dot, e.g. ".webp"
+       */
+      function buildCaseVariants(name) {
+        // Defensive: strip leading/trailing whitespace and any character
+        // that isn't a letter/number/underscore/hyphen, in case Firebase
+        // ever returns a tag with stray whitespace or invisible characters
+        const clean = String(name).trim().replace(/[^a-zA-Z0-9_-]/g, "");
+        const lower = clean.toLowerCase();
+        const upper = clean.toUpperCase();
+        // Capitalized (first letter upper, rest lower) as a 3rd common case
+        const capitalized = lower.charAt(0).toUpperCase() + lower.slice(1);
+        // De-duplicate while preserving order: try lower, upper, capitalized
+        return [...new Set([lower, upper, capitalized])];
+      }
+
+      function setImgWithCaseFallback(imgEl, base, name, ext) {
+        const variants = buildCaseVariants(name);
+        let attempt = 0;
+
+        function tryNext() {
+          if (attempt >= variants.length) {
+            console.warn(`Image not found in any case variant: ${base}${name}${ext}`);
+            imgEl.onerror = null;
+            return;
+          }
+          const candidate = `${base}${variants[attempt]}${ext}`;
+          attempt++;
+          imgEl.onerror = tryNext;
+          imgEl.src = candidate;
+        }
+        tryNext();
+      }
+
+      const FIXED_MAPS = [
+        { name: "BERMUDA",   file: "bermuda"   },
+        { name: "PURGATORY", file: "purgatory" },
+        { name: "KALAHARI",  file: "kalahari"  },
+        { name: "NEXTERRA",  file: "nexterra"  },
+        { name: "SOLARA",    file: "solara"    },
+      ];
+
+      // Pick once on page load and keep fixed for the session
+      const RANDOM_MAP_DEF = FIXED_MAPS[Math.floor(Math.random() * FIXED_MAPS.length)];
+      const RANDOM_MAP = { name: RANDOM_MAP_DEF.name, file: RANDOM_MAP_DEF.file };
+
+      // Initial map assignment per box (mirrors the original hardcoded markup)
+      const INITIAL_MAPS = [
+        { file: "bermuda",   label: "BERMUDA"   },
+        { file: "purgatory", label: "PURGATORY" },
+        { file: "kalahari",  label: "KALAHARI"  },
+        { file: "nexterra",  label: "NEXTERRA"  },
+        { file: "solara",    label: "SOLARA"    },
+        { file: "random",    label: "RANDOM"    },
+        { file: "random",    label: "RANDOM"    },
+        { file: "random",    label: "RANDOM"    },
+      ];
+
+      // ─── DOM refs ────────────────────────────────────────────────────────────
+      const allBoxes    = Array.from({ length: NUM_BOXES }, (_, i) => document.getElementById(`box${i+1}`));
+      const logos       = Array.from({ length: NUM_BOXES }, (_, i) => document.getElementById(`logo${i+1}`));
+      const labels      = Array.from({ length: NUM_BOXES }, (_, i) => document.getElementById(`label${i+1}`));
+      const mapImgs     = Array.from({ length: NUM_BOXES }, (_, i) => document.getElementById(`mapimg${i+1}`));
+      const mapLabels   = Array.from({ length: NUM_BOXES }, (_, i) => document.getElementById(`maplabel${i+1}`));
+      const booyahImgs  = Array.from({ length: NUM_BOXES }, (_, i) => document.getElementById(`booyahimg${i+1}`));
+
+      const mainEl        = document.querySelector(".main");
+      const standingsEl   = document.getElementById("standings");
+      const standingsBody = document.getElementById("standings-body");
+      const standTitleEl  = document.getElementById("standings-title");
+      const standColEl    = document.getElementById("standings-col-header");
+
+      // Set initial map images/labels/booyah-img sources from JS so they
+      // respect LOGO_BASE/MAP_BASE regardless of protocol, and try
+      // case variants until one loads successfully
+      INITIAL_MAPS.forEach((m, i) => {
+        setImgWithCaseFallback(mapImgs[i], MAP_BASE, m.file, LOGO_EXT);
+        mapLabels[i].textContent = m.label;
+        setImgWithCaseFallback(booyahImgs[i], MAP_BASE, "booyah", LOGO_EXT);
+      });
+
+      // ─── CSS animation values ────────────────────────────────────────────────
+      const cssVars      = getComputedStyle(document.documentElement);
+      const parseSec     = v => parseFloat(v.trim().replace('s','')) * 1000;
+      const SLIDE_DUR    = parseSec(cssVars.getPropertyValue('--slide-duration'));
+      const STAGGER      = parseSec(cssVars.getPropertyValue('--slide-stagger'));
+      const STAY_DUR     = parseSec(cssVars.getPropertyValue('--stay-duration'));
+      const SLIDE_OFFSET = cssVars.getPropertyValue('--slide-offset').trim();
+
+      // Total slideable standings elements: title + col-header + NUM_STANDS rows
+      const STAND_COUNT = 2 + NUM_STANDS;
+
+      // ─── Build standings rows ────────────────────────────────────────────────
+      let standingsRows = [];
+      (function buildRows() {
+        standingsBody.innerHTML = "";
+        standingsRows = [];
+        for (let i = 0; i < NUM_STANDS; i++) {
+          const row = document.createElement("div");
+          row.className = "standings-row";
+          row.id = "srow-" + i;
+          row.innerHTML =
+            `<span class="standings-rank">#${i+1}</span>` +
+            `<img class="standings-logo" id="slogo-${i}" src="" alt="">` +
+            `<span class="standings-name" id="sname-${i}">—</span>` +
+            `<span class="standings-pts"  id="spts-${i}">0</span>`;
+          standingsBody.appendChild(row);
+          standingsRows.push(row);
+        }
+      })();
+
+      // ─── Firebase: standings from /matches/0_teams ───────────────────────────
       function fetchStandings() {
-        fbDb.ref("/matches/0_teams").once("value", function(snap) {
-          var teams = snap.val();
+        fbDb.ref("/matches/0_teams").once("value", snap => {
+          const teams = snap.val();
           if (!teams) return;
+          const entries = Object.keys(teams).map(tag => ({
+            tag,
+            name:     teams[tag]["1_teamName"] || tag,
+            totalPts: parseInt(teams[tag]["5_totalPoints"]) || 0
+          }));
+          entries.sort((a, b) => b.totalPts - a.totalPts);
 
-          var entries = Object.keys(teams).map(function(tag) {
-            var t = teams[tag];
-            return {
-              tag:      tag,
-              name:     t["1_teamName"] || tag,
-              rank:     parseInt(t["0_rank"]) || 99,
-              totalPts: parseInt(t["5_totalPoints"]) || 0
-            };
-          });
-
-          entries.sort(function(a, b) { return b.totalPts - a.totalPts; });
-
-          for (var i = 0; i < 12; i++) {
-            var row = document.getElementById("srow-" + i);
-            if (!row) continue;
-
-            var rankEl  = row.querySelector(".standings-rank");
-            var logoEl  = document.getElementById("slogo-" + i);
-            var nameEl  = document.getElementById("sname-" + i);
-            var ptsEl   = document.getElementById("spts-" + i);
+          for (let i = 0; i < NUM_STANDS; i++) {
+            const rankEl = document.querySelector(`#srow-${i} .standings-rank`);
+            const logoEl = document.getElementById(`slogo-${i}`);
+            const nameEl = document.getElementById(`sname-${i}`);
+            const ptsEl  = document.getElementById(`spts-${i}`);
 
             if (i < entries.length) {
-              var e = entries[i];
-              if (rankEl) rankEl.textContent = "#" + (i + 1);
+              const e = entries[i];
+              if (rankEl) rankEl.textContent = `#${i+1}`;
               if (logoEl) {
-                logoEl.src = LOGO_FOLDER + "/" + e.tag + LOGO_EXT;
-                logoEl.onerror = function() { this.style.display = "none"; };
                 logoEl.style.display = "block";
+                loadStandingsLogoCaseInsensitive(logoEl, e.tag);
               }
               if (nameEl) nameEl.textContent = e.name;
               if (ptsEl)  ptsEl.textContent  = e.totalPts;
@@ -630,176 +600,147 @@
           }
         });
       }
-
-      // fetch immediately then every 5s
       fetchStandings();
       setInterval(fetchStandings, 5000);
 
-      // ─── Random map for box 6 — picked once on load, fixed until page reload ───
-      const FIXED_MAPS = [
-        { name: "BERMUDA",   img: "maps/bermuda.webp"   },
-        { name: "PURGATORY", img: "maps/purgatory.webp" },
-        { name: "KALAHARI",  img: "maps/kalahari.webp"  },
-        { name: "NEXTERRA",  img: "maps/nexterra.webp"  },
-        { name: "SOLARA",    img: "maps/solara.webp"    },
-      ];
-      const RANDOM_MAP = FIXED_MAPS[Math.floor(Math.random() * FIXED_MAPS.length)];
+      // ─── Firebase: BOOYAH tags from matches/match{x}/4_BOOYAH/tag ────────────
+      let booyahTags = new Array(NUM_BOXES).fill(null);
 
-      // ─── Animation config — reads from CSS :root vars ───────────────────────
-      const style       = getComputedStyle(document.documentElement);
-      const parseSec    = v => parseFloat(v.trim().replace('s','')) * 1000;
-      const SLIDE_DUR   = parseSec(style.getPropertyValue('--slide-duration'));
-      const STAGGER     = parseSec(style.getPropertyValue('--slide-stagger'));
-      const STAY_DUR    = parseSec(style.getPropertyValue('--stay-duration'));
-      const HIDE_DUR    = parseSec(style.getPropertyValue('--hide-duration'));
+      function attachBooyahListener() {
+        fbDb.ref("/matches").on("value", snap => {
+          const matches = snap.val() || {};
+          const newTags = new Array(NUM_BOXES).fill(null);
 
-      // Read --slide-offset from :root (e.g. "-120px" or "120px")
-      // This controls the slide direction: negative = from left, positive = from right
-      const SLIDE_OFFSET = style.getPropertyValue('--slide-offset').trim();
+          for (let i = 1; i <= NUM_BOXES; i++) {
+            const matchNode = matches[`match${i}`];
+            if (matchNode && matchNode["4_BOOYAH"] && matchNode["4_BOOYAH"]["tag"]) {
+              newTags[i - 1] = matchNode["4_BOOYAH"]["tag"];
+            }
+          }
 
-      const NUM_BOXES   = 8;
-      const allBoxes    = Array.from({ length: NUM_BOXES }, (_, i) => document.getElementById(`box${i + 1}`));
+          booyahTags = newTags;
+          applyBooyahToBoxes(booyahTags);
+          logDebug();
+        });
+      }
 
-      // ─── Standings table (12 rows, each slides like a box) ─────────────────
-      const standingsEl  = document.getElementById("standings");
-      const standingsBody = document.getElementById("standings-body");
-      let standingsRows = [];
+      // ─── Apply BOOYAH tags to the 8 boxes ───────────────────────────────────
+      function applyBooyahToBoxes(tags) {
+        let firstEmptySeen = false;
 
-      function buildStandingsRows() {
-        standingsBody.innerHTML = "";
-        standingsRows = [];
-        for (let i = 0; i < 12; i++) {
-          const row = document.createElement("div");
-          row.className = "standings-row";
-          row.id = "srow-" + i;
-          row.innerHTML =
-            '<span class="standings-rank">#' + (i + 1) + '</span>' +
-            '<img class="standings-logo" id="slogo-' + i + '" src="" alt="">' +
-            '<span class="standings-name" id="sname-' + i + '">—</span>' +
-            '<span class="standings-pts" id="spts-' + i + '">0</span>';
-          standingsBody.appendChild(row);
-          standingsRows.push(row);
+        for (let i = 0; i < NUM_BOXES; i++) {
+          const tag = tags[i];
+
+          if (tag) {
+            // ── Completed game: BOOYAH + team logo ──────────────────────────
+            allBoxes[i].classList.add("has-tag");
+            labels[i].innerHTML = `<span class="upcoming-text">BOOYAH</span>`;
+
+            // Use the raw tag (not forced to one case) as the cache key so we
+            // don't re-trigger the fallback chain on every poll for the same team
+            if (logos[i].getAttribute("data-tag") !== tag) {
+              logos[i].setAttribute("data-tag", tag);
+              loadTeamLogoCaseInsensitive(logos[i], tag);
+            }
+
+          } else {
+            // ── Empty slot ───────────────────────────────────────────────────
+            allBoxes[i].classList.remove("has-tag");
+            logos[i].onload  = null;
+            logos[i].onerror = null;
+            logos[i].src     = "";
+            logos[i].setAttribute("data-tag", "");
+            logos[i].classList.remove("visible");
+
+            if (!firstEmptySeen) {
+              firstEmptySeen = true;
+              // First empty = COMING AHEAD; show the random map
+              setImgWithCaseFallback(mapImgs[i], MAP_BASE, RANDOM_MAP.file, LOGO_EXT);
+              mapLabels[i].textContent = RANDOM_MAP.name;
+              labels[i].innerHTML = `<span class="upcoming-text">COMING AHEAD</span>`;
+            } else {
+              labels[i].innerHTML = `<span class="upcoming-text">UPCOMING</span>`;
+            }
+          }
         }
       }
-      buildStandingsRows();
 
-      // Slide a single standings row in or out (same as slideBox for maps)
-      function slideStandingsRow(row, inOrOut, delay) {
-        setTimeout(() => {
-          row.style.transition = `opacity ${SLIDE_DUR}ms ease, transform ${SLIDE_DUR}ms ease`;
-          if (inOrOut === 'in') {
-            row.style.opacity = '1';
-            row.style.transform = 'translateX(0)';
-          } else {
-            row.style.opacity = '0';
-            row.style.transform = `translateX(${SLIDE_OFFSET})`;
+      // Loads a standings-row team logo trying multiple case variants of the
+      // tag; hides the <img> only if every variant fails to load
+      function loadStandingsLogoCaseInsensitive(imgEl, tag) {
+        const variants = buildCaseVariants(tag);
+        let attempt = 0;
+
+        function tryNext() {
+          if (attempt >= variants.length) {
+            imgEl.style.display = "none";
+            imgEl.onerror = null;
+            return;
           }
-        }, delay);
+          const candidate = `${LOGO_BASE}${variants[attempt]}${LOGO_EXT}`;
+          attempt++;
+          imgEl.onerror = tryNext;
+          imgEl.src = candidate;
+        }
+        tryNext();
       }
 
-      function slideStandingsIn() {
-        standingsEl.style.display = "flex";
-        standingsRows.forEach((row, i) => {
-          slideStandingsRow(row, 'in', i * STAGGER);
-        });
-      }
+      // Loads a team logo trying multiple case variants of the tag, and
+      // toggles the .visible class on success/failure like the original code did
+      function loadTeamLogoCaseInsensitive(imgEl, tag) {
+        const variants = buildCaseVariants(tag);
+        let attempt = 0;
+        console.log(`[logo] starting fallback chain for tag="${tag}" variants=${JSON.stringify(variants)}`);
 
-      function slideStandingsOut() {
-        standingsRows.forEach((row, i) => {
-          const reverseIndex = standingsRows.length - 1 - i;
-          slideStandingsRow(standingsRows[reverseIndex], 'out', i * STAGGER);
-        });
-      }
-
-      // Slide a single box in (opacity 1, translateX 0) or out (opacity 0, translateX = SLIDE_OFFSET)
-      function slideBox(box, inOrOut, delay) {
-        setTimeout(() => {
-          box.style.transition = `opacity ${SLIDE_DUR}ms ease, transform ${SLIDE_DUR}ms ease`;
-          if (inOrOut === 'in') {
-            box.style.opacity = '1';
-            box.style.transform = 'translateX(0)';
-          } else {
-            box.style.opacity = '0';
-            box.style.transform = `translateX(${SLIDE_OFFSET})`;
+        function tryNext() {
+          if (attempt >= variants.length) {
+            imgEl.classList.remove("visible");
+            console.warn(`[logo] ALL variants failed for tag="${tag}"`);
+            imgEl.onerror = null;
+            return;
           }
-        }, delay);
+          const candidate = `${LOGO_BASE}${variants[attempt]}${LOGO_EXT}`;
+          console.log(`[logo] attempt ${attempt + 1}/${variants.length} for tag="${tag}": ${candidate}`);
+          attempt++;
+          imgEl.onload = () => {
+            console.log(`[logo] SUCCESS: ${candidate}`);
+            imgEl.classList.add("visible");
+          };
+          imgEl.onerror = () => {
+            console.warn(`[logo] FAILED: ${candidate} — trying next variant`);
+            tryNext();
+          };
+          imgEl.src = candidate;
+        }
+        tryNext();
       }
 
-      // Slide all boxes IN — box 1 first, box 8 last
-      function slideAllIn() {
-        allBoxes.forEach((box, i) => {
-          slideBox(box, 'in', i * STAGGER);
-        });
-      }
 
-      // Slide all boxes OUT — box 8 first, box 1 last (reverse order)
-      function slideAllOut() {
-        allBoxes.forEach((box, i) => {
-          const reverseIndex = NUM_BOXES - 1 - i;
-          slideBox(allBoxes[reverseIndex], 'out', i * STAGGER);
-        });
-      }
-
-      // Full cycle: maps in → stay → out → standings in → stay → out → repeat
-      function runCycle() {
-        slideAllIn();
-
-        const mapsInTime  = NUM_BOXES * STAGGER + SLIDE_DUR;
-        const mapsOutTime = mapsInTime + STAY_DUR;
-
-        setTimeout(() => {
-          slideAllOut();
-        }, mapsOutTime);
-
-        const mapsDone = mapsOutTime + NUM_BOXES * STAGGER + SLIDE_DUR;
-
-        // clear maps display after they slide out
-        setTimeout(() => {
-          document.querySelector(".main").style.display = "none";
-        }, mapsDone);
-
-        // standings slide in after maps are fully out
-        const NUM_STANDINGS = 12;
-        const standsInAt = mapsDone;
-        setTimeout(() => {
-          slideStandingsIn();
-        }, standsInAt);
-
-        const standsInTime  = standsInAt + NUM_STANDINGS * STAGGER + SLIDE_DUR;
-        const standsOutTime = standsInTime + STAY_DUR;
-
-        setTimeout(() => {
-          slideStandingsOut();
-        }, standsOutTime);
-
-        const standsDone = standsOutTime + NUM_STANDINGS * STAGGER + SLIDE_DUR + HIDE_DUR;
-
-        setTimeout(() => {
-          standingsEl.style.display = "none";
-          document.querySelector(".main").style.display = "grid";
-          runCycle();
-        }, standsDone);
-      }
-
-      // ─── Firebase fetch ──────────────────────────────────────────────────────
-      const WEB_APP_URL  = "https://script.google.com/macros/s/AKfycbz1JmA3BlqI4xqFll5FZHCVY-iPQDO5OU6DH0gRYPTqd8bqMa_TWz5Gzw3lvVYALcXtlA/exec";
-      const POLL_INTERVAL = 3000;
-
+      // ─── Debug panel ────────────────────────────────────────────────────────
       const showDebug = !location.search.includes("nodebug");
       if (!showDebug) document.getElementById("debug").style.display = "none";
-
-      const logos  = Array.from({ length: NUM_BOXES }, (_, i) => document.getElementById(`logo${i + 1}`));
-      const boxes  = allBoxes;
-      const labels = Array.from({ length: NUM_BOXES }, (_, i) => document.getElementById(`label${i + 1}`));
-
       const dbEl = document.getElementById("debug-body");
-      let lastLog = "";
 
-      function log(lines) {
-        const text = lines.join("\n");
-        if (text === lastLog) return;
-        lastLog = text;
-        dbEl.innerHTML = lines.map((l) => {
+      function logDebug() {
+        if (!showDebug) return;
+        const lines = [
+          `⏱ ${new Date().toLocaleTimeString()}`,
+          `Protocol: ${location.protocol} ${isFileProtocol ? "(file-relative paths in use)" : "(absolute paths in use)"}`,
+          `Logo base: ${LOGO_BASE}`,
+          `Map base: ${MAP_BASE}`,
+          `Random map: ${RANDOM_MAP.name}`,
+          ``
+        ];
+        booyahTags.forEach((tag, i) => {
+          if (tag) {
+            lines.push(`✅ GAME ${i+1}: BOOYAH → ${tag}`);
+          } else if (i === booyahTags.findIndex(t => !t)) {
+            lines.push(`⚠️ GAME ${i+1}: COMING AHEAD`);
+          } else {
+            lines.push(`   GAME ${i+1}: UPCOMING`);
+          }
+        });
+        dbEl.innerHTML = lines.map(l => {
           if (l.startsWith("❌")) return `<span class="err">${l}</span>`;
           if (l.startsWith("⚠️")) return `<span class="warn">${l}</span>`;
           if (l.startsWith("✅")) return `<span class="ok">${l}</span>`;
@@ -807,117 +748,82 @@
         }).join("\n");
       }
 
-      function applyLogo(logoEl, boxEl, labelEl, tag, logLines, idx) {
-        if (tag) {
-          boxEl.classList.add("has-tag");
-          labelEl.innerHTML = `<span class="upcoming-text">BOOYAH</span>`;
+      // ─── Slide helpers ───────────────────────────────────────────────────────
+      function resetEl(el) {
+        el.style.transition = 'none';
+        el.style.opacity    = '0';
+        el.style.transform  = `translateX(${SLIDE_OFFSET})`;
+      }
 
-          const path = `${LOGO_FOLDER}/${tag}${LOGO_EXT}`;
-          logLines.push(`[${idx + 1}] tag="${tag}" → ${path}`);
+      function slideEl(el, inOrOut, delay) {
+        setTimeout(() => {
+          el.style.transition = `opacity ${SLIDE_DUR}ms ease, transform ${SLIDE_DUR}ms ease`;
+          el.style.opacity    = inOrOut === 'in' ? '1' : '0';
+          el.style.transform  = inOrOut === 'in' ? 'translateX(0)' : `translateX(${SLIDE_OFFSET})`;
+        }, delay);
+      }
 
-          if (logoEl.getAttribute("data-tag") !== tag) {
-            logoEl.setAttribute("data-tag", tag);
-            logoEl.src = path;
-          }
-
-          logoEl.onerror = () => {
-            logoEl.classList.remove("visible");
-            log([...logLines, `❌ [${idx + 1}] Image load FAILED: ${path}`]);
-          };
-          logoEl.onload = () => {
-            logoEl.classList.add("visible");
-            log([...logLines, `✅ [${idx + 1}] Image loaded OK: ${path}`]);
-          };
-
-          if (logoEl.complete && logoEl.naturalWidth > 0) {
-            logoEl.classList.add("visible");
-          }
+      // Slide all standings elements (title → col-header → rows, or reverse)
+      function slideStandings(inOrOut) {
+        const els = [standTitleEl, standColEl, ...standingsRows];
+        if (inOrOut === 'in') {
+          els.forEach((el, i) => slideEl(el, 'in', i * STAGGER));
         } else {
-          logLines.push(`[${idx + 1}] tag="" — no logo`);
-          boxEl.classList.remove("has-tag");
-          labelEl.innerHTML = `<span class="upcoming-text">UPCOMING</span>`;
-          logoEl.src = "";
-          logoEl.setAttribute("data-tag", "");
-          logoEl.classList.remove("visible");
+          [...els].reverse().forEach((el, i) => slideEl(el, 'out', i * STAGGER));
         }
       }
 
-      async function fetchAndUpdate(firstFetch = false) {
-        const logLines = [`⏱ ${new Date().toLocaleTimeString()} — fetching…`];
-        log(logLines);
+      function resetStandings() {
+        [standTitleEl, standColEl, ...standingsRows].forEach(el => resetEl(el));
+      }
 
-        try {
-          const url = `${WEB_APP_URL}?_cb=${Date.now()}`;
-          logLines.push(`URL: ${url.slice(0, 80)}…`);
+      // ─── Main animation cycle ────────────────────────────────────────────────
+      function runCycle() {
+        // ── Phase 1: Maps slide in ───────────────────────────────────────────
+        standingsEl.style.display = "none";
+        mainEl.style.display      = "grid";
+        allBoxes.forEach(box => resetEl(box));
 
-          const res = await fetch(url);
-          logLines.push(`HTTP status: ${res.status}`);
-          if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        // 50ms grace for browser to process the instant reset
+        setTimeout(() => {
+          allBoxes.forEach((box, i) => slideEl(box, 'in', i * STAGGER));
+        }, 50);
 
-          const text = await res.text();
-          logLines.push(`Raw response (first 200):\n${text.slice(0, 200)}`);
+        const mapsInDone = 50 + NUM_BOXES * STAGGER + SLIDE_DUR;
+        const mapsOutAt  = mapsInDone + STAY_DUR;
 
-          let data;
-          try { data = JSON.parse(text); }
-          catch (e) { throw new Error(`JSON parse failed: ${e.message}`); }
-
-          if (!data.tags || !Array.isArray(data.tags)) {
-            throw new Error(`No "tags" array in response. Keys: ${Object.keys(data).join(", ")}`);
+        // ── Phase 2: Maps slide out (reverse) ───────────────────────────────
+        setTimeout(() => {
+          for (let i = 0; i < NUM_BOXES; i++) {
+            slideEl(allBoxes[NUM_BOXES - 1 - i], 'out', i * STAGGER);
           }
+        }, mapsOutAt);
 
-          logLines.push(`✅ Got ${data.tags.length} tags: [${data.tags.join(", ")}]`);
+        const mapsClearAt = mapsOutAt + NUM_BOXES * STAGGER + SLIDE_DUR;
 
-          let emptyCount = 0;
+        // ── Phase 3: Standings slide in ──────────────────────────────────────
+        setTimeout(() => {
+          mainEl.style.display      = "none";
+          standingsEl.style.display = "flex";
+          resetStandings();
+          setTimeout(() => slideStandings('in'), 50);
+        }, mapsClearAt);
 
-          data.tags.forEach((tag, i) => {
-            if (!logos[i]) return;
-			
-			// After the forEach, fill any remaining boxes with UPCOMING
-for (let i = data.tags.length; i < NUM_BOXES; i++) {
-  boxes[i].classList.remove("has-tag");
-  logos[i].src = "";
-  logos[i].setAttribute("data-tag", "");
-  logos[i].classList.remove("visible");
-  labels[i].innerHTML = `<span class="upcoming-text">UPCOMING</span>`;
-}
+        const standsInDone = mapsClearAt + 50 + STAND_COUNT * STAGGER + SLIDE_DUR;
+        const standsOutAt  = standsInDone + STAY_DUR;
 
-            if (tag) {
-              applyLogo(logos[i], boxes[i], labels[i], tag, logLines, i);
-            } else {
-              emptyCount++;
-              boxes[i].classList.remove("has-tag");
-              logos[i].src = "";
-              logos[i].setAttribute("data-tag", "");
-              logos[i].classList.remove("visible");
+        // ── Phase 4: Standings slide out (reverse) ───────────────────────────
+        setTimeout(() => slideStandings('out'), standsOutAt);
 
-              if (emptyCount === 1) {
-                if (i === 5) {
-                  logLines.push(`[${i + 1}] tag="" — COMING AHEAD (random: ${RANDOM_MAP.name})`);
-                  boxes[i].querySelector('.map-img').src = RANDOM_MAP.img;
-                  boxes[i].querySelector('.map-label').textContent = RANDOM_MAP.name;
-                } else {
-                  logLines.push(`[${i + 1}] tag="" — COMING AHEAD`);
-                }
-                labels[i].innerHTML = `<span class="upcoming-text">COMING AHEAD</span>`;
-              } else {
-                logLines.push(`[${i + 1}] tag="" — UPCOMING`);
-                labels[i].innerHTML = `<span class="upcoming-text">UPCOMING</span>`;
-              }
-            }
-          });
+        const standsClearAt = standsOutAt + STAND_COUNT * STAGGER + SLIDE_DUR;
 
-          log(logLines);
-        } catch (err) {
-          logLines.push(`❌ FETCH ERROR: ${err.message}`);
-          log(logLines);
-          console.warn("Web App fetch failed:", err.message);
-        } finally {
-          if (firstFetch) runCycle();
-        }
+        // ── Phase 5: Loop ────────────────────────────────────────────────────
+        setTimeout(() => runCycle(), standsClearAt);
       }
 
-      fetchAndUpdate(true);
-      setInterval(() => fetchAndUpdate(false), POLL_INTERVAL);
+      // ─── Boot ────────────────────────────────────────────────────────────────
+      attachBooyahListener();
+      runCycle();
     </script>
   </body>
 </html>
