@@ -221,7 +221,7 @@ function renderTeams(teamsObj, matchCounts) {
     if (e) {
       setText('f-rank',   i + 1);
       setText('f-match',  e.matches);
-      setText('f-booyah', e.booyahs);
+      setText('f-booyah', e.booyahs || '');
       setText('f-kills',  e.kills);
       setText('f-place',  e.place);
       setText('f-total',  e.total);
