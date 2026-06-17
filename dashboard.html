@@ -363,6 +363,23 @@
   }
   window.exportToSheets = exportToSheets;
 
+  // ── Slide Direction ────────────────────────────────────────
+  var slideDirRef = db.ref("/live-graphics/overview/slideDirection");
+
+  function setSlideDir(dir) {
+    slideDirRef.set(dir);
+    document.getElementById("btn-slide-left").classList.toggle("ticker-active", dir === "left");
+    document.getElementById("btn-slide-right").classList.toggle("ticker-active", dir === "right");
+  }
+  window.setSlideDir = setSlideDir;
+
+  // restore active state on load
+  slideDirRef.once("value", function(snap) {
+    var dir = snap.val() || "left";
+    document.getElementById("btn-slide-left").classList.toggle("ticker-active", dir === "left");
+    document.getElementById("btn-slide-right").classList.toggle("ticker-active", dir === "right");
+  });
+
   // ── Map Randomizer ────────────────────────────────────────
   // ↓ Change this number to set the default cooldown (how many spins before a map returns)
   var COOLDOWN  = 3;
@@ -1405,6 +1422,14 @@ body {
           Export to Sheets
         </button>
         <div id="export-sheets-status" style="font-size:10px;color:var(--text-low);letter-spacing:1px;min-height:14px;margin-top:4px;"></div>
+      </div>
+
+      <div class="left-panel-section">
+        <div class="left-panel-label">Slide Direction</div>
+        <div class="ticker-grid">
+          <button class="ticker-btn" id="btn-slide-left" onclick="setSlideDir('left')">LEFT</button>
+          <button class="ticker-btn" id="btn-slide-right" onclick="setSlideDir('right')">RIGHT</button>
+        </div>
       </div>
 
     </div>

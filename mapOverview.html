@@ -71,16 +71,25 @@
         --grid-padding: 10px;
         --grid-width: 25%;
 
-        --standings-bg: #1a1a1a;
-        --standings-border: #333;
-        --standings-header-bg: #222;
-        --standings-header-color: #ffd700;
-        --standings-col-header-bg: #2a2a2a;
+        --standings-bg: #c1a882;
+        --standings-border: #58412a;
+        --standings-header-bg: #58412a;
+        --standings-header-color: #ffffff;
+        --standings-col-header-bg: #58412a;
+        --standings-col-header-color: #ffd700;
         --standings-row-height: 60px;
-        --standings-alt-row: #1e1e1e;
-        --standings-text: var(--text-color);
-        --standings-text-dim: #888;
+        --standings-alt-row: #c1a882;
+        --standings-text: #000000;
+        --standings-text-dim: #000000;
         --standings-font-family: var(--font-family);
+
+        /* ── Background box behind the team logo in the STANDINGS table only.
+           Change --standings-logo-bg to whatever color/gradient you want.
+           The map boxes (.team-logo) are untouched and stay background-free. */
+        --standings-logo-bg: #58412a;
+        --standings-logo-padding: 0px;
+        --standings-logo-radius: 50%;
+        --standings-logo-border: none;
 
         --slide-duration: 0.5s;
         --slide-stagger: 0.15s;
@@ -147,6 +156,7 @@
         z-index: 2; pointer-events: none;
         border-radius: var(--box-border-radius);
       }
+      /* Logo inside the MAP boxes — intentionally has NO background box */
       .team-logo {
         position: absolute;
         top: 5px; left: 20px;
@@ -251,7 +261,7 @@
         font-family: var(--standings-font-family);
         font-size: 14px; font-weight: 800;
         letter-spacing: 2px;
-        color: var(--standings-text-dim);
+        color: var(--standings-col-header-color);
         text-transform: uppercase;
         background: var(--standings-col-header-bg);
         border: 1px solid var(--standings-border);
@@ -278,7 +288,21 @@
       }
       .standings-row:nth-child(even) { background: var(--standings-alt-row); }
       .standings-rank { width: 40px; text-align: center; font-weight: 800; color: var(--standings-text-dim); flex-shrink: 0; }
-      .standings-logo { width: 42px; height: 42px; object-fit: contain; flex-shrink: 0; margin: 0 10px 0 20px; filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5)); }
+      /* Logo inside the STANDINGS table — gets its own background box,
+         fully controlled from :root (--standings-logo-bg / padding / radius) */
+      .standings-logo {
+        width: var(--standings-row-height);
+        height: 100%;
+        object-fit: contain;
+        flex-shrink: 0;
+        margin: 0 10px 0 20px;
+        filter: drop-shadow(0 1px 3px rgba(0,0,0,0.5));
+        background-color: var(--standings-logo-bg);
+        padding: var(--standings-logo-padding);
+        border-radius: var(--standings-logo-radius);
+        border: var(--standings-logo-border);
+        box-sizing: border-box;
+      }
       .standings-name { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 4px; font-size: 17px; font-weight: 700; letter-spacing: 1px; }
       .standings-pts  { width: 60px; text-align: center; font-weight: 700; flex-shrink: 0; }
 
@@ -380,7 +404,7 @@
       <div class="standings-col-header" id="standings-col-header">
         <span class="sth-rank">RANK</span>
         <span class="sth-teams">TEAMS</span>
-        <span class="sth-pts">TOTAL PTS</span>
+        <span class="sth-pts">PTS</span>
       </div>
       <div class="standings-body" id="standings-body"></div>
     </div>
@@ -540,7 +564,7 @@
       const SLIDE_DUR    = parseSec(cssVars.getPropertyValue('--slide-duration'));
       const STAGGER      = parseSec(cssVars.getPropertyValue('--slide-stagger'));
       const STAY_DUR     = parseSec(cssVars.getPropertyValue('--stay-duration'));
-      const SLIDE_OFFSET = cssVars.getPropertyValue('--slide-offset').trim();
+      let slideOffset = cssVars.getPropertyValue('--slide-offset').trim();
 
       // Total slideable standings elements: title + col-header + NUM_STANDS rows
       const STAND_COUNT = 2 + NUM_STANDS;
@@ -602,6 +626,19 @@
       }
       fetchStandings();
       setInterval(fetchStandings, 5000);
+
+      // ─── Slide direction ──────────────────────────────────────────────────────
+      fbDb.ref("/live-graphics/overview/slideDirection").on("value", snap => {
+        const dir = snap.val();
+        const root = document.documentElement;
+        if (dir === "right") {
+          root.style.setProperty("--slide-offset", "120px");
+          slideOffset = "120px";
+        } else {
+          root.style.setProperty("--slide-offset", "-120px");
+          slideOffset = "-120px";
+        }
+      });
 
       // ─── Firebase: BOOYAH tags from matches/match{x}/4_BOOYAH/tag ────────────
       let booyahTags = new Array(NUM_BOXES).fill(null);
@@ -752,14 +789,14 @@
       function resetEl(el) {
         el.style.transition = 'none';
         el.style.opacity    = '0';
-        el.style.transform  = `translateX(${SLIDE_OFFSET})`;
+        el.style.transform  = `translateX(${slideOffset})`;
       }
 
       function slideEl(el, inOrOut, delay) {
         setTimeout(() => {
           el.style.transition = `opacity ${SLIDE_DUR}ms ease, transform ${SLIDE_DUR}ms ease`;
           el.style.opacity    = inOrOut === 'in' ? '1' : '0';
-          el.style.transform  = inOrOut === 'in' ? 'translateX(0)' : `translateX(${SLIDE_OFFSET})`;
+          el.style.transform  = inOrOut === 'in' ? 'translateX(0)' : `translateX(${slideOffset})`;
         }, delay);
       }
 
