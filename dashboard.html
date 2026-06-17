@@ -380,6 +380,22 @@
     document.getElementById("btn-slide-right").classList.toggle("ticker-active", dir === "right");
   });
 
+  // ── OS Overlay On/Off ─────────────────────────────────────
+  var osOnOffRef = db.ref("/live-graphics/osOnOff");
+
+  function setOsOnOff(val) {
+    osOnOffRef.set(val);
+    document.getElementById("btn-os-on").classList.toggle("ticker-active", val === "ON");
+    document.getElementById("btn-os-off").classList.toggle("ticker-active", val === "OFF");
+  }
+  window.setOsOnOff = setOsOnOff;
+
+  osOnOffRef.once("value", function(snap) {
+    var val = snap.val() || "ON";
+    document.getElementById("btn-os-on").classList.toggle("ticker-active", val === "ON");
+    document.getElementById("btn-os-off").classList.toggle("ticker-active", val === "OFF");
+  });
+
   // ── Map Randomizer ────────────────────────────────────────
   // ↓ Change this number to set the default cooldown (how many spins before a map returns)
   var COOLDOWN  = 3;
@@ -979,9 +995,9 @@ body {
   display: flex;
   flex-direction: column;
   padding: 20px 16px;
-  gap: 16px;
+  gap: 5px;
   transition: width 0.25s ease, padding 0.25s ease, opacity 0.2s ease;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .left-panel.collapsed {
@@ -994,7 +1010,6 @@ body {
 .left-panel-section {
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
 
 .left-panel-label {
@@ -1006,11 +1021,11 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
-/* 2×2 ticker grid */
+/* pairs of buttons side by side */
 .ticker-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 8px;
+  gap: 2px;
 }
 
 .ticker-btn {
@@ -1022,7 +1037,7 @@ body {
   font-weight: 500;
   letter-spacing: 2px;
   text-transform: uppercase;
-  padding: 12px 8px;
+  padding: 8px 8px;
   cursor: pointer;
   text-align: center;
   transition: border-color 0.2s, color 0.2s, background 0.2s, box-shadow 0.2s;
@@ -1429,6 +1444,14 @@ body {
         <div class="ticker-grid">
           <button class="ticker-btn" id="btn-slide-left" onclick="setSlideDir('left')">LEFT</button>
           <button class="ticker-btn" id="btn-slide-right" onclick="setSlideDir('right')">RIGHT</button>
+        </div>
+      </div>
+
+      <div class="left-panel-section">
+        <div class="left-panel-label">OS Overlay</div>
+        <div class="ticker-grid">
+          <button class="ticker-btn" id="btn-os-on" onclick="setOsOnOff('ON')">ON</button>
+          <button class="ticker-btn" id="btn-os-off" onclick="setOsOnOff('OFF')">OFF</button>
         </div>
       </div>
 
