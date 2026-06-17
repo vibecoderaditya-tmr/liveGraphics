@@ -146,8 +146,37 @@
 </div>
 
 <script>
-const LOGO_BASE  = "logos/";
-const LOGO_EXT   = ".webp";
+const isFileProtocol = location.protocol === "file:";
+function fileRelativeDir() {
+  const p = location.pathname;
+  return p.substring(0, p.lastIndexOf("/") + 1);
+}
+const LOGO_BASE = isFileProtocol ? `${fileRelativeDir()}logos/` : "/logos/";
+const LOGO_EXT  = ".webp";
+
+function buildCaseVariants(name) {
+  const clean = String(name).trim().replace(/[^a-zA-Z0-9_-]/g, "");
+  const lower = clean.toLowerCase();
+  const upper = clean.toUpperCase();
+  const capitalized = lower.charAt(0).toUpperCase() + lower.slice(1);
+  return [...new Set([lower, upper, capitalized])];
+}
+
+function loadLogoCaseInsensitive(imgEl, tag) {
+  const variants = buildCaseVariants(tag);
+  let attempt = 0;
+  function tryNext() {
+    if (attempt >= variants.length) {
+      imgEl.style.display = "none";
+      imgEl.onerror = null;
+      return;
+    }
+    imgEl.src = LOGO_BASE + variants[attempt] + LOGO_EXT;
+    attempt++;
+    imgEl.onerror = tryNext;
+  }
+  tryNext();
+}
 
 const firebaseConfig = {
   apiKey:            "AIzaSyC21mdsgyIEqXT7ujFbi0xcVAMRZxxqB1I",
@@ -201,14 +230,14 @@ function renderTeams(teamsObj, matchCounts) {
       const teamEl = rowEl.querySelector('.f-team');
       const existingImg = teamEl.querySelector('.f-team-logo');
       if (existingImg) {
-        existingImg.src = LOGO_BASE + e.tag + LOGO_EXT;
+        loadLogoCaseInsensitive(existingImg, e.tag);
       } else {
+        teamEl.textContent = '';
         const img = document.createElement('img');
         img.className = 'f-team-logo';
-        img.src = LOGO_BASE + e.tag + LOGO_EXT;
         img.alt = '';
-        teamEl.textContent = '';
         teamEl.appendChild(img);
+        loadLogoCaseInsensitive(img, e.tag);
       }
       // append a text node for the name (after the img)
       const txtNode = teamEl.querySelector('.f-team-name');
