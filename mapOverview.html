@@ -640,7 +640,7 @@
         }
       });
 
-      // ─── Firebase: BOOYAH tags from matches/match{x}/4_BOOYAH/tag ────────────
+      // ─── Firebase: BOOYAH tags + maps for boxes 6-8 from matches ────────────
       let booyahTags = new Array(NUM_BOXES).fill(null);
 
       function attachBooyahListener() {
@@ -652,6 +652,13 @@
             const matchNode = matches[`match${i}`];
             if (matchNode && matchNode["4_BOOYAH"] && matchNode["4_BOOYAH"]["tag"]) {
               newTags[i - 1] = matchNode["4_BOOYAH"]["tag"];
+            }
+            // boxes 6-8: read map name from Firebase (0-indexed: 5,6,7)
+            if (i >= 6 && matchNode && matchNode["1_mapName"]) {
+              const mapName = matchNode["1_mapName"];
+              const file = mapName.toLowerCase();
+              setImgWithCaseFallback(mapImgs[i - 1], MAP_BASE, file, LOGO_EXT);
+              mapLabels[i - 1].textContent = mapName;
             }
           }
 
@@ -691,10 +698,12 @@
 
             if (!firstEmptySeen) {
               firstEmptySeen = true;
-              // First empty = COMING AHEAD; show the random map
-              setImgWithCaseFallback(mapImgs[i], MAP_BASE, RANDOM_MAP.file, LOGO_EXT);
-              mapLabels[i].textContent = RANDOM_MAP.name;
               labels[i].innerHTML = `<span class="upcoming-text">COMING AHEAD</span>`;
+              // Only set random map for boxes 6-8 if Firebase hasn't provided one yet
+              if (i >= 5 && mapLabels[i].textContent === "RANDOM") {
+                setImgWithCaseFallback(mapImgs[i], MAP_BASE, RANDOM_MAP.file, LOGO_EXT);
+                mapLabels[i].textContent = RANDOM_MAP.name;
+              }
             } else {
               labels[i].innerHTML = `<span class="upcoming-text">UPCOMING</span>`;
             }
