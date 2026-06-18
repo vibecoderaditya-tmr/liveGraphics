@@ -108,10 +108,31 @@
     margin-bottom: var(--header-gap);
   }
 
-  .ticker-row {
+  /* ── Row wrapper: handles position, top, display:none, and the glow filter.
+     clip-path is applied to .ticker-row (the child), NOT the wrapper.
+     filter: drop-shadow on the wrapper is composited AFTER the child's
+     clip-path, so the glow bleeds outside the clipped area freely. ── */
+  .row-wrap {
     position: absolute;
     left: 0;
     right: 0;
+    height: var(--row-height);
+    transition: top 0.6s ease-in-out;
+  }
+
+  /* Golden glow lives on the wrapper — never clipped */
+  .row-wrap.top-frag-wrap {
+    animation: top-frag-glow 2.5s ease-in-out infinite;
+    z-index: 2;
+  }
+  @keyframes top-frag-glow {
+    0%, 100% { filter: drop-shadow(0 0 6px rgba(255,200,0,0.7)) drop-shadow(0 0 12px rgba(255,180,0,0.5)); }
+    50%       { filter: drop-shadow(0 0 10px rgba(255,220,60,1))  drop-shadow(0 0 22px rgba(255,200,0,0.8)); }
+  }
+
+  .ticker-row {
+    position: absolute;
+    inset: 0;
     display: flex;
     align-items: center;
     height: var(--row-height);
@@ -120,11 +141,15 @@
     border-bottom: 1px solid var(--row-border);
     font-size: 20px;
     color: var(--row-color);
-    transition: top 0.6s ease-in-out;
-	overflow: hidden;
+    overflow: hidden;
   }
-  .ticker-row:nth-child(even) {
-    background: var(--row-bg-alt);
+  /* Background pulse on the row itself */
+  .row-wrap.top-frag-wrap .ticker-row {
+    animation: top-frag-bg 2.5s ease-in-out infinite;
+  }
+  @keyframes top-frag-bg {
+    0%, 100% { background-color: #d4a017; }
+    50%       { background-color: #ffd700; }
   }
 
   .ticker-row .col-rank,
@@ -185,26 +210,18 @@
   }
 
   /* ── Directional wipe-reveal animation states ─────────────────────────
-     Unlike a slide, the row/header itself never moves and never fades —
-     its left or right edge is fixed in place, and a clip-path "wipe"
-     reveals/hides the content from that fixed edge outward, exactly like
-     the .elim-overlay wipe below.
-       "left"  → left edge fixed; content reveals growing rightward,
-                 and hides by clipping back toward that same left edge.
-       "right" → right edge fixed; content reveals growing leftward,
-                 and hides by clipping back toward that same right edge.
+     clip-path is applied to .ticker-row (NOT .row-wrap), so the glow
+     filter on .row-wrap is never clipped.
   ------------------------------------------------------------------- */
   .anim-hide-left   { clip-path: inset(0 100% 0 0); }
   .anim-hide-right  { clip-path: inset(0 0 0 100%); }
   .anim-in          { clip-path: inset(0 0 0 0); }
 
   .trans-anim {
-    transition: top        0.6s  ease-in-out,
-                clip-path  0.55s cubic-bezier(0.25,0.46,0.45,0.94);
+    transition: clip-path  0.55s cubic-bezier(0.25,0.46,0.45,0.94);
   }
   .trans-anim-out {
-    transition: top        0.6s  ease-in-out,
-                clip-path  0.5s  cubic-bezier(0.55,0.06,0.68,0.53);
+    transition: clip-path  0.5s  cubic-bezier(0.55,0.06,0.68,0.53);
   }
 
   .elim-overlay.not-played-overlay {
@@ -215,37 +232,6 @@
   }
   .elim-overlay.not-played-overlay span {
     display: none;
-  }
-
-  /* ── Top-fragger golden glow ──────────────────────────────────────
-     Applied to whichever row has a strictly-higher elim count than
-     every other team currently in play. The entire row background
-     pulses gold (not just the edges), on a quick cycle.
-     NOTE: box-shadow is clipped by clip-path (used for wipe animations),
-     so the glow is rendered via a ::before pseudo-element that sits
-     OUTSIDE the row's own stacking context, making it clip-path-immune.
-  ------------------------------------------------------------------- */
-  .ticker-row.top-frag {
-    position: relative;
-    z-index: 2;
-    animation: top-frag-bg 2.5s ease-in-out infinite;
-  }
-  .ticker-row.top-frag::before {
-    content: '';
-    position: absolute;
-    inset: -4px -6px;
-    border-radius: 3px;
-    z-index: -1;
-    pointer-events: none;
-    animation: top-frag-glow 2.5s ease-in-out infinite;
-  }
-  @keyframes top-frag-bg {
-    0%, 100% { background-color: #d4a017; }
-    50%       { background-color: #ffd700; }
-  }
-  @keyframes top-frag-glow {
-    0%, 100% { box-shadow: 0 0 18px 6px rgba(255, 200, 0, 0.65); }
-    50%       { box-shadow: 0 0 32px 10px rgba(255, 220, 60, 0.95); }
   }
 
   .alive-bar {
@@ -261,9 +247,8 @@
 
   .elim-overlay {
     position: absolute;
-	align-self: unset;
-  margin: 0;
-  
+    align-self: unset;
+    margin: 0;
     inset: 0;
     display: flex;
     align-items: center;
@@ -374,12 +359,18 @@ function loadLogo(imgEl, tag) {
 const NUM_ROWS = 12;
 const rowsContainer = document.getElementById("ticker-rows");
 
+// Each row is now: .row-wrap > .ticker-row
+// .row-wrap  → position/top/display/glow-filter  (never clip-pathed)
+// .ticker-row → clip-path wipe animations         (clipped, but glow is on parent)
 function buildRows() {
   rowsContainer.innerHTML = "";
   for (let i = 0; i < NUM_ROWS; i++) {
+    const wrap = document.createElement("div");
+    wrap.className = "row-wrap";
+    wrap.dataset.slot = i;
+
     const row = document.createElement("div");
     row.className = "ticker-row";
-    row.dataset.slot = i;
     row.innerHTML = `
       <span class="col-rank"></span>
       <span class="col-team">
@@ -396,13 +387,18 @@ function buildRows() {
       </span>
       <div class="elim-overlay"><span>ELIMINATED</span></div>
     `;
-    rowsContainer.appendChild(row);
+    wrap.appendChild(row);
+    rowsContainer.appendChild(wrap);
   }
 }
 buildRows();
 
-const rowEls = Array.from(document.querySelectorAll('.ticker-row'))
+// rowEls now points to the .row-wrap elements (position/display owners)
+// innerRow(wrap) returns the .ticker-row inside (clip-path/content owner)
+const rowEls = Array.from(document.querySelectorAll('.row-wrap'))
   .sort((a, b) => Number(a.dataset.slot) - Number(b.dataset.slot));
+
+function innerRow(wrap) { return wrap.querySelector('.ticker-row'); }
 
 const firebaseConfig = {
   apiKey:            "AIzaSyC21mdsgyIEqXT7ujFbi0xcVAMRZxxqB1I",
@@ -422,7 +418,7 @@ let liveData  = {};
 
 let prevElims = {};
 let prevPts   = {};
-let currentTopFragTag = null; // tag of whichever team currently holds the top-frag glow
+let currentTopFragTag = null;
 
 function animateCount(el, from, to) {
   if (from === to) { el.textContent = to; return; }
@@ -453,13 +449,13 @@ function renderTicker() {
   const rowHeight = 40;
   const rowGap    = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--row-gap')) || 0;
 
-  // ── row ↔ tag association ─────────────────────────────────────────
+  // ── row ↔ tag association (on .row-wrap) ─────────────────────────
   const activeTags = new Set(entries.map(e => e.tag));
-  for (const row of rowEls) {
-    if (row.dataset.tag && !activeTags.has(row.dataset.tag)) delete row.dataset.tag;
+  for (const wrap of rowEls) {
+    if (wrap.dataset.tag && !activeTags.has(wrap.dataset.tag)) delete wrap.dataset.tag;
   }
   const assigned = new Set();
-  for (const row of rowEls) if (row.dataset.tag) assigned.add(row.dataset.tag);
+  for (const wrap of rowEls) if (wrap.dataset.tag) assigned.add(wrap.dataset.tag);
   for (const e of entries) {
     if (!assigned.has(e.tag)) {
       const free = rowEls.find(r => !r.dataset.tag);
@@ -467,21 +463,13 @@ function renderTicker() {
     }
   }
 
-  // ── Determine the highest elim count among teams that are BOTH played
-  // AND currently alive. Eliminated teams (alive === 0) are excluded from
-  // contention entirely, so the glow automatically falls through to the
-  // next-highest-frag team that's still alive (and turns off completely
-  // if no team is left alive).
-  //
-  // If multiple alive teams are tied on kills, the tie is broken by
-  // total points (higher PTS wins the glow). If they're ALSO tied on
-  // points, nobody gets the glow.
+  // ── Top-fragger determination ─────────────────────────────────────
   let maxKills = -Infinity;
   for (const e of entries) {
     const live = liveData[e.tag];
-    if (!live) continue; // not played, excluded from contention
+    if (!live) continue;
     const aliveCount = Number(live["3_playersAlive"]) || 0;
-    if (aliveCount <= 0) continue; // eliminated, excluded from contention
+    if (aliveCount <= 0) continue;
     const k = Number(live["5_totalKills"]) || 0;
     if (k > maxKills) maxKills = k;
   }
@@ -498,7 +486,6 @@ function renderTicker() {
     if (killLeaders.length === 1) {
       topFragTag = killLeaders[0].tag;
     } else if (killLeaders.length > 1) {
-      // Tied on kills — break the tie by points.
       let maxPts = -Infinity, maxPtsCount = 0;
       for (const c of killLeaders) {
         if (c.pts > maxPts) { maxPts = c.pts; maxPtsCount = 1; }
@@ -506,12 +493,6 @@ function renderTicker() {
       }
       topFragTag = (maxPtsCount === 1)
         ? killLeaders.find(c => c.pts === maxPts).tag
-        // Still tied on points too — don't hand the glow to a new team;
-        // keep it on whichever team currently holds it, as long as that
-        // team is still part of this tied group (still alive and still
-        // sharing the max kill count). If nobody currently holds the
-        // glow (or the previous holder no longer qualifies), there's no
-        // "current team" to keep it on, so nobody glows.
         : (currentTopFragTag && killLeaders.some(c => c.tag === currentTopFragTag))
           ? currentTopFragTag
           : null;
@@ -519,9 +500,12 @@ function renderTicker() {
   }
   currentTopFragTag = topFragTag;
 
-  for (const row of rowEls) {
-    if (!row.dataset.tag || !activeTags.has(row.dataset.tag)) {
-      row.style.display = "none";
+  for (const wrap of rowEls) {
+    const row = innerRow(wrap);
+
+    if (!wrap.dataset.tag || !activeTags.has(wrap.dataset.tag)) {
+      wrap.style.display = "none";
+      wrap.classList.remove("top-frag-wrap");
       row.querySelector(".col-rank").textContent = "";
       row.querySelector(".team-logo").src = "";
       row.querySelector(".team-logo").style.display = "none";
@@ -531,41 +515,32 @@ function renderTicker() {
       row.querySelector(".col-pts").textContent = "";
       row.querySelectorAll(".alive-bar").forEach(b => b.classList.remove("active"));
       row.querySelector(".elim-overlay").classList.remove("show", "exit", "final", "not-played-overlay");
-      row.classList.remove("top-frag");
       row.querySelector(".col-alive").classList.remove("struck");
-      clearTimeout(row._elimT1);
-      clearTimeout(row._elimT2);
-      row._elimT1 = null;
-      row._elimT2 = null;
-      row._elimStage = 0;
+      clearTimeout(wrap._elimT1);
+      clearTimeout(wrap._elimT2);
+      wrap._elimT1 = null;
+      wrap._elimT2 = null;
+      wrap._elimStage = 0;
       continue;
     }
 
-    const eIdx = entries.findIndex(en => en.tag === row.dataset.tag);
+    const eIdx = entries.findIndex(en => en.tag === wrap.dataset.tag);
     const e = entries[eIdx];
     const live = liveData[e.tag] || {};
 
-    row.style.display = "";
-    // Live Firebase data (kills/points) ticks constantly and can call
-    // renderTicker() at any moment — including while a row is still
-    // mid-flight in its slide IN/OUT animation. .ticker-row always has
-    // `transition: top 0.6s ease-in-out`, so naively setting top here
-    // would restart/fight that transition against the slide transform,
-    // making rows freeze or land out of sync with their stagger order.
-    // Only let `top` transition smoothly for rows that have actually
-    // finished landing (anim-in present). Rows still mid-animation (or
-    // not yet shown) get their position snapped instantly instead, so
-    // the pending slide animation finishes on its own schedule, and
-    // applyAnim() picks up the correct final position once it runs.
+    wrap.style.display = "";
+
     const newTop = (eIdx * (rowHeight + rowGap)) + "px";
+    // Only smooth-transition top if the row is fully visible (anim-in).
+    // Mid-animation rows get snapped so the wipe finishes cleanly.
     if (row.classList.contains("anim-in")) {
-      row.style.top = newTop;
+      wrap.style.top = newTop;
     } else {
-      const prevTransition = row.style.transition;
-      row.style.transition = "none";
-      row.style.top = newTop;
-      void row.offsetHeight; // force reflow so the snap applies immediately
-      row.style.transition = prevTransition;
+      const prevTransition = wrap.style.transition;
+      wrap.style.transition = "none";
+      wrap.style.top = newTop;
+      void wrap.offsetHeight;
+      wrap.style.transition = prevTransition;
     }
 
     const rankEl  = row.querySelector(".col-rank");
@@ -580,43 +555,43 @@ function renderTicker() {
     const elimOverlay = row.querySelector(".elim-overlay");
     const notPlayed = !liveData[e.tag];
 
-    // ── Top-fragger glow ────────────────────────────────────────────
-    row.classList.toggle("top-frag", !notPlayed && topFragTag === e.tag);
+    // ── Top-fragger glow on the wrapper (never clipped) ─────────────
+    wrap.classList.toggle("top-frag-wrap", !notPlayed && topFragTag === e.tag);
 
     if (notPlayed) {
       elimOverlay.classList.remove("show", "exit", "final");
       elimOverlay.classList.add("not-played-overlay");
       aliveEl.classList.add("struck");
-      clearTimeout(row._elimT1);
-      clearTimeout(row._elimT2);
-      row._elimT1 = null;
-      row._elimT2 = null;
-      row._elimStage = 0;
+      clearTimeout(wrap._elimT1);
+      clearTimeout(wrap._elimT2);
+      wrap._elimT1 = null;
+      wrap._elimT2 = null;
+      wrap._elimStage = 0;
     } else {
       elimOverlay.classList.remove("not-played-overlay");
       aliveEl.classList.remove("struck");
       if (alive === 0) {
-        if (!row._elimStage) {
-          row._elimStage = 1;
+        if (!wrap._elimStage) {
+          wrap._elimStage = 1;
           elimOverlay.classList.add("show");
-          row._elimT1 = setTimeout(() => {
+          wrap._elimT1 = setTimeout(() => {
             elimOverlay.classList.remove("show");
             elimOverlay.classList.add("exit");
-            row._elimStage = 2;
-            row._elimT2 = setTimeout(() => {
+            wrap._elimStage = 2;
+            wrap._elimT2 = setTimeout(() => {
               elimOverlay.classList.remove("exit");
               elimOverlay.classList.add("final");
-              row._elimStage = 3;
+              wrap._elimStage = 3;
             }, 500);
           }, 1500);
         }
       } else {
         elimOverlay.classList.remove("show", "exit", "final");
-        clearTimeout(row._elimT1);
-        clearTimeout(row._elimT2);
-        row._elimT1 = null;
-        row._elimT2 = null;
-        row._elimStage = 0;
+        clearTimeout(wrap._elimT1);
+        clearTimeout(wrap._elimT2);
+        wrap._elimT1 = null;
+        wrap._elimT2 = null;
+        wrap._elimStage = 0;
       }
     }
 
@@ -648,6 +623,7 @@ db.ref("/matches/live").on("value", snap => {
   renderTicker();
 });
 
+
 // ── Points visibility ──────────────────────────────────────────────────────
 db.ref("/live-graphics/status").on("value", snap => {
   const val = snap.val();
@@ -661,13 +637,9 @@ db.ref("/live-graphics/status").on("value", snap => {
 // ── Entrance / exit direction ───────────────────────────────────────────
 // /live-graphics/animate-from-to holds either "left" or "right".
 //   "left"  -> left edge fixed; ticker wipes/reveals in growing rightward
-//              from that edge, and (on exit) wipes back to hidden the
-//              same way, retracting toward the left edge.
 //   "right" -> right edge fixed; ticker wipes/reveals in growing leftward
-//              from that edge, and (on exit) wipes back to hidden the
-//              same way, retracting toward the right edge.
-// Defaults to "left" if the node is missing/unrecognized so the graphic
-// still animates instead of silently doing nothing.
+// NOTE: clip-path classes are applied to .ticker-row (inner), NOT .row-wrap.
+// The glow filter on .row-wrap is therefore never clipped.
 let animDirection = "left"; // "left" | "right"
 let animState      = "out";  // "in" | "out"
 let animTimers      = [];
@@ -680,59 +652,53 @@ function applyAnim() {
   animTimers.forEach(t => clearTimeout(t));
   animTimers = [];
 
-  const header   = document.querySelector(".ticker-header");
-  // rowEls is fixed DOM slot order, NOT visual rank order — a team at
-  // visual rank #1 (top: 0px) can live in any DOM slot depending on which
-  // slot was free when it was assigned. Sort by actual on-screen position
-  // (style.top) so the stagger animates top-to-bottom visually, and drop
-  // rows with no active team (display: none) so empty slots don't throw
-  // off the timing/gaps.
-  const rows = rowEls
-    .filter(row => row.style.display !== "none")
+  const header = document.querySelector(".ticker-header");
+  // Sort visible wrappers by on-screen position for correct stagger order
+  const wrapRows = rowEls
+    .filter(wrap => wrap.style.display !== "none")
     .slice()
     .sort((a, b) => (parseFloat(a.style.top) || 0) - (parseFloat(b.style.top) || 0));
-  const all      = [header, ...rows];
+
+  // Clip-path targets: header directly, inner .ticker-row for each wrap
+  const headerTarget = header;
+  const rowTargets   = wrapRows.map(wrap => innerRow(wrap));
+  const allTargets   = [headerTarget, ...rowTargets];
+
   const isIn     = animState === "in";
   const hideCls  = hideClassFor(animDirection);
   const otherHideCls = hideCls === "anim-hide-left" ? "anim-hide-right" : "anim-hide-left";
 
   if (isIn) {
-    // Snap every element to the "hidden" position on the correct side,
-    // with transitions disabled so there's no visible jump.
-    all.forEach(el => {
+    allTargets.forEach(el => {
       el.style.transition = "none";
       el.classList.remove("anim-in", otherHideCls, hideCls);
       el.classList.add(hideCls);
     });
-    void header.offsetHeight; // force reflow so the snap takes effect
-    all.forEach(el => { el.style.transition = ""; });
+    void header.offsetHeight;
+    allTargets.forEach(el => { el.style.transition = ""; });
 
-    // Header wipes in first.
     header.classList.remove("trans-anim-out");
     header.classList.add("trans-anim");
     header.classList.remove(hideCls);
     header.classList.add("anim-in");
 
-    // Rows stagger in one-by-one from the same side as the header.
-    rows.forEach((row, i) => {
+    rowTargets.forEach((rowEl, i) => {
       const t = setTimeout(() => {
-        row.classList.remove("trans-anim-out");
-        row.classList.add("trans-anim");
-        row.classList.remove(hideCls);
-        row.classList.add("anim-in");
+        rowEl.classList.remove("trans-anim-out");
+        rowEl.classList.add("trans-anim");
+        rowEl.classList.remove(hideCls);
+        rowEl.classList.add("anim-in");
       }, 80 + i * 60);
       animTimers.push(t);
     });
   } else {
-    // Exit: rows stagger out first (reverse order), in the SAME direction
-    // they entered from, then the header exits last.
-    rows.forEach((row, i) => {
+    rowTargets.forEach((rowEl, i) => {
       const t = setTimeout(() => {
-        row.classList.remove("trans-anim");
-        row.classList.add("trans-anim-out");
-        row.classList.remove("anim-in");
-        row.classList.add(hideCls);
-      }, (rows.length - 1 - i) * 60);
+        rowEl.classList.remove("trans-anim");
+        rowEl.classList.add("trans-anim-out");
+        rowEl.classList.remove("anim-in");
+        rowEl.classList.add(hideCls);
+      }, (rowTargets.length - 1 - i) * 60);
       animTimers.push(t);
     });
     const t = setTimeout(() => {
@@ -740,7 +706,7 @@ function applyAnim() {
       header.classList.add("trans-anim-out");
       header.classList.remove("anim-in");
       header.classList.add(hideCls);
-    }, rows.length * 60 + 80);
+    }, rowTargets.length * 60 + 80);
     animTimers.push(t);
   }
 }
@@ -748,8 +714,6 @@ function applyAnim() {
 db.ref("/live-graphics/animate-from-to").on("value", snap => {
   const val = (snap.val() || "left").toLowerCase().trim();
   animDirection = (val === "right") ? "right" : "left";
-  // If currently shown, re-apply immediately so direction changes are
-  // reflected without waiting for the next show/hide toggle.
   if (animState === "in") applyAnim();
 });
 
