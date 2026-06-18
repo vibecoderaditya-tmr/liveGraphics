@@ -221,21 +221,31 @@
      Applied to whichever row has a strictly-higher elim count than
      every other team currently in play. The entire row background
      pulses gold (not just the edges), on a quick cycle.
+     NOTE: box-shadow is clipped by clip-path (used for wipe animations),
+     so the glow is rendered via a ::before pseudo-element that sits
+     OUTSIDE the row's own stacking context, making it clip-path-immune.
   ------------------------------------------------------------------- */
   .ticker-row.top-frag {
     position: relative;
     z-index: 2;
-    animation: top-frag-pulse 2.5s ease-in-out infinite;
+    animation: top-frag-bg 2.5s ease-in-out infinite;
   }
-  @keyframes top-frag-pulse {
-    0%, 100% {
-      background-color: #d4a017;
-      box-shadow: 0 0 18px 4px rgba(255, 200, 0, 0.55);
-    }
-    50% {
-      background-color: #ffd700;
-      box-shadow: 0 0 30px 8px rgba(255, 220, 60, 0.85);
-    }
+  .ticker-row.top-frag::before {
+    content: '';
+    position: absolute;
+    inset: -4px -6px;
+    border-radius: 3px;
+    z-index: -1;
+    pointer-events: none;
+    animation: top-frag-glow 2.5s ease-in-out infinite;
+  }
+  @keyframes top-frag-bg {
+    0%, 100% { background-color: #d4a017; }
+    50%       { background-color: #ffd700; }
+  }
+  @keyframes top-frag-glow {
+    0%, 100% { box-shadow: 0 0 18px 6px rgba(255, 200, 0, 0.65); }
+    50%       { box-shadow: 0 0 32px 10px rgba(255, 220, 60, 0.95); }
   }
 
   .alive-bar {
