@@ -70,7 +70,7 @@
     height: var(--canvas-height);
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-end;
     padding-top: 60px;
   }
 
@@ -167,14 +167,18 @@
   .ticker-row .col-elims   { display: flex; align-items: center; justify-content: center; text-align: center; }
   .ticker-row .col-pts     { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; color: var(--row-pts-color); }
   .ticker-row .col-alive   { position: relative; text-align: center; display: flex; align-items: center; justify-content: center; gap: var(--bar-gap); margin-left: var(--pts-alive-gap); padding-left: 27px; }
+  .col-alive.struck {
+    position: relative;
+  }
   .col-alive.struck::after {
     content: '';
     position: absolute;
-    left: 0;
+    left: 27px;
     right: 0;
     top: 50%;
-    height: 2px;
+    height: 5px;
     background: var(--alive);
+    transform: translateY(-50%);
     z-index: 1;
     pointer-events: none;
   }
@@ -202,8 +206,14 @@
                 clip-path  0.5s  cubic-bezier(0.55,0.06,0.68,0.53);
   }
 
-  .ticker-row.not-played {
-    background: rgba(0,0,0,0.85) !important;
+  .elim-overlay.not-played-overlay {
+    clip-path: inset(0 0 0 0);
+    background: rgba(0,0,0,0.6);
+    opacity: 1;
+    transition: none;
+  }
+  .elim-overlay.not-played-overlay span {
+    display: none;
   }
 
   /* ── Top-fragger golden glow ──────────────────────────────────────
@@ -214,7 +224,7 @@
   .ticker-row.top-frag {
     position: relative;
     z-index: 2;
-    animation: top-frag-pulse 0.7s ease-in-out infinite;
+    animation: top-frag-pulse 2.5s ease-in-out infinite;
   }
   @keyframes top-frag-pulse {
     0%, 100% {
@@ -509,8 +519,7 @@ function renderTicker() {
       row.querySelector(".col-elims").textContent = "";
       row.querySelector(".col-pts").textContent = "";
       row.querySelectorAll(".alive-bar").forEach(b => b.classList.remove("active"));
-      row.querySelector(".elim-overlay").classList.remove("show", "exit", "final");
-      row.classList.remove("not-played");
+      row.querySelector(".elim-overlay").classList.remove("show", "exit", "final", "not-played-overlay");
       row.classList.remove("top-frag");
       row.querySelector(".col-alive").classList.remove("struck");
       clearTimeout(row._elimT1);
@@ -564,16 +573,16 @@ function renderTicker() {
     row.classList.toggle("top-frag", !notPlayed && topFragTag === e.tag);
 
     if (notPlayed) {
-      row.classList.add("not-played");
-      aliveEl.classList.add("struck");
       elimOverlay.classList.remove("show", "exit", "final");
+      elimOverlay.classList.add("not-played-overlay");
+      aliveEl.classList.add("struck");
       clearTimeout(row._elimT1);
       clearTimeout(row._elimT2);
       row._elimT1 = null;
       row._elimT2 = null;
       row._elimStage = 0;
     } else {
-      row.classList.remove("not-played");
+      elimOverlay.classList.remove("not-played-overlay");
       aliveEl.classList.remove("struck");
       if (alive === 0) {
         if (!row._elimStage) {
