@@ -237,6 +237,11 @@
         display: none;
         flex-direction: column;
         gap: 2px;
+        /* Body bottom-aligns its flex children by default (align-items: flex-end)
+           so the maps grid sits at the bottom of the 1080px canvas. The standings
+           panel overrides that for itself and sticks to the top instead. */
+        align-self: flex-start;
+        margin-top: 20px;
       }
       /* Title + col-header both animate — start hidden like rows */
       .standings-header {
