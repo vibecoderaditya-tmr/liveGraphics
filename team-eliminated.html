@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Team Eliminated</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --box-w: 100px;
+    --bg-left:  #48321e;
+    --bg-right: #c1a882;
+    --left-hash:  #ffffff;
+    --right-team: #000000;
+    --right-elim: #000000;
+    --size-hash: 16px;
+    --size-team: 30px;
+    --size-elim: 16px;
+    --logo-size: 65px;
+    --font: 'Oswald', sans-serif;
+  }
+  html, body {
+    width: 1920px;
+    height: 1080px;
+    background: transparent;
+    overflow: hidden;
+    font-family: var(--font);
+    color: var(--right-elim);
+  }
+  .elim-wrap {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .elim-card {
+    display: none;
+    position: relative;
+    height: var(--box-w);
+  }
+  .elim-card.show { display: flex; }
+  .elim-card.show .left-box {
+    animation: leftSlide 3s ease forwards;
+  }
+  @keyframes leftSlide {
+    0%     { transform: translateY(calc(-1 * var(--box-w))); }
+    16.67% { transform: translateY(0); }
+    100%   { transform: translateY(0); }
+  }
+  .left-box {
+    width: var(--box-w);
+    height: var(--box-w);
+    background: var(--bg-left);
+    position: relative;
+    z-index: 1;
+  }
+  .hash-tag {
+    position: absolute;
+    top: 6px;
+    left: 8px;
+    font-size: var(--size-hash);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--left-hash);
+  }
+  .logo-box {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .logo-box img {
+    width: var(--logo-size);
+    height: var(--logo-size);
+    object-fit: contain;
+  }
+  .right-box {
+    position: absolute;
+    left: var(--box-w);
+    top: 0;
+    height: var(--box-w);
+    max-width: 0;
+    overflow: hidden;
+    background: var(--bg-right);
+    z-index: 0;
+  }
+  .elim-card.show .right-box {
+    animation: rightSlide 2.625s ease forwards;
+    animation-delay: 0.375s;
+  }
+  @keyframes rightSlide {
+    0%     { max-width: 0; }
+    19.05% { max-width: 600px; }
+    100%   { max-width: 600px; }
+  }
+  .right-inner {
+    height: 100%;
+    width: max-content;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 8px 14px;
+    white-space: nowrap;
+  }
+  .elim-count {
+    position: absolute;
+    top: 8px;
+    right: 14px;
+    font-size: var(--size-elim);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--right-elim);
+    white-space: nowrap;
+  }
+  .team-name {
+    font-size: var(--size-team);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--right-team);
+    white-space: nowrap;
+    padding-top: 6px;
+  }
+</style>
+</head>
+<body>
+<div class="elim-wrap">
+  <div class="elim-card" id="elimCard">
+    <div class="left-box">
+      <div class="hash-tag">#0</div>
+      <div class="logo-box">
+        <img src="./logos/tmr.webp" alt="team logo" />
+      </div>
+    </div>
+    <div class="right-box">
+      <div class="right-inner">
+        <div class="elim-count">0 ELIMINATIONS</div>
+        <div class="team-name">---</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyC21mdsgyIEqXT7ujFbi0xcVAMRZxxqB1I",
+  authDomain: "tmraditya-1ceb7.firebaseapp.com",
+  projectId: "tmraditya-1ceb7",
+  storageBucket: "tmraditya-1ceb7.firebasestorage.app",
+  messagingSenderId: "317037791388",
+  appId: "1:317037791388:web:755b5a18bb77aa140a4559",
+  databaseURL: "https://tmraditya-1ceb7-default-rtdb.asia-southeast1.firebasedatabase.app"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+const card = document.getElementById('elimCard');
+const hashEl = card.querySelector('.hash-tag');
+const teamNameEl = card.querySelector('.team-name');
+const elimCountEl = card.querySelector('.elim-count');
+const logoImg = card.querySelector('.logo-box img');
+const leftBox = card.querySelector('.left-box');
+const rightBox = card.querySelector('.right-box');
+
+const prevAlive = {};
+const queue = [];
+let showing = false;
+
+db.ref('/matches/live').on('value', snap => {
+  const data = snap.val() || {};
+  const teamTags = Object.keys(data).filter(k => data[k] && data[k]['2_isTeamAlive'] !== undefined);
+  const totalTeams = teamTags.length;
+  for (const tag of teamTags) {
+    const node = data[tag];
+    const alive = node['2_isTeamAlive'];
+    if (alive === undefined || alive === null) continue;
+    const prev = prevAlive[tag];
+    prevAlive[tag] = alive;
+    if (alive === 0 && prev !== undefined && prev !== 0) {
+      const hash = node['0_hash'] || totalTeams;
+      queue.push({ tag, hash, kills: Number(node['5_totalKills']) || 0, name: node['4_teamName'] || '' });
+      processQueue();
+    }
+  }
+});
+
+function processQueue() {
+  if (showing || queue.length === 0) return;
+  showing = true;
+  const item = queue.shift();
+  const name = item.name || item.tag;
+  showCard(item.tag, item.hash, name, item.kills);
+}
+
+function showCard(tag, hash, name, kills) {
+  card.classList.remove('show');
+  card.style.display = 'none';
+  hashEl.textContent = '#' + hash;
+  teamNameEl.textContent = name;
+  elimCountEl.textContent = kills + ' ELIMINATIONS';
+  logoImg.src = './logos/' + tag + '.webp';
+  card.style.display = 'flex';
+  void card.offsetWidth;
+  card.classList.add('show');
+  setTimeout(() => {
+    card.classList.remove('show');
+    card.style.display = 'none';
+    showing = false;
+    processQueue();
+  }, 3000);
+}
+</script>
+</body>
+</html>
