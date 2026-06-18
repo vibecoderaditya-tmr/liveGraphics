@@ -204,7 +204,7 @@ function showCard(tag, hash, name, kills) {
   hashEl.textContent = '#' + hash;
   teamNameEl.textContent = name;
   elimCountEl.textContent = kills + ' ELIMINATIONS';
-  logoImg.src = './logos/' + tag + '.webp';
+  logoImg.src = './logos/' + tag.toLowerCase() + '.webp';
   card.style.display = 'flex';
   void card.offsetWidth;
   card.classList.add('show');
