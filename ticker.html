@@ -531,17 +531,7 @@ function renderTicker() {
     wrap.style.display = "";
 
     const newTop = (eIdx * (rowHeight + rowGap)) + "px";
-    // Only smooth-transition top if the row is fully visible (anim-in).
-    // Mid-animation rows get snapped so the wipe finishes cleanly.
-    if (row.classList.contains("anim-in")) {
-      wrap.style.top = newTop;
-    } else {
-      const prevTransition = wrap.style.transition;
-      wrap.style.transition = "none";
-      wrap.style.top = newTop;
-      void wrap.offsetHeight;
-      wrap.style.transition = prevTransition;
-    }
+    wrap.style.top = newTop;
 
     const rankEl  = row.querySelector(".col-rank");
     const logoEl  = row.querySelector(".team-logo");
@@ -624,109 +614,7 @@ db.ref("/matches/live").on("value", snap => {
 });
 
 
-// ── Points visibility ──────────────────────────────────────────────────────
-db.ref("/live-graphics/status").on("value", snap => {
-  const val = snap.val();
-  const box    = document.querySelector(".ticker-box");
-  const header = document.querySelector(".ticker-header");
-  const hide = val !== "show";
-  box.classList.toggle("pts-hidden", hide);
-  header.classList.toggle("pts-hidden", hide);
-});
 
-// ── Entrance / exit direction ───────────────────────────────────────────
-// /live-graphics/animate-from-to holds either "left" or "right".
-//   "left"  -> left edge fixed; ticker wipes/reveals in growing rightward
-//   "right" -> right edge fixed; ticker wipes/reveals in growing leftward
-// NOTE: clip-path classes are applied to .ticker-row (inner), NOT .row-wrap.
-// The glow filter on .row-wrap is therefore never clipped.
-let animDirection = "left"; // "left" | "right"
-let animState      = "out";  // "in" | "out"
-let animTimers      = [];
-
-function hideClassFor(direction) {
-  return direction === "right" ? "anim-hide-right" : "anim-hide-left";
-}
-
-function applyAnim() {
-  animTimers.forEach(t => clearTimeout(t));
-  animTimers = [];
-
-  const header = document.querySelector(".ticker-header");
-  // Sort visible wrappers by on-screen position for correct stagger order
-  const wrapRows = rowEls
-    .filter(wrap => wrap.style.display !== "none")
-    .slice()
-    .sort((a, b) => (parseFloat(a.style.top) || 0) - (parseFloat(b.style.top) || 0));
-
-  // Clip-path targets: header directly, inner .ticker-row for each wrap
-  const headerTarget = header;
-  const rowTargets   = wrapRows.map(wrap => innerRow(wrap));
-  const allTargets   = [headerTarget, ...rowTargets];
-
-  const isIn     = animState === "in";
-  const hideCls  = hideClassFor(animDirection);
-  const otherHideCls = hideCls === "anim-hide-left" ? "anim-hide-right" : "anim-hide-left";
-
-  if (isIn) {
-    allTargets.forEach(el => {
-      el.style.transition = "none";
-      el.classList.remove("anim-in", otherHideCls, hideCls);
-      el.classList.add(hideCls);
-    });
-    void header.offsetHeight;
-    allTargets.forEach(el => { el.style.transition = ""; });
-
-    header.classList.remove("trans-anim-out");
-    header.classList.add("trans-anim");
-    header.classList.remove(hideCls);
-    header.classList.add("anim-in");
-
-    rowTargets.forEach((rowEl, i) => {
-      const t = setTimeout(() => {
-        rowEl.classList.remove("trans-anim-out");
-        rowEl.classList.add("trans-anim");
-        rowEl.classList.remove(hideCls);
-        rowEl.classList.add("anim-in");
-      }, 80 + i * 60);
-      animTimers.push(t);
-    });
-  } else {
-    rowTargets.forEach((rowEl, i) => {
-      const t = setTimeout(() => {
-        rowEl.classList.remove("trans-anim");
-        rowEl.classList.add("trans-anim-out");
-        rowEl.classList.remove("anim-in");
-        rowEl.classList.add(hideCls);
-      }, (rowTargets.length - 1 - i) * 60);
-      animTimers.push(t);
-    });
-    const t = setTimeout(() => {
-      header.classList.remove("trans-anim");
-      header.classList.add("trans-anim-out");
-      header.classList.remove("anim-in");
-      header.classList.add(hideCls);
-    }, rowTargets.length * 60 + 80);
-    animTimers.push(t);
-  }
-}
-
-db.ref("/live-graphics/animate-from-to").on("value", snap => {
-  const val = (snap.val() || "left").toLowerCase().trim();
-  animDirection = (val === "right") ? "right" : "left";
-  if (animState === "in") applyAnim();
-});
-
-db.ref("/live-graphics/state").on("value", snap => {
-  animState = (snap.val() || "out").toLowerCase();
-  applyAnim();
-});
-
-// Initial hidden state
-setTimeout(() => {
-  animState = "out";
-  applyAnim();
-}, 0);
 </script>
 
 </body>
