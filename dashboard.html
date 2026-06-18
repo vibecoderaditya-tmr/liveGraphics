@@ -212,6 +212,22 @@
     if (tickerAnim  === "RIGHT") { var e = document.getElementById("btn-right"); if(e) e.classList.add("ticker-active"); }
   }
 
+  // ── Points Visibility ────────────────────────────────────
+  var ptsVisRef = db.ref("/live-graphics/status");
+
+  function setPtsVis(val) {
+    ptsVisRef.set(val);
+    document.getElementById("btn-pts-show").classList.toggle("ticker-active", val === "show");
+    document.getElementById("btn-pts-hide").classList.toggle("ticker-active", val === "hide");
+  }
+  window.setPtsVis = setPtsVis;
+
+  ptsVisRef.once("value", function(snap) {
+    var val = snap.val() || "show";
+    document.getElementById("btn-pts-show").classList.toggle("ticker-active", val === "show");
+    document.getElementById("btn-pts-hide").classList.toggle("ticker-active", val === "hide");
+  });
+
   lgRef.on("value", function(snap) {
     var val = snap.val() || {};
     tickerState = val["state"]           || null;
@@ -1402,6 +1418,14 @@ body {
           <button class="ticker-btn" id="btn-right" onclick="setTicker('animate-from-to','RIGHT')">RIGHT</button>
           <button class="ticker-btn" id="btn-in"    onclick="setTicker('state','IN')">IN</button>
           <button class="ticker-btn" id="btn-out"   onclick="setTicker('state','OUT')">OUT</button>
+        </div>
+      </div>
+
+      <div class="left-panel-section">
+        <div class="left-panel-label">Points Visibility</div>
+        <div class="ticker-grid">
+          <button class="ticker-btn" id="btn-pts-show" onclick="setPtsVis('show')">SHOW</button>
+          <button class="ticker-btn" id="btn-pts-hide" onclick="setPtsVis('hide')">HIDE</button>
         </div>
       </div>
 
