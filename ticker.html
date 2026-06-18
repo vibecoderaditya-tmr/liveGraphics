@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Ticker</title>
+<link rel="icon" type="image/x-icon" href="/icon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --width-sm: 50px;
+    --width-lg: 70px;
+    --width-team: 120px;
+    --pts-alive-gap: -10px;
+
+    --header-bg:       #c1a882;
+    --header-color:    #000000;
+    --header-border:   #c1a882;
+    --team-text-pad:   12px;
+    --header-text-pad: 24px;
+
+    --row-bg:          #48321e;
+    --row-bg-alt:      #48321e;
+    --row-color:       #ffffff;
+    --row-border:      #48321e;
+    --row-pts-color:   #ffffff;
+    --alive:           #c1a882;
+    --dead:            #000000;
+    --bar-width:       8px;
+    --bar-height:      28px;
+    --bar-gap:         3px;
+
+    --logo-size:       36px;
+    --header-gap:      5px;
+    --row-gap:          5px;
+    --row-height:      40px;
+    --alive-pad-left:  19px;
+
+    --pts-col-width:   var(--width-sm);
+    --pts-duration:    0.45s;
+    --pts-easing:      cubic-bezier(0.4, 0, 0.2, 1);
+
+    --box-width: calc(
+      2px +
+      16px +
+      var(--width-sm) +
+      var(--width-team) +
+      var(--width-sm) +
+      var(--width-sm) +
+      var(--pts-alive-gap) +
+      var(--width-lg)
+    );
+
+    --canvas-width:    1920px;
+    --canvas-height:   1080px;
+  }
+
+  html, body {
+    width: var(--canvas-width);
+    height: var(--canvas-height);
+    background: transparent;
+    overflow: hidden;
+    font-family: 'Oswald', sans-serif;
+  }
+
+  .ticker-wrap {
+    width: var(--canvas-width);
+    height: var(--canvas-height);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    padding-top: 60px;
+  }
+
+  .ticker-box {
+    width: var(--box-width);
+    transition: width var(--pts-duration) var(--pts-easing);
+  }
+  .ticker-box.pts-hidden {
+    width: calc(var(--box-width) - var(--pts-col-width));
+  }
+
+  .ticker-header {
+    display: flex;
+    align-items: center;
+    height: 40px;
+    background: var(--header-bg);
+    border: 1px solid var(--header-border);
+    border-radius: 6px 6px 0 0;
+    padding: 0 16px 0 4px;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--header-color);
+    overflow: hidden;
+  }
+
+  .ticker-rows {
+    position: relative;
+    height: calc(var(--row-height) * 12 + var(--row-gap) * 11);
+  }
+
+  .ticker-header {
+    margin-bottom: var(--header-gap);
+  }
+
+  .ticker-row {
+    position: absolute;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    height: var(--row-height);
+    padding: 0 16px 0 4px;
+    background: var(--row-bg);
+    border-bottom: 1px solid var(--row-border);
+    font-size: 20px;
+    color: var(--row-color);
+    transition: top 0.6s ease-in-out;
+	overflow: hidden;
+  }
+  .ticker-row:nth-child(even) {
+    background: var(--row-bg-alt);
+  }
+
+  .ticker-row .col-rank,
+  .ticker-row .col-elims,
+  .ticker-header .col-rank,
+  .ticker-header .col-elims {
+    width: var(--width-sm);
+    flex-shrink: 0;
+  }
+  .ticker-row .col-alive,
+  .ticker-header .col-alive {
+    width: var(--width-lg);
+    flex-shrink: 0;
+  }
+  .ticker-row .col-team,
+  .ticker-header .col-team {
+    width: var(--width-team);
+    flex-shrink: 0;
+  }
+
+  .col-pts {
+    width: var(--pts-col-width);
+    flex-shrink: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    opacity: 1;
+    transition:
+      width     var(--pts-duration) var(--pts-easing),
+      opacity   calc(var(--pts-duration) * 0.6) var(--pts-easing),
+      padding   var(--pts-duration) var(--pts-easing);
+  }
+  .pts-hidden .col-pts {
+    width: 0 !important;
+    opacity: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+  }
+
+  .ticker-row .col-rank    { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; }
+  .ticker-row .col-team    { text-align: left;   display: flex; align-items: center; gap: 10px; padding-left: var(--team-text-pad); }
+  .ticker-row .col-elims   { display: flex; align-items: center; justify-content: center; text-align: center; }
+  .ticker-row .col-pts     { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; color: var(--row-pts-color); }
+  .ticker-row .col-alive   { position: relative; text-align: center; display: flex; align-items: center; justify-content: center; gap: var(--bar-gap); margin-left: var(--pts-alive-gap); padding-left: 27px; }
+  .col-alive.struck {
+    position: relative;
+  }
+  .col-alive.struck::after {
+    content: '';
+    position: absolute;
+    left: 27px;
+    right: 0;
+    top: 50%;
+    height: 5px;
+    background: var(--alive);
+    transform: translateY(-50%);
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* ── Directional wipe-reveal animation states ─────────────────────────
+     Unlike a slide, the row/header itself never moves and never fades —
+     its left or right edge is fixed in place, and a clip-path "wipe"
+     reveals/hides the content from that fixed edge outward, exactly like
+     the .elim-overlay wipe below.
+       "left"  → left edge fixed; content reveals growing rightward,
+                 and hides by clipping back toward that same left edge.
+       "right" → right edge fixed; content reveals growing leftward,
+                 and hides by clipping back toward that same right edge.
+  ------------------------------------------------------------------- */
+
+
+  .elim-overlay.not-played-overlay {
+    clip-path: inset(0 0 0 0);
+    background: rgba(0,0,0,0.6);
+    opacity: 1;
+    transition: none;
+  }
+  .elim-overlay.not-played-overlay span {
+    display: none;
+  }
+
+  /* ── Top-fragger golden glow ──────────────────────────────────────
+     Applied to whichever row has a strictly-higher elim count than
+     every other team currently in play. The entire row background
+     pulses gold (not just the edges), on a quick cycle.
+  ------------------------------------------------------------------- */
+  .ticker-row.top-frag {
+    position: relative;
+    z-index: 2;
+    animation: top-frag-pulse 2.5s ease-in-out infinite;
+  }
+  @keyframes top-frag-pulse {
+    0%, 100% {
+      background-color: #d4a017;
+      box-shadow: 0 0 18px 4px rgba(255, 200, 0, 0.55);
+    }
+    50% {
+      background-color: #ffd700;
+      box-shadow: 0 0 30px 8px rgba(255, 220, 60, 0.85);
+    }
+  }
+
+  .alive-bar {
+    width: var(--bar-width);
+    height: var(--bar-height);
+    background: var(--dead);
+    border-radius: 2px;
+    transition: background 0.3s;
+  }
+  .alive-bar.active {
+    background: var(--alive);
+  }
+
+  .elim-overlay {
+    position: absolute;
+	align-self: unset;
+  margin: 0;
+  
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 6px;
+    z-index: 3;
+    pointer-events: none;
+    background: linear-gradient(90deg, rgba(200,40,40,0.95), rgba(160,20,20,0.95));
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.5s ease-in-out;
+  }
+  .elim-overlay.show {
+    clip-path: inset(0 0 0 0);
+  }
+  .elim-overlay.exit {
+    clip-path: inset(0 0 0 100%);
+  }
+  .elim-overlay.final {
+    clip-path: inset(0 0 0 0);
+    background: rgba(0,0,0,0.5);
+    transition: background 0.4s ease-in-out;
+  }
+  .elim-overlay.final span {
+    opacity: 0;
+  }
+
+  .ticker-header .col-rank  { display: flex; align-items: center; justify-content: center; text-align: center; }
+  .ticker-header .col-team  { text-align: left; padding-left: var(--header-text-pad); display: flex; align-items: center; }
+  .ticker-header .col-elims { display: flex; align-items: center; justify-content: center; text-align: center; }
+  .ticker-header .col-pts   { display: flex; align-items: center; justify-content: center; text-align: center; }
+  .ticker-header .col-alive { text-align: center; display: flex; align-items: center; justify-content: center; margin-left: var(--pts-alive-gap); padding-left: 19px; }
+
+  .logo-wrap {
+    width: var(--row-height);
+    height: var(--row-height);
+    border-radius: 50%;
+    background: #58412a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .logo-wrap .team-logo {
+    width: var(--logo-size);
+    height: var(--logo-size);
+    object-fit: contain;
+  }
+  .team-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+
+<div class="ticker-wrap">
+  <div class="ticker-box">
+    <div class="ticker-header">
+      <span class="col-rank">RANK</span>
+      <span class="col-team">TEAMS</span>
+      <span class="col-elims">ELIMS</span>
+      <span class="col-pts">PTS</span>
+      <span class="col-alive">ALIVE</span>
+    </div>
+    <div class="ticker-rows" id="ticker-rows">
+    </div>
+  </div>
+</div>
+
+<script>
+const isFileProtocol = location.protocol === "file:";
+function fileRelativeDir() {
+  const p = location.pathname;
+  return p.substring(0, p.lastIndexOf("/") + 1);
+}
+const LOGO_BASE = isFileProtocol ? `${fileRelativeDir()}logos/` : "/logos/";
+const LOGO_EXT  = ".webp";
+
+function buildCaseVariants(name) {
+  const clean = String(name).trim().replace(/[^a-zA-Z0-9_-]/g, "");
+  const lower = clean.toLowerCase();
+  const upper = clean.toUpperCase();
+  const capitalized = lower.charAt(0).toUpperCase() + lower.slice(1);
+  return [...new Set([lower, upper, capitalized])];
+}
+
+function loadLogo(imgEl, tag) {
+  const variants = buildCaseVariants(tag);
+  let attempt = 0;
+  function tryNext() {
+    if (attempt >= variants.length) {
+      imgEl.style.display = "none";
+      imgEl.onerror = null;
+      return;
+    }
+    imgEl.src = LOGO_BASE + variants[attempt] + LOGO_EXT;
+    attempt++;
+    imgEl.onerror = tryNext;
+  }
+  tryNext();
+}
+
+const NUM_ROWS = 12;
+const rowsContainer = document.getElementById("ticker-rows");
+
+function buildRows() {
+  rowsContainer.innerHTML = "";
+  for (let i = 0; i < NUM_ROWS; i++) {
+    const row = document.createElement("div");
+    row.className = "ticker-row";
+    row.dataset.slot = i;
+    row.innerHTML = `
+      <span class="col-rank"></span>
+      <span class="col-team">
+        <span class="logo-wrap"><img class="team-logo" src="" alt=""></span>
+        <span class="team-name">—</span>
+      </span>
+      <span class="col-elims"></span>
+      <span class="col-pts"></span>
+      <span class="col-alive">
+        <span class="alive-bar"></span>
+        <span class="alive-bar"></span>
+        <span class="alive-bar"></span>
+        <span class="alive-bar"></span>
+      </span>
+      <div class="elim-overlay"><span>ELIMINATED</span></div>
+    `;
+    rowsContainer.appendChild(row);
+  }
+}
+buildRows();
+
+const rowEls = Array.from(document.querySelectorAll('.ticker-row'))
+  .sort((a, b) => Number(a.dataset.slot) - Number(b.dataset.slot));
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyC21mdsgyIEqXT7ujFbi0xcVAMRZxxqB1I",
+  authDomain:        "tmraditya-1ceb7.firebaseapp.com",
+  databaseURL:       "https://tmraditya-1ceb7-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:         "tmraditya-1ceb7",
+  storageBucket:     "tmraditya-1ceb7.firebasestorage.app",
+  messagingSenderId: "317037791388",
+  appId:             "1:317037791388:web:755b5a18bb77aa140a4559"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+let teamsData = null;
+let liveData  = {};
+
+let prevElims = {};
+let prevPts   = {};
+let currentTopFragTag = null; // tag of whichever team currently holds the top-frag glow
+
+function animateCount(el, from, to) {
+  if (from === to) { el.textContent = to; return; }
+  const step = from < to ? 1 : -1;
+  const duration = 300;
+  const interval = Math.max(20, Math.floor(duration / Math.abs(to - from)));
+  let current = from;
+  el.textContent = current;
+  const timer = setInterval(() => {
+    current += step;
+    if ((step > 0 && current >= to) || (step < 0 && current <= to)) {
+      clearInterval(timer);
+      el.textContent = to;
+    } else {
+      el.textContent = current;
+    }
+  }, interval);
+}
+
+function renderTicker() {
+  const entries = Object.keys(teamsData || {}).map(tag => ({
+    tag:  tag,
+    name: teamsData[tag]["1_teamName"] || tag,
+    pts:  Number(teamsData[tag]["5_totalPoints"]) || 0,
+  }));
+  entries.sort((a, b) => b.pts - a.pts);
+
+  const rowHeight = 40;
+  const rowGap    = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--row-gap')) || 0;
+
+  // ── row ↔ tag association ─────────────────────────────────────────
+  const activeTags = new Set(entries.map(e => e.tag));
+  for (const row of rowEls) {
+    if (row.dataset.tag && !activeTags.has(row.dataset.tag)) delete row.dataset.tag;
+  }
+  const assigned = new Set();
+  for (const row of rowEls) if (row.dataset.tag) assigned.add(row.dataset.tag);
+  for (const e of entries) {
+    if (!assigned.has(e.tag)) {
+      const free = rowEls.find(r => !r.dataset.tag);
+      if (free) { free.dataset.tag = e.tag; assigned.add(e.tag); }
+    }
+  }
+
+  // ── Determine the highest elim count among teams that are BOTH played
+  // AND currently alive. Eliminated teams (alive === 0) are excluded from
+  // contention entirely, so the glow automatically falls through to the
+  // next-highest-frag team that's still alive (and turns off completely
+  // if no team is left alive).
+  //
+  // If multiple alive teams are tied on kills, the tie is broken by
+  // total points (higher PTS wins the glow). If they're ALSO tied on
+  // points, nobody gets the glow.
+  let maxKills = -Infinity;
+  for (const e of entries) {
+    const live = liveData[e.tag];
+    if (!live) continue; // not played, excluded from contention
+    const aliveCount = Number(live["3_playersAlive"]) || 0;
+    if (aliveCount <= 0) continue; // eliminated, excluded from contention
+    const k = Number(live["5_totalKills"]) || 0;
+    if (k > maxKills) maxKills = k;
+  }
+
+  let topFragTag = null;
+  if (maxKills > 0) {
+    const killLeaders = entries.filter(e => {
+      const live = liveData[e.tag];
+      return live
+        && (Number(live["3_playersAlive"]) || 0) > 0
+        && (Number(live["5_totalKills"]) || 0) === maxKills;
+    });
+
+    if (killLeaders.length === 1) {
+      topFragTag = killLeaders[0].tag;
+    } else if (killLeaders.length > 1) {
+      // Tied on kills — break the tie by points.
+      let maxPts = -Infinity, maxPtsCount = 0;
+      for (const c of killLeaders) {
+        if (c.pts > maxPts) { maxPts = c.pts; maxPtsCount = 1; }
+        else if (c.pts === maxPts) { maxPtsCount++; }
+      }
+      topFragTag = (maxPtsCount === 1)
+        ? killLeaders.find(c => c.pts === maxPts).tag
+        // Still tied on points too — don't hand the glow to a new team;
+        // keep it on whichever team currently holds it, as long as that
+        // team is still part of this tied group (still alive and still
+        // sharing the max kill count). If nobody currently holds the
+        // glow (or the previous holder no longer qualifies), there's no
+        // "current team" to keep it on, so nobody glows.
+        : (currentTopFragTag && killLeaders.some(c => c.tag === currentTopFragTag))
+          ? currentTopFragTag
+          : null;
+    }
+  }
+  currentTopFragTag = topFragTag;
+
+  for (const row of rowEls) {
+    if (!row.dataset.tag || !activeTags.has(row.dataset.tag)) {
+      row.style.display = "none";
+      row.querySelector(".col-rank").textContent = "";
+      row.querySelector(".team-logo").src = "";
+      row.querySelector(".team-logo").style.display = "none";
+      row.querySelector(".logo-wrap").style.display = "none";
+      row.querySelector(".team-name").textContent = "";
+      row.querySelector(".col-elims").textContent = "";
+      row.querySelector(".col-pts").textContent = "";
+      row.querySelectorAll(".alive-bar").forEach(b => b.classList.remove("active"));
+      row.querySelector(".elim-overlay").classList.remove("show", "exit", "final", "not-played-overlay");
+      row.classList.remove("top-frag");
+      row.querySelector(".col-alive").classList.remove("struck");
+      clearTimeout(row._elimT1);
+      clearTimeout(row._elimT2);
+      row._elimT1 = null;
+      row._elimT2 = null;
+      row._elimStage = 0;
+      continue;
+    }
+
+    const eIdx = entries.findIndex(en => en.tag === row.dataset.tag);
+    const e = entries[eIdx];
+    const live = liveData[e.tag] || {};
+
+    row.style.display = "";
+    // Live Firebase data (kills/points) ticks constantly and can call
+    // renderTicker() at any moment — including while a row is still
+    // mid-flight in its slide IN/OUT animation. .ticker-row always has
+    // `transition: top 0.6s ease-in-out`, so naively setting top here
+    // would restart/fight that transition against the slide transform,
+    // making rows freeze or land out of sync with their stagger order.
+    // Only let `top` transition smoothly for rows that have actually
+    // finished landing (anim-in present). Rows still mid-animation (or
+    // not yet shown) get their position snapped instantly instead, so
+    // the pending slide animation finishes on its own schedule, and
+    // applyAnim() picks up the correct final position once it runs.
+    row.style.top = (eIdx * (rowHeight + rowGap)) + "px";
+
+    const rankEl  = row.querySelector(".col-rank");
+    const logoEl  = row.querySelector(".team-logo");
+    const nameEl  = row.querySelector(".team-name");
+    const elimsEl = row.querySelector(".col-elims");
+    const ptsEl   = row.querySelector(".col-pts");
+    const aliveEl = row.querySelector(".col-alive");
+
+    const kills = Number(live["5_totalKills"]) || 0;
+    const alive = Number(live["3_playersAlive"]) || 0;
+    const elimOverlay = row.querySelector(".elim-overlay");
+    const notPlayed = !liveData[e.tag];
+
+    // ── Top-fragger glow ────────────────────────────────────────────
+    row.classList.toggle("top-frag", !notPlayed && topFragTag === e.tag);
+
+    if (notPlayed) {
+      elimOverlay.classList.remove("show", "exit", "final");
+      elimOverlay.classList.add("not-played-overlay");
+      aliveEl.classList.add("struck");
+      clearTimeout(row._elimT1);
+      clearTimeout(row._elimT2);
+      row._elimT1 = null;
+      row._elimT2 = null;
+      row._elimStage = 0;
+    } else {
+      elimOverlay.classList.remove("not-played-overlay");
+      aliveEl.classList.remove("struck");
+      if (alive === 0) {
+        if (!row._elimStage) {
+          row._elimStage = 1;
+          elimOverlay.classList.add("show");
+          row._elimT1 = setTimeout(() => {
+            elimOverlay.classList.remove("show");
+            elimOverlay.classList.add("exit");
+            row._elimStage = 2;
+            row._elimT2 = setTimeout(() => {
+              elimOverlay.classList.remove("exit");
+              elimOverlay.classList.add("final");
+              row._elimStage = 3;
+            }, 500);
+          }, 1500);
+        }
+      } else {
+        elimOverlay.classList.remove("show", "exit", "final");
+        clearTimeout(row._elimT1);
+        clearTimeout(row._elimT2);
+        row._elimT1 = null;
+        row._elimT2 = null;
+        row._elimStage = 0;
+      }
+    }
+
+    rankEl.textContent  = "#" + (eIdx + 1);
+    row.querySelector(".logo-wrap").style.display = "flex";
+    logoEl.style.display = "block";
+    loadLogo(logoEl, e.tag);
+    nameEl.textContent  = e.tag;
+    const prevK = prevElims[e.tag];
+    if (prevK !== undefined && prevK !== kills) animateCount(elimsEl, prevK, kills);
+    else elimsEl.textContent = kills;
+    prevElims[e.tag] = kills;
+    const prevP = prevPts[e.tag];
+    if (prevP !== undefined && prevP !== e.pts) animateCount(ptsEl, prevP, e.pts);
+    else ptsEl.textContent = e.pts;
+    prevPts[e.tag] = e.pts;
+    const bars = aliveEl.querySelectorAll(".alive-bar");
+    bars.forEach((bar, bi) => bar.classList.toggle("active", bi < alive));
+  }
+}
+
+db.ref("/matches/0_teams").on("value", snap => {
+  teamsData = snap.val() || {};
+  renderTicker();
+});
+
+db.ref("/matches/live").on("value", snap => {
+  liveData = snap.val() || {};
+  renderTicker();
+});
+
+
+</script>
+
+</body>
+</html>
