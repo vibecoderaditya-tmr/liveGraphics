@@ -1,0 +1,382 @@
+const isFileProtocol = location.protocol === "file:";
+function fileRelativeDir() {
+  const p = location.pathname;
+  return p.substring(0, p.lastIndexOf("/") + 1);
+}
+const LOGO_BASE = isFileProtocol ? `${fileRelativeDir()}img/logos/` : "/img/logos/";
+const LOGO_EXT  = ".webp";
+
+function buildCaseVariants(name) {
+  const clean = String(name).trim().replace(/[^a-zA-Z0-9_-]/g, "");
+  const lower = clean.toLowerCase();
+  const upper = clean.toUpperCase();
+  const capitalized = lower.charAt(0).toUpperCase() + lower.slice(1);
+  return [...new Set([lower, upper, capitalized])];
+}
+
+function loadLogo(imgEl, tag) {
+  const variants = buildCaseVariants(tag);
+  let attempt = 0;
+  function tryNext() {
+    if (attempt >= variants.length) {
+      imgEl.style.display = "none";
+      imgEl.onerror = null;
+      return;
+    }
+    imgEl.src = LOGO_BASE + variants[attempt] + LOGO_EXT;
+    attempt++;
+    imgEl.onerror = tryNext;
+  }
+  tryNext();
+}
+
+const NUM_ROWS = 12;
+const rowsContainer = document.getElementById("ticker-rows");
+
+function buildRows() {
+  rowsContainer.innerHTML = "";
+  for (let i = 0; i < NUM_ROWS; i++) {
+    const wrap = document.createElement("div");
+    wrap.className = "row-wrap";
+    wrap.dataset.slot = i;
+
+    const row = document.createElement("div");
+    row.className = "ticker-row";
+    row.innerHTML = `
+      <span class="col-rank"></span>
+      <span class="col-team">
+        <span class="logo-wrap"><img class="team-logo" src="" alt=""></span>
+        <span class="team-name">\u2014</span>
+      </span>
+      <span class="col-elims"></span>
+      <span class="col-pts"></span>
+      <span class="col-alive">
+        <span class="alive-bar"></span>
+        <span class="alive-bar"></span>
+        <span class="alive-bar"></span>
+        <span class="alive-bar"></span>
+      </span>
+      <div class="elim-overlay"><span>ELIMINATED</span></div>
+    `;
+    wrap.appendChild(row);
+    rowsContainer.appendChild(wrap);
+  }
+}
+buildRows();
+
+const rowEls = Array.from(document.querySelectorAll('.row-wrap'))
+  .sort((a, b) => Number(a.dataset.slot) - Number(b.dataset.slot));
+
+function innerRow(wrap) { return wrap.querySelector('.ticker-row'); }
+
+const firebaseConfig = {
+  apiKey:            "AIzaSyC21mdsgyIEqXT7ujFbi0xcVAMRZxxqB1I",
+  authDomain:        "tmraditya-1ceb7.firebaseapp.com",
+  databaseURL:       "https://tmraditya-1ceb7-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId:         "tmraditya-1ceb7",
+  storageBucket:     "tmraditya-1ceb7.firebasestorage.app",
+  messagingSenderId: "317037791388",
+  appId:             "1:317037791388:web:755b5a18bb77aa140a4559"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database();
+
+let teamsData = null;
+let liveData  = {};
+
+let prevElims = {};
+let prevPts   = {};
+let currentTopFragTag = null;
+
+function animateCount(el, from, to) {
+  if (from === to) { el.textContent = to; return; }
+  const step = from < to ? 1 : -1;
+  const duration = 300;
+  const interval = Math.max(20, Math.floor(duration / Math.abs(to - from)));
+  let current = from;
+  el.textContent = current;
+  const timer = setInterval(() => {
+    current += step;
+    if ((step > 0 && current >= to) || (step < 0 && current <= to)) {
+      clearInterval(timer);
+      el.textContent = to;
+    } else {
+      el.textContent = current;
+    }
+  }, interval);
+}
+
+function renderTicker() {
+  const entries = Object.keys(teamsData || {}).map(tag => ({
+    tag:  tag,
+    name: teamsData[tag]["1_teamName"] || tag,
+    pts:  Number(teamsData[tag]["5_totalPoints"]) || 0,
+  }));
+  entries.sort((a, b) => b.pts - a.pts);
+
+  const rowHeight = 40;
+  const rowGap    = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--row-gap')) || 0;
+
+  const activeTags = new Set(entries.map(e => e.tag));
+  for (const wrap of rowEls) {
+    if (wrap.dataset.tag && !activeTags.has(wrap.dataset.tag)) delete wrap.dataset.tag;
+  }
+  const assigned = new Set();
+  for (const wrap of rowEls) if (wrap.dataset.tag) assigned.add(wrap.dataset.tag);
+  for (const e of entries) {
+    if (!assigned.has(e.tag)) {
+      const free = rowEls.find(r => !r.dataset.tag);
+      if (free) { free.dataset.tag = e.tag; assigned.add(e.tag); }
+    }
+  }
+
+  let maxKills = -Infinity;
+  for (const e of entries) {
+    const live = liveData[e.tag];
+    if (!live) continue;
+    const aliveCount = Number(live["3_playersAlive"]) || 0;
+    if (aliveCount <= 0) continue;
+    const k = Number(live["5_totalKills"]) || 0;
+    if (k > maxKills) maxKills = k;
+  }
+
+  let topFragTag = null;
+  if (maxKills > 0) {
+    const killLeaders = entries.filter(e => {
+      const live = liveData[e.tag];
+      return live
+        && (Number(live["3_playersAlive"]) || 0) > 0
+        && (Number(live["5_totalKills"]) || 0) === maxKills;
+    });
+
+    if (killLeaders.length === 1) {
+      topFragTag = killLeaders[0].tag;
+    } else if (killLeaders.length > 1) {
+      let maxPts = -Infinity, maxPtsCount = 0;
+      for (const c of killLeaders) {
+        if (c.pts > maxPts) { maxPts = c.pts; maxPtsCount = 1; }
+        else if (c.pts === maxPts) { maxPtsCount++; }
+      }
+      topFragTag = (maxPtsCount === 1)
+        ? killLeaders.find(c => c.pts === maxPts).tag
+        : (currentTopFragTag && killLeaders.some(c => c.tag === currentTopFragTag))
+          ? currentTopFragTag
+          : null;
+    }
+  }
+  currentTopFragTag = topFragTag;
+
+  for (const wrap of rowEls) {
+    const row = innerRow(wrap);
+
+    if (!wrap.dataset.tag || !activeTags.has(wrap.dataset.tag)) {
+      wrap.style.display = "none";
+      wrap.classList.remove("top-frag-wrap");
+      row.querySelector(".col-rank").textContent = "";
+      row.querySelector(".team-logo").src = "";
+      row.querySelector(".team-logo").style.display = "none";
+      row.querySelector(".logo-wrap").style.display = "none";
+      row.querySelector(".team-name").textContent = "";
+      row.querySelector(".col-elims").textContent = "";
+      row.querySelector(".col-pts").textContent = "";
+      row.querySelectorAll(".alive-bar").forEach(b => b.classList.remove("active"));
+      row.querySelector(".elim-overlay").classList.remove("show", "exit", "final", "not-played-overlay");
+      row.querySelector(".col-alive").classList.remove("struck");
+      clearTimeout(wrap._elimT1);
+      clearTimeout(wrap._elimT2);
+      wrap._elimT1 = null;
+      wrap._elimT2 = null;
+      wrap._elimStage = 0;
+      continue;
+    }
+
+    const eIdx = entries.findIndex(en => en.tag === wrap.dataset.tag);
+    const e = entries[eIdx];
+    const live = liveData[e.tag] || {};
+
+    wrap.style.display = "";
+
+    const newTop = (eIdx * (rowHeight + rowGap)) + "px";
+    if (row.classList.contains("anim-in")) {
+      wrap.style.top = newTop;
+    } else {
+      const prevTransition = wrap.style.transition;
+      wrap.style.transition = "none";
+      wrap.style.top = newTop;
+      void wrap.offsetHeight;
+      wrap.style.transition = prevTransition;
+    }
+
+    const rankEl  = row.querySelector(".col-rank");
+    const logoEl  = row.querySelector(".team-logo");
+    const nameEl  = row.querySelector(".team-name");
+    const elimsEl = row.querySelector(".col-elims");
+    const ptsEl   = row.querySelector(".col-pts");
+    const aliveEl = row.querySelector(".col-alive");
+
+    const kills = Number(live["5_totalKills"]) || 0;
+    const alive = Number(live["3_playersAlive"]) || 0;
+    const elimOverlay = row.querySelector(".elim-overlay");
+    const notPlayed = !liveData[e.tag];
+
+    wrap.classList.toggle("top-frag-wrap", !notPlayed && topFragTag === e.tag);
+
+    if (notPlayed) {
+      elimOverlay.classList.remove("show", "exit", "final");
+      elimOverlay.classList.add("not-played-overlay");
+      aliveEl.classList.add("struck");
+      clearTimeout(wrap._elimT1);
+      clearTimeout(wrap._elimT2);
+      wrap._elimT1 = null;
+      wrap._elimT2 = null;
+      wrap._elimStage = 0;
+    } else {
+      elimOverlay.classList.remove("not-played-overlay");
+      aliveEl.classList.remove("struck");
+      if (alive === 0) {
+        if (!wrap._elimStage) {
+          wrap._elimStage = 1;
+          elimOverlay.classList.add("show");
+          wrap._elimT1 = setTimeout(() => {
+            elimOverlay.classList.remove("show");
+            elimOverlay.classList.add("exit");
+            wrap._elimStage = 2;
+            wrap._elimT2 = setTimeout(() => {
+              elimOverlay.classList.remove("exit");
+              elimOverlay.classList.add("final");
+              wrap._elimStage = 3;
+            }, 500);
+          }, 1500);
+        }
+      } else {
+        elimOverlay.classList.remove("show", "exit", "final");
+        clearTimeout(wrap._elimT1);
+        clearTimeout(wrap._elimT2);
+        wrap._elimT1 = null;
+        wrap._elimT2 = null;
+        wrap._elimStage = 0;
+      }
+    }
+
+    rankEl.textContent  = "#" + (eIdx + 1);
+    row.querySelector(".logo-wrap").style.display = "flex";
+    logoEl.style.display = "block";
+    loadLogo(logoEl, e.tag);
+    nameEl.textContent  = e.tag;
+    const prevK = prevElims[e.tag];
+    if (prevK !== undefined && prevK !== kills) animateCount(elimsEl, prevK, kills);
+    else elimsEl.textContent = kills;
+    prevElims[e.tag] = kills;
+    const prevP = prevPts[e.tag];
+    if (prevP !== undefined && prevP !== e.pts) animateCount(ptsEl, prevP, e.pts);
+    else ptsEl.textContent = e.pts;
+    prevPts[e.tag] = e.pts;
+    const bars = aliveEl.querySelectorAll(".alive-bar");
+    bars.forEach((bar, bi) => bar.classList.toggle("active", bi < alive));
+  }
+}
+
+db.ref("/matches/0_teams").on("value", snap => {
+  teamsData = snap.val() || {};
+  renderTicker();
+});
+
+db.ref("/matches/live").on("value", snap => {
+  liveData = snap.val() || {};
+  renderTicker();
+});
+
+db.ref("/live-graphics/status").on("value", snap => {
+  const val = snap.val();
+  const box    = document.querySelector(".ticker-box");
+  const header = document.querySelector(".ticker-header");
+  const hide = val !== "show";
+  box.classList.toggle("pts-hidden", hide);
+  header.classList.toggle("pts-hidden", hide);
+});
+
+let animDirection = "left";
+let animState      = "out";
+let animTimers      = [];
+
+function hideClassFor(direction) {
+  return direction === "right" ? "anim-hide-right" : "anim-hide-left";
+}
+
+function applyAnim() {
+  animTimers.forEach(t => clearTimeout(t));
+  animTimers = [];
+
+  const header = document.querySelector(".ticker-header");
+  const wrapRows = rowEls
+    .filter(wrap => wrap.style.display !== "none")
+    .slice()
+    .sort((a, b) => (parseFloat(a.style.top) || 0) - (parseFloat(b.style.top) || 0));
+
+  const headerTarget = header;
+  const rowTargets   = wrapRows.map(wrap => innerRow(wrap));
+  const allTargets   = [headerTarget, ...rowTargets];
+
+  const isIn     = animState === "in";
+  const hideCls  = hideClassFor(animDirection);
+  const otherHideCls = hideCls === "anim-hide-left" ? "anim-hide-right" : "anim-hide-left";
+
+  if (isIn) {
+    allTargets.forEach(el => {
+      el.style.transition = "none";
+      el.classList.remove("anim-in", otherHideCls, hideCls);
+      el.classList.add(hideCls);
+    });
+    void header.offsetHeight;
+    allTargets.forEach(el => { el.style.transition = ""; });
+
+    header.classList.remove("trans-anim-out");
+    header.classList.add("trans-anim");
+    header.classList.remove(hideCls);
+    header.classList.add("anim-in");
+
+    rowTargets.forEach((rowEl, i) => {
+      const t = setTimeout(() => {
+        rowEl.classList.remove("trans-anim-out");
+        rowEl.classList.add("trans-anim");
+        rowEl.classList.remove(hideCls);
+        rowEl.classList.add("anim-in");
+      }, 80 + i * 60);
+      animTimers.push(t);
+    });
+  } else {
+    rowTargets.forEach((rowEl, i) => {
+      const t = setTimeout(() => {
+        rowEl.classList.remove("trans-anim");
+        rowEl.classList.add("trans-anim-out");
+        rowEl.classList.remove("anim-in");
+        rowEl.classList.add(hideCls);
+      }, (rowTargets.length - 1 - i) * 60);
+      animTimers.push(t);
+    });
+    const t = setTimeout(() => {
+      header.classList.remove("trans-anim");
+      header.classList.add("trans-anim-out");
+      header.classList.remove("anim-in");
+      header.classList.add(hideCls);
+    }, rowTargets.length * 60 + 80);
+    animTimers.push(t);
+  }
+}
+
+db.ref("/live-graphics/animate-from-to").on("value", snap => {
+  const val = (snap.val() || "left").toLowerCase().trim();
+  animDirection = (val === "right") ? "right" : "left";
+  if (animState === "in") applyAnim();
+});
+
+db.ref("/live-graphics/state").on("value", snap => {
+  animState = (snap.val() || "out").toLowerCase();
+  applyAnim();
+});
+
+setTimeout(() => {
+  animState = "out";
+  applyAnim();
+}, 0);

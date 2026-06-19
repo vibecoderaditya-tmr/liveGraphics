@@ -1,0 +1,120 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --box-w: 100px;
+  --bg-left:  #48321e;
+  --bg-right: #c1a882;
+  --left-hash:  #ffffff;
+  --right-team: #000000;
+  --right-elim: #000000;
+  --size-hash: 16px;
+  --size-team: 30px;
+  --size-elim: 16px;
+  --logo-size: 68px;
+  --font: 'Oswald', sans-serif;
+}
+html, body {
+  width: 1920px;
+  height: 1080px;
+  background: transparent;
+  overflow: hidden;
+  font-family: var(--font);
+  color: var(--right-elim);
+}
+.elim-wrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+.elim-card {
+  display: none;
+  position: relative;
+  height: var(--box-w);
+}
+.elim-card.show { display: flex; }
+.elim-card.show .left-box {
+  animation: leftSlide 3s ease forwards;
+}
+@keyframes leftSlide {
+  0%     { transform: translateY(calc(-1 * var(--box-w))); }
+  16.67% { transform: translateY(0); }
+  100%   { transform: translateY(0); }
+}
+.left-box {
+  width: var(--box-w);
+  height: var(--box-w);
+  background: var(--bg-left);
+  position: relative;
+  z-index: 1;
+}
+.hash-tag {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  font-size: var(--size-hash);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--left-hash);
+}
+.logo-box {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.logo-box img {
+  width: var(--logo-size);
+  height: var(--logo-size);
+  object-fit: contain;
+}
+.right-box {
+  position: absolute;
+  left: var(--box-w);
+  top: 0;
+  height: var(--box-w);
+  max-width: 0;
+  overflow: hidden;
+  background: var(--bg-right);
+  z-index: 0;
+}
+.elim-card.show .right-box {
+  animation: rightSlide 2.625s ease forwards;
+  animation-delay: 0.375s;
+}
+@keyframes rightSlide {
+  0%     { max-width: 0; }
+  19.05% { max-width: 600px; }
+  100%   { max-width: 600px; }
+}
+.right-inner {
+  height: 100%;
+  width: max-content;
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 8px 14px;
+  white-space: nowrap;
+}
+.elim-count {
+  position: absolute;
+  top: 8px;
+  right: 14px;
+  font-size: var(--size-elim);
+  font-weight: 600;
+  line-height: 1;
+  color: var(--right-elim);
+  white-space: nowrap;
+}
+.team-name {
+  font-size: var(--size-team);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--right-team);
+  white-space: nowrap;
+  padding-top: 6px;
+}
