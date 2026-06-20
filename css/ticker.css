@@ -19,7 +19,7 @@
   --row-pts:   #ffffff;
   --bar-alive:           #26b2f2 ;
   --bar-dead:            #000000;
-  --bar-width:       8px;
+  --bar-width:       6px;
   --bar-height:      28px;
   --bar-gap:         3px;
 
@@ -199,19 +199,21 @@ html, body {
 .ticker-row .col-team    { text-align: left;   display: flex; align-items: center; gap: 10px; padding-left: var(--team-pad); color: var(--col-team-row); }
 .ticker-row .col-elims   { display: flex; align-items: center; justify-content: center; text-align: center; margin-left: var(--elims-shift); color: var(--col-elims-row); }
 .ticker-row .col-pts     { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; color: var(--col-pts-row); }
-.ticker-row .col-alive   { position: relative; text-align: center; display: flex; align-items: center; justify-content: center; gap: var(--bar-gap); margin-left: var(--alive-shift); padding-left: 27px; margin-right: var(--gap-right); color: var(--col-alive-row); }
+.ticker-row .col-alive   { position: relative; text-align: center; display: flex; align-items: center; justify-content: center; gap: var(--bar-gap); margin-left: var(--alive-shift); margin-right: var(--gap-right); color: var(--col-alive-row); }
 .col-alive.struck {
   position: relative;
+  margin-left: var(--alive-shift);
+  margin-right: var(--gap-right);
 }
 .col-alive.struck::after {
   content: '';
   position: absolute;
-  left: 27px;
-  right: 0;
+  width: 34px;
+  left: 50%;
   top: 50%;
   height: 5px;
   background: var(--bar-alive);
-  transform: translateY(-50%);
+  transform: translate(-50%, -50%);
   z-index: 1;
   pointer-events: none;
 }
@@ -285,7 +287,7 @@ html, body {
 .ticker-header .col-team  { text-align: left; padding-left: var(--header-team-pad); display: flex; align-items: center; color: var(--col-team-header); }
 .ticker-header .col-elims { display: flex; align-items: center; justify-content: center; text-align: center; margin-left: var(--elims-shift); color: var(--col-elims-header); }
 .ticker-header .col-pts   { display: flex; align-items: center; justify-content: center; text-align: center; color: var(--col-pts-header); }
-.ticker-header .col-alive { text-align: center; display: flex; align-items: center; justify-content: center; margin-left: var(--alive-shift); padding-left: 19px; margin-right: var(--gap-right); color: var(--col-alive-header); }
+.ticker-header .col-alive { text-align: center; display: flex; align-items: center; justify-content: center; margin-left: var(--alive-shift); margin-right: var(--gap-right); color: var(--col-alive-header); }
 
 .logo-wrap {
   width: var(--row-height);
