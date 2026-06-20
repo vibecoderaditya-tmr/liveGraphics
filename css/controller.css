@@ -381,6 +381,12 @@ body {
 .hex-copy-btn:hover { color: var(--accent); border-color: var(--accent); }
 .hex-copy-btn.copied { color: var(--ok); border-color: var(--ok); }
 
+@media (max-width: 719px) {
+  .theme-fields {
+    grid-template-columns: 1fr;
+  }
+}
+
 .eyedropper-btn {
   flex-shrink: 0;
   background: none;
