@@ -199,7 +199,7 @@ html, body {
 .ticker-row .col-team    { text-align: left;   display: flex; align-items: center; gap: 10px; padding-left: var(--team-pad); color: var(--col-team-row); }
 .ticker-row .col-elims   { display: flex; align-items: center; justify-content: center; text-align: center; margin-left: var(--elims-shift); color: var(--col-elims-row); }
 .ticker-row .col-pts     { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; color: var(--col-pts-row); }
-.ticker-row .col-alive   { position: relative; text-align: center; display: flex; align-items: center; justify-content: center; gap: var(--bar-gap); margin-left: var(--alive-shift); padding-left: 27px; margin-right: var(--gap-right); color: var(--col-alive-row); }
+.ticker-row .col-alive   { position: relative; text-align: center; display: flex; align-items: center; justify-content: center; gap: var(--bar-gap); margin-left: var(--alive-shift); padding-left: 20px; margin-right: var(--gap-right); color: var(--col-alive-row); }
 .col-alive.struck {
   position: relative;
 }
