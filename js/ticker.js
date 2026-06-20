@@ -48,14 +48,15 @@ function buildRows() {
         <span class="logo-wrap"><img class="team-logo" src="" alt=""></span>
         <span class="team-name">\u2014</span>
       </span>
-      <span class="col-elims"></span>
-      <span class="col-pts"></span>
       <span class="col-alive">
         <span class="alive-bar"></span>
         <span class="alive-bar"></span>
         <span class="alive-bar"></span>
         <span class="alive-bar"></span>
       </span>
+      <span class="col-elims"></span>
+      <span class="col-pts"></span>
+      <span class="col-end"></span>
       <div class="elim-overlay"><span>ELIMINATED</span></div>
     `;
     wrap.appendChild(row);
@@ -277,4 +278,29 @@ db.ref("/matches/0_teams").on("value", snap => {
 db.ref("/matches/live").on("value", snap => {
   liveData = snap.val() || {};
   renderTicker();
+});
+
+db.ref("/live-graphics/status").on("value", snap => {
+  const val = snap.val();
+  const box    = document.querySelector(".ticker-box");
+  const header = document.querySelector(".ticker-header");
+  const hide = val !== "show";
+  box.classList.toggle("pts-hidden", hide);
+  header.classList.toggle("pts-hidden", hide);
+});
+
+db.ref("/live-graphics/theme/ticker").on("value", function(snap) {
+  var t = snap.val();
+  if (!t) return;
+  var root = document.documentElement;
+  if (t.headerBg)      root.style.setProperty("--header-bg", t.headerBg);
+  if (t.headerText)    root.style.setProperty("--header-text", t.headerText);
+  if (t.headerBorder)  root.style.setProperty("--header-border", t.headerBorder);
+  if (t.rowBg)         root.style.setProperty("--row-bg", t.rowBg);
+  if (t.rowBgAlt)      root.style.setProperty("--row-bg-alt", t.rowBgAlt);
+  if (t.rowText)       root.style.setProperty("--row-text", t.rowText);
+  if (t.rowBorder)     root.style.setProperty("--row-border", t.rowBorder);
+  if (t.rowPts)        root.style.setProperty("--row-pts", t.rowPts);
+  if (t.barAlive)      root.style.setProperty("--bar-alive", t.barAlive);
+  if (t.barDead)       root.style.setProperty("--bar-dead", t.barDead);
 });

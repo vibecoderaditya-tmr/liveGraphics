@@ -450,44 +450,6 @@ body {
     0 0 12px rgba(176,196,207,0.12);
 }
 
-.cooldown-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.cooldown-label {
-  font-size: 9px;
-  letter-spacing: 2px;
-  color: var(--text-low);
-  text-transform: uppercase;
-  flex: 1;
-}
-
-#cooldown-input {
-  width: 44px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-bottom: 2px solid var(--c3);
-  color: var(--text-hi);
-  font-family: var(--font-mono);
-  font-size: 13px;
-  text-align: center;
-  padding: 4px 6px;
-  outline: none;
-  transition: border-color 0.2s, background 0.2s;
-  -moz-appearance: textfield;
-}
-
-#cooldown-input::-webkit-outer-spin-button,
-#cooldown-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-
-#cooldown-input:focus {
-  background: var(--card);
-  border-color: var(--c3);
-  border-bottom-color: var(--text-hi);
-}
-
 #winrate-panel {
   display: flex;
   width: 190px;

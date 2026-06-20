@@ -168,7 +168,7 @@ body::after {
 }
 
 .nav-card.full {
-  grid-column: 1 / -1;
+  grid-column: span 2;
   flex-direction: row;
   align-items: center;
   gap: 24px;

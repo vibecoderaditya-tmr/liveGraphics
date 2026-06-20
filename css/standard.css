@@ -1,24 +1,24 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --width-sm: 50px;
-  --width-lg: 70px;
-  --width-team: 120px;
-  --pts-alive-gap: -10px;
+  --col-small: 50px;
+  --col-large: 70px;
+  --col-team: 120px;
+  --alive-shift: -10px;
 
   --header-bg:       #26b2f2 ;
-  --header-color:    #000000;
+  --header-text:    #000000;
   --header-border:   #26b2f2 ;
-  --team-text-pad:   12px;
-  --header-text-pad: 24px;
+  --team-pad:   0px;
+  --header-team-pad: 38px;
 
   --row-bg:          #00499b ;
   --row-bg-alt:      #00499b ;
-  --row-color:       #ffffff;
+  --row-text:       #ffffff;
   --row-border:      #00499b ;
-  --row-pts-color:   #ffffff;
-  --alive:           #26b2f2 ;
-  --dead:            #000000;
+  --row-pts:   #ffffff;
+  --bar-alive:           #26b2f2 ;
+  --bar-dead:            #000000;
   --bar-width:       8px;
   --bar-height:      28px;
   --bar-gap:         3px;
@@ -27,21 +27,25 @@
   --header-gap:      5px;
   --row-gap:          5px;
   --row-height:      40px;
-  --alive-pad-left:  19px;
+  --bar-left:  19px;
 
-  --pts-col-width:   var(--width-sm);
+  --col-pts:   var(--col-small);
   --pts-duration:    0.45s;
   --pts-easing:      cubic-bezier(0.4, 0, 0.2, 1);
 
+  --gap-left:  4px;
+  --gap-right: 16px;
+  --elims-shift: -5px;
+
   --box-width: calc(
-    2px +
-    16px +
-    var(--width-sm) +
-    var(--width-team) +
-    var(--width-sm) +
-    var(--width-sm) +
-    var(--pts-alive-gap) +
-    var(--width-lg)
+    var(--gap-left) +
+    var(--gap-right) +
+    var(--col-small) +
+    var(--col-team) +
+    var(--col-small) +
+    var(--col-small) +
+    var(--alive-shift) +
+    var(--col-large)
   );
 
   --canvas-width:    1920px;
@@ -70,7 +74,7 @@ html, body {
   transition: width var(--pts-duration) var(--pts-easing);
 }
 .ticker-box.pts-hidden {
-  width: calc(var(--box-width) - var(--pts-col-width));
+  width: calc(var(--box-width) - var(--col-pts));
 }
 
 .ticker-header {
@@ -80,12 +84,11 @@ html, body {
   background: var(--header-bg);
   border: 1px solid var(--header-border);
   border-radius: 6px 6px 0 0;
-  padding: 0 16px 0 4px;
   font-size: 16px;
   font-weight: 700;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--header-color);
+  color: var(--header-text);
   overflow: hidden;
 }
 
@@ -121,11 +124,10 @@ html, body {
   display: flex;
   align-items: center;
   height: var(--row-height);
-  padding: 0 16px 0 4px;
   background: var(--row-bg);
   border-bottom: 1px solid var(--row-border);
   font-size: 20px;
-  color: var(--row-color);
+  color: var(--row-text);
   overflow: hidden;
 }
 .row-wrap.top-frag-wrap .ticker-row {
@@ -140,22 +142,22 @@ html, body {
 .ticker-row .col-elims,
 .ticker-header .col-rank,
 .ticker-header .col-elims {
-  width: var(--width-sm);
+  width: var(--col-small);
   flex-shrink: 0;
 }
 .ticker-row .col-alive,
 .ticker-header .col-alive {
-  width: var(--width-lg);
+  width: var(--col-large);
   flex-shrink: 0;
 }
 .ticker-row .col-team,
 .ticker-header .col-team {
-  width: var(--width-team);
+  width: var(--col-team);
   flex-shrink: 0;
 }
 
 .col-pts {
-  width: var(--pts-col-width);
+  width: var(--col-pts);
   flex-shrink: 0;
   overflow: hidden;
   white-space: nowrap;
@@ -172,11 +174,21 @@ html, body {
   border: none !important;
 }
 
-.ticker-row .col-rank    { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; }
-.ticker-row .col-team    { text-align: left;   display: flex; align-items: center; gap: 10px; padding-left: var(--team-text-pad); }
-.ticker-row .col-elims   { display: flex; align-items: center; justify-content: center; text-align: center; }
-.ticker-row .col-pts     { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; color: var(--row-pts-color); }
-.ticker-row .col-alive   { position: relative; text-align: center; display: flex; align-items: center; justify-content: center; gap: var(--bar-gap); margin-left: var(--pts-alive-gap); padding-left: 27px; }
+.col-end {
+  width: 0;
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: width var(--pts-duration) var(--pts-easing);
+}
+.pts-hidden .col-end {
+  width: var(--col-small);
+}
+
+.ticker-row .col-rank    { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; margin-left: var(--gap-left); }
+.ticker-row .col-team    { text-align: left;   display: flex; align-items: center; gap: 10px; padding-left: var(--team-pad); }
+.ticker-row .col-elims   { display: flex; align-items: center; justify-content: center; text-align: center; margin-left: var(--elims-shift); }
+.ticker-row .col-pts     { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; color: var(--row-pts); }
+.ticker-row .col-alive   { position: relative; text-align: center; display: flex; align-items: center; justify-content: center; gap: var(--bar-gap); margin-left: var(--alive-shift); padding-left: 27px; margin-right: var(--gap-right); }
 .col-alive.struck {
   position: relative;
 }
@@ -187,7 +199,7 @@ html, body {
   right: 0;
   top: 50%;
   height: 5px;
-  background: var(--alive);
+  background: var(--bar-alive);
   transform: translateY(-50%);
   z-index: 1;
   pointer-events: none;
@@ -217,12 +229,12 @@ html, body {
 .alive-bar {
   width: var(--bar-width);
   height: var(--bar-height);
-  background: var(--dead);
+  background: var(--bar-dead);
   border-radius: 2px;
   transition: background 0.3s;
 }
 .alive-bar.active {
-  background: var(--alive);
+  background: var(--bar-alive);
 }
 
 .elim-overlay {
@@ -258,11 +270,11 @@ html, body {
   opacity: 0;
 }
 
-.ticker-header .col-rank  { display: flex; align-items: center; justify-content: center; text-align: center; }
-.ticker-header .col-team  { text-align: left; padding-left: var(--header-text-pad); display: flex; align-items: center; }
-.ticker-header .col-elims { display: flex; align-items: center; justify-content: center; text-align: center; }
+.ticker-header .col-rank  { display: flex; align-items: center; justify-content: center; text-align: center; margin-left: var(--gap-left); }
+.ticker-header .col-team  { text-align: left; padding-left: var(--header-team-pad); display: flex; align-items: center; }
+.ticker-header .col-elims { display: flex; align-items: center; justify-content: center; text-align: center; margin-left: var(--elims-shift); }
 .ticker-header .col-pts   { display: flex; align-items: center; justify-content: center; text-align: center; }
-.ticker-header .col-alive { text-align: center; display: flex; align-items: center; justify-content: center; margin-left: var(--pts-alive-gap); padding-left: 19px; }
+.ticker-header .col-alive { text-align: center; display: flex; align-items: center; justify-content: center; margin-left: var(--alive-shift); padding-left: 19px; margin-right: var(--gap-right); }
 
 .logo-wrap {
   width: var(--row-height);

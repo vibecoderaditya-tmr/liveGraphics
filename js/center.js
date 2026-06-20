@@ -65,3 +65,14 @@ function showCard(tag, hash, name, kills) {
     processQueue();
   }, 3000);
 }
+
+db.ref("/live-graphics/theme/eliminated").on("value", function(snap) {
+  var t = snap.val();
+  if (!t) return;
+  var root = document.documentElement;
+  if (t.bgLeft)     root.style.setProperty("--bg-left", t.bgLeft);
+  if (t.bgRight)    root.style.setProperty("--bg-right", t.bgRight);
+  if (t.leftHash)   root.style.setProperty("--left-hash", t.leftHash);
+  if (t.rightTeam)  root.style.setProperty("--right-team", t.rightTeam);
+  if (t.rightElim)  root.style.setProperty("--right-elim", t.rightElim);
+});

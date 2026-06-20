@@ -472,45 +472,6 @@ body {
     0 0 12px rgba(176,196,207,0.12);
 }
 
-/* ── COOLDOWN INPUT ───────────────────────────────────────── */
-.cooldown-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.cooldown-label {
-  font-size: 9px;
-  letter-spacing: 2px;
-  color: var(--text-low);
-  text-transform: uppercase;
-  flex: 1;
-}
-
-#cooldown-input {
-  width: 44px;
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-bottom: 2px solid var(--c3);
-  color: var(--text-hi);
-  font-family: var(--font-mono);
-  font-size: 13px;
-  text-align: center;
-  padding: 4px 6px;
-  outline: none;
-  transition: border-color 0.2s, background 0.2s;
-  -moz-appearance: textfield;
-}
-
-#cooldown-input::-webkit-outer-spin-button,
-#cooldown-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-
-#cooldown-input:focus {
-  background: var(--card);
-  border-color: var(--c3);
-  border-bottom-color: var(--text-hi);
-}
-
 /* ── WIN RATE ASIDE ───────────────────────────────────────── */
 #winrate-panel {
   display: flex;
@@ -808,24 +769,6 @@ body {
       <button class="panel-close-mobile ticker-btn" onclick="togglePanel()" style="margin-bottom:12px;">✕ Close</button>
 
       <div class="left-panel-section">
-        <div class="left-panel-label">Live Ticker</div>
-        <div class="ticker-grid">
-          <button class="ticker-btn" id="btn-left"  onclick="setTicker('animate-from-to','LEFT')">LEFT</button>
-          <button class="ticker-btn" id="btn-right" onclick="setTicker('animate-from-to','RIGHT')">RIGHT</button>
-          <button class="ticker-btn" id="btn-in"    onclick="setTicker('state','IN')">IN</button>
-          <button class="ticker-btn" id="btn-out"   onclick="setTicker('state','OUT')">OUT</button>
-        </div>
-      </div>
-
-      <div class="left-panel-section">
-        <div class="left-panel-label">Points Visibility</div>
-        <div class="ticker-grid">
-          <button class="ticker-btn" id="btn-pts-show" onclick="setPtsVis('show')">SHOW</button>
-          <button class="ticker-btn" id="btn-pts-hide" onclick="setPtsVis('hide')">HIDE</button>
-        </div>
-      </div>
-
-      <div class="left-panel-section">
         <div class="left-panel-label">Roster</div>
         <div id="join-counter" style="display:none;font-size:11px;color:var(--text-mid);letter-spacing:1px;padding:6px 0 2px 0;">
           <span id="join-count-val">0</span> players joined
@@ -836,43 +779,6 @@ body {
           Force Roster
         </button>
         <div id="force-roster-status" style="font-size:10px;color:var(--text-low);letter-spacing:1px;min-height:14px;margin-top:4px;"></div>
-      </div>
-
-      <div class="left-panel-section">
-        <div class="left-panel-label">Map Randomizer</div>
-
-        <button class="ticker-btn" id="btn-map-start"
-                onclick="startMapRand()"
-                style="width:100%;letter-spacing:2px;">
-          Start
-        </button>
-        <div id="map-rand-result" style="font-size:11px;color:var(--text-low);letter-spacing:1px;min-height:14px;margin-top:4px;font-weight:500;"></div>
-      </div>
-
-      <div class="left-panel-section">
-        <div class="left-panel-label">Export</div>
-        <button class="ticker-btn" id="btn-export-sheets"
-                onclick="exportToSheets()"
-                style="width:100%;letter-spacing:2px;">
-          Export to Sheets
-        </button>
-        <div id="export-sheets-status" style="font-size:10px;color:var(--text-low);letter-spacing:1px;min-height:14px;margin-top:4px;"></div>
-      </div>
-
-      <div class="left-panel-section">
-        <div class="left-panel-label">Slide Direction</div>
-        <div class="ticker-grid">
-          <button class="ticker-btn" id="btn-slide-left" onclick="setSlideDir('left')">LEFT</button>
-          <button class="ticker-btn" id="btn-slide-right" onclick="setSlideDir('right')">RIGHT</button>
-        </div>
-      </div>
-
-      <div class="left-panel-section">
-        <div class="left-panel-label">OS Overlay</div>
-        <div class="ticker-grid">
-          <button class="ticker-btn" id="btn-os-on" onclick="setOsOnOff('ON')">ON</button>
-          <button class="ticker-btn" id="btn-os-off" onclick="setOsOnOff('OFF')">OFF</button>
-        </div>
       </div>
 
     </div>
