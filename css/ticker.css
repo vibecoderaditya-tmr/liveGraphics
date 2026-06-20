@@ -37,6 +37,17 @@
   --gap-right: 16px;
   --elims-shift: -5px;
 
+  --col-rank-header: #000000;
+  --col-rank-row: #ffffff;
+  --col-team-header: #000000;
+  --col-team-row: #ffffff;
+  --col-alive-header: #000000;
+  --col-alive-row: #ffffff;
+  --col-elims-header: #000000;
+  --col-elims-row: #ffffff;
+  --col-pts-header: #ffffff;
+  --col-pts-row: #ffffff;
+
   --box-width: calc(
     var(--gap-left) +
     var(--gap-right) +
@@ -184,11 +195,11 @@ html, body {
   width: var(--col-small);
 }
 
-.ticker-row .col-rank    { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; margin-left: var(--gap-left); }
-.ticker-row .col-team    { text-align: left;   display: flex; align-items: center; gap: 10px; padding-left: var(--team-pad); }
-.ticker-row .col-elims   { display: flex; align-items: center; justify-content: center; text-align: center; margin-left: var(--elims-shift); }
-.ticker-row .col-pts     { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; color: var(--row-pts); }
-.ticker-row .col-alive   { position: relative; text-align: center; display: flex; align-items: center; justify-content: center; gap: var(--bar-gap); margin-left: var(--alive-shift); padding-left: 27px; margin-right: var(--gap-right); }
+.ticker-row .col-rank    { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; margin-left: var(--gap-left); color: var(--col-rank-row); }
+.ticker-row .col-team    { text-align: left;   display: flex; align-items: center; gap: 10px; padding-left: var(--team-pad); color: var(--col-team-row); }
+.ticker-row .col-elims   { display: flex; align-items: center; justify-content: center; text-align: center; margin-left: var(--elims-shift); color: var(--col-elims-row); }
+.ticker-row .col-pts     { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; color: var(--col-pts-row); }
+.ticker-row .col-alive   { position: relative; text-align: center; display: flex; align-items: center; justify-content: center; gap: var(--bar-gap); margin-left: var(--alive-shift); padding-left: 27px; margin-right: var(--gap-right); color: var(--col-alive-row); }
 .col-alive.struck {
   position: relative;
 }
@@ -270,11 +281,11 @@ html, body {
   opacity: 0;
 }
 
-.ticker-header .col-rank  { display: flex; align-items: center; justify-content: center; text-align: center; margin-left: var(--gap-left); }
-.ticker-header .col-team  { text-align: left; padding-left: var(--header-team-pad); display: flex; align-items: center; }
-.ticker-header .col-elims { display: flex; align-items: center; justify-content: center; text-align: center; margin-left: var(--elims-shift); }
-.ticker-header .col-pts   { display: flex; align-items: center; justify-content: center; text-align: center; }
-.ticker-header .col-alive { text-align: center; display: flex; align-items: center; justify-content: center; margin-left: var(--alive-shift); padding-left: 19px; margin-right: var(--gap-right); }
+.ticker-header .col-rank  { display: flex; align-items: center; justify-content: center; text-align: center; margin-left: var(--gap-left); color: var(--col-rank-header); }
+.ticker-header .col-team  { text-align: left; padding-left: var(--header-team-pad); display: flex; align-items: center; color: var(--col-team-header); }
+.ticker-header .col-elims { display: flex; align-items: center; justify-content: center; text-align: center; margin-left: var(--elims-shift); color: var(--col-elims-header); }
+.ticker-header .col-pts   { display: flex; align-items: center; justify-content: center; text-align: center; color: var(--col-pts-header); }
+.ticker-header .col-alive { text-align: center; display: flex; align-items: center; justify-content: center; margin-left: var(--alive-shift); padding-left: 19px; margin-right: var(--gap-right); color: var(--col-alive-header); }
 
 .logo-wrap {
   width: var(--row-height);

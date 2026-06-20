@@ -303,4 +303,14 @@ db.ref("/live-graphics/theme/ticker").on("value", function(snap) {
   if (t.rowPts)        root.style.setProperty("--row-pts", t.rowPts);
   if (t.barAlive)      root.style.setProperty("--bar-alive", t.barAlive);
   if (t.barDead)       root.style.setProperty("--bar-dead", t.barDead);
+  if (t.rankHeader)    root.style.setProperty("--col-rank-header", t.rankHeader);
+  if (t.rankRow)       root.style.setProperty("--col-rank-row", t.rankRow);
+  if (t.teamHeader)    root.style.setProperty("--col-team-header", t.teamHeader);
+  if (t.teamRow)       root.style.setProperty("--col-team-row", t.teamRow);
+  if (t.aliveHeader)   root.style.setProperty("--col-alive-header", t.aliveHeader);
+  if (t.aliveRow)      root.style.setProperty("--col-alive-row", t.aliveRow);
+  if (t.elimsHeader)   root.style.setProperty("--col-elims-header", t.elimsHeader);
+  if (t.elimsRow)      root.style.setProperty("--col-elims-row", t.elimsRow);
+  if (t.ptsHeader)     root.style.setProperty("--col-pts-header", t.ptsHeader);
+  if (t.ptsRow)        root.style.setProperty("--col-pts-row", t.ptsRow);
 });

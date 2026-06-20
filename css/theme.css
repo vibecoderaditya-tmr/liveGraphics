@@ -1,0 +1,64 @@
+.ctrl-wrap {
+  max-width: 1100px;
+  padding: 36px 20px 60px;
+}
+
+.ctrl-header { margin-bottom: 36px; }
+
+.ctrl-header::after {
+  content: '';
+  display: block;
+  margin: 18px auto 0;
+  width: 48px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border-hi), transparent);
+}
+
+.ctrl-badge { padding: 3px 10px 3px 6px; margin-bottom: 12px; }
+.ctrl-logo { font-size: 32px; }
+.ctrl-title { font-size: 12px; letter-spacing: 5px; }
+
+.theme-page-body {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.theme-group { margin-bottom: 18px; }
+.theme-group:last-child { margin-bottom: 0; }
+.theme-group-label { font-size: 8px; letter-spacing: 3px; color: var(--text-low); text-transform: uppercase; margin-bottom: 8px; display: flex; align-items: center; gap: 7px; }
+.theme-group-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+.theme-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+.theme-page-body .theme-fields { grid-template-columns: 1fr 1fr 1fr; }
+
+.theme-field { display: flex; flex-direction: column; gap: 6px; padding: 8px 10px; border-radius: var(--r-sm); border: 1px solid transparent; background: var(--card); transition: background 0.15s, border-color 0.15s; }
+.theme-field:hover { background: var(--card-hi); border-color: var(--border); }
+.theme-field-label { display: flex; flex-direction: column; gap: 1px; }
+.theme-field-name { font-size: 9.5px; color: var(--text-mid); letter-spacing: 0.5px; }
+.theme-field-desc, .theme-field-sep { font-size: 10px; color: var(--text-dim); }
+.theme-field-sep { grid-column: 1 / -1; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-dim); padding: 4px 4px 0; border-top: 1px solid var(--border); margin-top: 4px; }
+
+.color-pair { display: flex; align-items: center; gap: 6px; }
+.color-swatch-wrap { position: relative; width: 26px; height: 26px; border-radius: var(--r-sm); border: 1px solid var(--border-hi); overflow: hidden; flex-shrink: 0; cursor: pointer; transition: border-color 0.15s; }
+.color-swatch-wrap:hover { border-color: var(--accent); }
+.color-swatch-wrap input[type="color"] { position: absolute; inset: -4px; width: calc(100% + 8px); height: calc(100% + 8px); border: none; padding: 0; cursor: pointer; opacity: 1; background: none; }
+.color-swatch-wrap input[type="color"]::-webkit-color-swatch-wrapper { padding: 0; }
+.color-swatch-wrap input[type="color"]::-webkit-color-swatch { border: none; }
+
+.hex-text { flex: 1; min-width: 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-sm); color: var(--text-hi); font-family: var(--font-mono); font-size: 11px; letter-spacing: 1px; padding: 4px 6px; outline: none; transition: border-color 0.15s, box-shadow 0.15s; text-transform: uppercase; }
+.hex-text:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-dim); }
+.hex-text.invalid { border-color: var(--err); color: var(--err); }
+
+.hex-copy-btn { flex-shrink: 0; background: none; border: 1px solid var(--border); border-radius: var(--r-sm); color: var(--text-dim); cursor: pointer; font-size: 10px; padding: 3px 5px; line-height: 1; transition: color 0.15s, border-color 0.15s; display: flex; align-items: center; }
+.hex-copy-btn:hover { color: var(--accent); border-color: var(--accent); }
+.hex-copy-btn.copied { color: var(--ok); border-color: var(--ok); }
+
+.eyedropper-btn { flex-shrink: 0; background: none; border: 1px solid var(--border); border-radius: var(--r-sm); color: var(--text-dim); cursor: pointer; font-size: 12px; padding: 2px 5px; line-height: 1; transition: color 0.15s, border-color 0.15s, box-shadow 0.15s; display: flex; align-items: center; }
+.eyedropper-btn:hover { color: var(--accent); border-color: var(--accent); }
+.eyedropper-btn.active { color: var(--ok); border-color: var(--ok); box-shadow: 0 0 8px var(--accent-glow); }
+
+.ctrl-divider { height: 1px; background: var(--border); margin: 12px 0; }
+
+@media (max-width: 800px) { .theme-page-body .theme-fields { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 719px) { .theme-fields { grid-template-columns: 1fr; } }
+@media (max-width: 500px) { .theme-page-body .theme-fields { grid-template-columns: 1fr; } }
