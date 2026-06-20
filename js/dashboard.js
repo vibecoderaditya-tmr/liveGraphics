@@ -13,17 +13,14 @@ var OPERATOR_PIN = "6558";
 firebase.initializeApp(firebaseConfig);
 var db = firebase.database();
 
-var msgRef   = db.ref("/session/bot_message");
-var reqRef   = db.ref("/session/input_request");
-var replyRef = db.ref("/session/input_reply");
-
 var authenticated = false;
-var lastTs        = null;
+var currentPromptId = null;
+var currentReplyRef = null;
 var awaitingInput = false;
 
 function addLog(text, type) {
   type = type || "bot";
-  if (type === "bot" && (text.startsWith("💀") || text.startsWith("🥇"))) {
+  if (type === "bot" && (text.startsWith("\u{1F480}") || text.startsWith("\u{1F947}"))) {
     type = "event";
   }
   var lb   = document.getElementById("log-box");
@@ -122,7 +119,7 @@ window.addEventListener("load", function() {
 });
 
 function sendReply() {
-  if (!awaitingInput) return;
+  if (!currentPromptId) return;
   var val = document.getElementById("op-input").value.trim();
   if (!val) return;
   var ta = document.getElementById("op-input");
@@ -131,7 +128,10 @@ function sendReply() {
   setInputState(false);
   document.getElementById("prompt-box").style.display = "none";
   addLog(val, "opr");
-  replyRef.set({ text: val, ready: true });
+  db.ref("session/replies/" + currentPromptId).push({
+    text: val,
+    ts: firebase.database.ServerValue.TIMESTAMP
+  });
 }
 
 function startListeners() {
@@ -144,28 +144,40 @@ function startListeners() {
       addLog("Panel cleared \u2014 new TMR session started.", "sys");
     }
   });
-  msgRef.on("value", function(snap) {
+
+  db.ref("/session/messages").limitToLast(100).on("child_added", function(snap) {
     var val = snap.val();
-    if (!val || val.ack !== false) return;
+    if (!val) return;
+    setStatus(true);
     if (val.type === "html" && val.html) {
       addHtml(val.html);
     } else if (val.text) {
       addLog(val.text, "bot");
     }
-    setStatus(true);
-    msgRef.update({ ack: true });
   });
-  reqRef.on("value", function(snap) {
+
+  db.ref("/session/input_request").on("value", function(snap) {
     var val = snap.val();
     if (!val) return;
-    if (val.ts === lastTs) return;
-    lastTs = val.ts;
+    var newPromptId = val.prompt_id;
+    if (!newPromptId || newPromptId === currentPromptId) return;
+    currentPromptId = newPromptId;
+    if (currentReplyRef) {
+      currentReplyRef.off();
+    }
     addLog(val.prompt, "bot");
     var pb = document.getElementById("prompt-box");
     pb.textContent = stripMd(val.prompt);
     pb.style.display = "block";
     setInputState(true);
     setStatus(true);
+    currentReplyRef = db.ref("session/replies/" + currentPromptId);
+    currentReplyRef.limitToLast(20).on("child_added", function(replySnap) {
+      var rv = replySnap.val();
+      if (rv && rv.text) {
+        addLog(rv.text, "opr");
+      }
+    });
   });
 }
 
