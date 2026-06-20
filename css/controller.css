@@ -381,6 +381,27 @@ body {
 .hex-copy-btn:hover { color: var(--accent); border-color: var(--accent); }
 .hex-copy-btn.copied { color: var(--ok); border-color: var(--ok); }
 
+.eyedropper-btn {
+  flex-shrink: 0;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--text-dim);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 5px;
+  line-height: 1;
+  transition: color 0.15s, border-color 0.15s, box-shadow 0.15s;
+  display: flex;
+  align-items: center;
+}
+.eyedropper-btn:hover { color: var(--accent); border-color: var(--accent); }
+.eyedropper-btn.active {
+  color: var(--ok);
+  border-color: var(--ok);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
 #map-rand-result {
   font-size: 12px;
   font-weight: 500;

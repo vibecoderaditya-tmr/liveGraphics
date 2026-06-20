@@ -302,3 +302,29 @@ function copyHex(inputId, btn) {
   });
 }
 window.copyHex = copyHex;
+
+function pickColor(btn) {
+  var pair = btn.closest(".color-pair");
+  if (!pair) return;
+  var colorEl = pair.querySelector('input[type="color"]');
+  var hexEl   = pair.querySelector(".hex-text");
+  if (!colorEl || !hexEl) return;
+  var idParts = colorEl.id.split("-");
+  var prefix  = idParts[0];
+
+  if (!window.EyeDropper) { hexEl.classList.add("invalid"); setTimeout(function() { hexEl.classList.remove("invalid"); }, 600); return; }
+
+  btn.classList.add("active");
+  var dropper = new EyeDropper();
+  dropper.open().then(function(result) {
+    btn.classList.remove("active");
+    var color = result.sRGBHex;
+    colorEl.value = color;
+    hexEl.value = color.toUpperCase();
+    hexEl.classList.remove("invalid");
+    scheduleWrite(prefix);
+  }).catch(function() {
+    btn.classList.remove("active");
+  });
+}
+window.pickColor = pickColor;
