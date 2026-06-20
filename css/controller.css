@@ -11,10 +11,10 @@
   --border-hi:  var(--c3);
   --border-glow: #7a8f9e;
 
-  --text-hi:    #dde8ef;
-  --text-mid:   #b0c4cf;
-  --text-low:   #8fa0ad;
-  --text-dim:   #5a7080;
+  --text-hi:    #f0f6fa;
+  --text-mid:   #dde8ef;
+  --text-low:   #b0c4cf;
+  --text-dim:   #8fa0ad;
 
   --accent:      #b0c4cf;
   --accent-dim:  rgba(176,196,207,0.12);

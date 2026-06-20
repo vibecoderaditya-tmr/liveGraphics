@@ -9,9 +9,9 @@
   --border:     var(--c2);
   --border-hi:  var(--c3);
 
-  --text-hi:    #dde8ef;
-  --text-mid:   #b0c4cf;
-  --text-low:   #8fa0ad;
+  --text-hi:    #f0f6fa;
+  --text-mid:   #dde8ef;
+  --text-low:   #b0c4cf;
 
   --accent:     #b0c4cf;
   --live-dot:   #9ab0bc;

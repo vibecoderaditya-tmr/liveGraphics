@@ -294,7 +294,7 @@ function copyHex(inputId, btn) {
     btn.textContent = "✓";
     setTimeout(function() {
       btn.classList.remove("copied");
-      btn.textContent = "⎘";
+      btn.textContent = "COPY";
     }, 1200);
   }).catch(function() {
     el.select();

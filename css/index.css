@@ -2,9 +2,9 @@
   --bg:     #2e3e4d;
   --panel:  #4a5d6b;
   --accent: #62747d;
-  --light:  #cadce6;
-  --mid:    #9da6ad;
-  --white:  #eef2f5;
+  --light:  #dde8ef;
+  --mid:    #b0c4cf;
+  --white:  #f0f6fa;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
