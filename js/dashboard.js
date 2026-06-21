@@ -307,7 +307,7 @@ liveRef.on("value", function(snap) {
       '</div>' +
       '<div class="wr-bar-wrap">' +
         '<div class="wr-bar" style="width:' + barW + '%"></div>' +
-        '<span class="wr-pct">' + t.winRate.toFixed(1) + '%</span>' +
+        '<span class="wr-pct">' + pct + '%</span>' +
       '</div>';
 
     body.appendChild(row);
