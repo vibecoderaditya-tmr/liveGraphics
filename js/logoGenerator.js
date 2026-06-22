@@ -300,24 +300,24 @@ function resizeAndCenter(img, crop, canvasSize, fitSize) {
 function resizeAndCenterBackpack(img, crop) {
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
-  const canvasSize = 990;
-  canvas.width = canvasSize;
-  canvas.height = canvasSize;
-  ctx.clearRect(0, 0, canvasSize, canvasSize);
+  canvas.width = 1000;
+  canvas.height = 1000;
+  ctx.clearRect(0, 0, 1000, 1000);
 
+  const topSpace = 150;
   const padding = 10;
-  const availableSize = canvasSize - padding * 2;
-  const size = Math.max(crop.width, crop.height);
-  const scale = 990 / size;
-  const scaledWidth = crop.width * scale;
-  const scaledHeight = crop.height * scale;
-  const x = padding + (availableSize - scaledWidth) / 2;
-  const y = padding + (availableSize - scaledHeight) / 2;
+  const availableW = 1000 - padding * 2;
+  const availableH = 1000 - topSpace - padding;
 
-  ctx.drawImage(
-    img, crop.x, crop.y, crop.width, crop.height,
-    x, y, scaledWidth, scaledHeight,
-  );
+  const scale = Math.min(availableW / crop.width, availableH / crop.height);
+  const scaledW = crop.width * scale;
+  const scaledH = crop.height * scale;
+
+  const x = padding + (availableW - scaledW) / 2;
+  const y = topSpace + (availableH - scaledH) / 2;
+
+  ctx.drawImage(img, crop.x, crop.y, crop.width, crop.height,
+                     x, y, scaledW, scaledH);
   return canvas;
 }
 

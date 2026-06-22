@@ -262,7 +262,7 @@ html, body {
   color: #fff;
   font-weight: 700;
   font-size: 18px;
-  letter-spacing: 6px;
+  letter-spacing: 15px;
   z-index: 3;
   pointer-events: none;
   background: linear-gradient(90deg, rgba(200,40,40,0.95), rgba(160,20,20,0.95));
