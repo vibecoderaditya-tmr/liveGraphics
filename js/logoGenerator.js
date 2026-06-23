@@ -281,7 +281,7 @@ function resizeAndCenter(img, crop, canvasSize, fitSize) {
   canvas.height = canvasSize;
   ctx.clearRect(0, 0, canvasSize, canvasSize);
 
-  const padding = 10;
+  const padding = 5;
   const availableSize = canvasSize - padding * 2;
   const size = Math.max(crop.width, crop.height);
   const scale = fitSize / size;
@@ -304,17 +304,19 @@ function resizeAndCenterBackpack(img, crop) {
   canvas.height = 1000;
   ctx.clearRect(0, 0, 1000, 1000);
 
-  const topSpace = 150;
-  const padding = 10;
-  const availableW = 1000 - padding * 2;
-  const availableH = 1000 - topSpace - padding;
+  const top = 150;
+  const bottom = 150;
+  const left = 70;
+  const right = 70;
+  const availableW = 1000 - left - right;
+  const availableH = 1000 - top - bottom;
 
   const scale = Math.min(availableW / crop.width, availableH / crop.height);
   const scaledW = crop.width * scale;
   const scaledH = crop.height * scale;
 
-  const x = padding + (availableW - scaledW) / 2;
-  const y = topSpace + (availableH - scaledH) / 2;
+  const x = left + (availableW - scaledW) / 2;
+  const y = top + (availableH - scaledH) / 2;
 
   ctx.drawImage(img, crop.x, crop.y, crop.width, crop.height,
                      x, y, scaledW, scaledH);
