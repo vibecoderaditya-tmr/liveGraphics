@@ -423,7 +423,7 @@ function loadCurtainCSS() {
   if (!curtainLinkEl) {
     curtainLinkEl = document.createElement("link");
     curtainLinkEl.rel = "stylesheet";
-    curtainLinkEl.href = "css/curtain.css";
+    curtainLinkEl.href = "css/live-ticker/curtain.css";
     document.head.appendChild(curtainLinkEl);
   }
 }
