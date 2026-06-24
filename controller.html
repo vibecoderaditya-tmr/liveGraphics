@@ -29,6 +29,15 @@
     <div class="col-broadcast">
 
       <div class="ctrl-section">
+        <div class="section-label">Animation Type</div>
+        <select class="ctrl-select" id="anim-type" onchange="setAnimType(this.value)">
+          <option value="default">Default</option>
+          <option value="curtain">Curtain</option>
+          <option value="fade">Fade</option>
+        </select>
+      </div>
+
+      <div class="ctrl-section">
         <div class="section-label">Live Ticker</div>
         <div class="btn-grid btn-grid-2">
           <button class="ctrl-btn" id="btn-left"  onclick="setTicker('animate-from-to','LEFT')">LEFT</button>

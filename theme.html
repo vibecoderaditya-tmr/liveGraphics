@@ -332,6 +332,21 @@
           </div>
         </div>
 
+        <div class="theme-field">
+          <div class="theme-field-label">
+            <span class="theme-field-name">Curtain Color</span>
+            <span class="theme-field-desc">curtain animation strips</span>
+          </div>
+          <div class="color-pair">
+            <div class="color-swatch-wrap">
+              <input type="color" id="tkr-curtainColor" value="#26b2f2" oninput="onColorPick(this,'tkr')">
+            </div>
+            <input class="hex-text" type="text" id="hex-tkr-curtainColor" value="#26B2F2" maxlength="7" oninput="onHexType(this,'tkr')">
+            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-curtainColor',this)" title="Copy">COPY COLOR</button>
+          </div>
+        </div>
+
       </div>
     </div>
 

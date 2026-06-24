@@ -13,7 +13,7 @@ var db = firebase.database();
 var tickerThemeRef = db.ref("/live-graphics/theme/ticker");
 var elimThemeRef   = db.ref("/live-graphics/theme/eliminated");
 
-var TICKER_KEYS = ["headerBg","headerText","headerBorder","rowBg","rowBgAlt","rowText","rowBorder","rowPts","barAlive","barDead","rankHeader","rankRow","teamHeader","teamRow","aliveHeader","aliveRow","elimsHeader","elimsRow","ptsHeader","ptsRow"];
+var TICKER_KEYS = ["headerBg","headerText","headerBorder","rowBg","rowBgAlt","rowText","rowBorder","rowPts","barAlive","barDead","rankHeader","rankRow","teamHeader","teamRow","aliveHeader","aliveRow","elimsHeader","elimsRow","ptsHeader","ptsRow","curtainColor"];
 var ELIM_KEYS   = ["bgLeft","bgRight","leftHash","rightTeam","rightElim"];
 
 function isValidHex(str) {

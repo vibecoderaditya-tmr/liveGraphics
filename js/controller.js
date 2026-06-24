@@ -10,10 +10,11 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 var db = firebase.database();
 
-var lgRef    = db.ref("/live-graphics");
-var stateRef = lgRef.child("state");
-var animRef  = lgRef.child("animate-from-to");
-var tickerState = null, tickerAnim = null;
+var lgRef      = db.ref("/live-graphics");
+var stateRef   = lgRef.child("state");
+var animRef    = lgRef.child("animate-from-to");
+var animTypeRef = lgRef.child("animation-type");
+var tickerState = null, tickerAnim = null, animType = "default";
 
 function setTicker(key, val) {
   if (key === "state") { stateRef.set(val); tickerState = val; }
@@ -22,10 +23,20 @@ function setTicker(key, val) {
 }
 window.setTicker = setTicker;
 
+function setAnimType(val) {
+  animTypeRef.set(val);
+  animType = val;
+  updateTickerUI();
+}
+window.setAnimType = setAnimType;
+
 function updateTickerUI() {
   ["btn-in","btn-out","btn-left","btn-right"].forEach(function(id) {
     document.getElementById(id).classList.remove("active");
   });
+  var dirDisabled = animType !== "default";
+  document.getElementById("btn-left").disabled = dirDisabled;
+  document.getElementById("btn-right").disabled = dirDisabled;
   if (tickerState === "IN")    document.getElementById("btn-in").classList.add("active");
   if (tickerState === "OUT")   document.getElementById("btn-out").classList.add("active");
   if (tickerAnim  === "LEFT")  document.getElementById("btn-left").classList.add("active");
@@ -36,6 +47,9 @@ lgRef.on("value", function(snap) {
   var val = snap.val() || {};
   tickerState = val["state"]           || null;
   tickerAnim  = val["animate-from-to"] || null;
+  animType    = val["animation-type"]  || "default";
+  var sel = document.getElementById("anim-type");
+  if (sel) sel.value = animType;
   updateTickerUI();
 });
 

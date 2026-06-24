@@ -313,4 +313,5 @@ db.ref("/live-graphics/theme/ticker").on("value", function(snap) {
   if (t.elimsRow)      root.style.setProperty("--col-elims-row", t.elimsRow);
   if (t.ptsHeader)     root.style.setProperty("--col-pts-header", t.ptsHeader);
   if (t.ptsRow)        root.style.setProperty("--col-pts-row", t.ptsRow);
+  if (t.curtainColor)  root.style.setProperty("--curtain-color", t.curtainColor);
 });

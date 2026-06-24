@@ -1,0 +1,51 @@
+.curtain-wrap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 20;
+  pointer-events: none;
+  overflow: hidden;
+  display: none;
+}
+.curtain-wrap.active {
+  display: block;
+}
+.curtain-strip {
+  position: absolute;
+  top: 0;
+  height: 0;
+  width: var(--curtain-strip-width, 2px);
+  background: var(--curtain-color, #26b2f2);
+  transition: height var(--strip-dur, 0.5s) cubic-bezier(0.4, 0, 0.2, 1);
+}
+.curtain-wrap.strips-grow .curtain-strip {
+  height: 100%;
+}
+.curtain-top {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 100%;
+  background: transparent;
+}
+.curtain-strip.dropping {
+  transition: top var(--strip-drop-dur, 0.5s) cubic-bezier(0.4, 0, 0.2, 1);
+  top: 110%;
+}
+.ticker-row.curtain-flip {
+  transform: rotateX(90deg);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.ticker-row.curtain-flip.flipped {
+  transform: rotateX(0deg);
+}
+.ticker-header.curtain-flip {
+  transform: rotateX(90deg);
+  transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.ticker-header.curtain-flip.flipped {
+  transform: rotateX(0deg);
+}

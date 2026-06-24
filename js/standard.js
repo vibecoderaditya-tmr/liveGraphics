@@ -299,13 +299,149 @@ db.ref("/live-graphics/status").on("value", snap => {
 
 let animDirection = "left";
 let animState      = "out";
+let animType      = "default";
 let animTimers      = [];
+let _firstCurtain   = true;
+let curtainLinkEl   = null;
 
 function hideClassFor(direction) {
   return direction === "right" ? "anim-hide-right" : "anim-hide-left";
 }
 
+function getCurtainN() {
+  return parseInt(getComputedStyle(document.documentElement).getPropertyValue('--curtain-strip-count')) || 50;
+}
+
+function buildCurtain(box) {
+  const wrap = document.createElement("div");
+  wrap.className = "curtain-wrap active";
+  const n = getCurtainN();
+  let maxFinish = 0;
+  for (let i = 0; i < n; i++) {
+    const strip = document.createElement("div");
+    strip.className = "curtain-strip";
+    strip.style.left = (i / n * 100) + "%";
+    const delay = Math.random() * 400;
+    const dur   = 0.3 + Math.random() * 0.3;
+    strip.style.transitionDelay = delay + "ms";
+    strip.style.setProperty("--strip-dur", dur + "s");
+    const finish = delay + dur * 1000;
+    if (finish > maxFinish) maxFinish = finish;
+    wrap.appendChild(strip);
+  }
+  const topBar = document.createElement("div");
+  topBar.className = "curtain-top";
+  wrap.appendChild(topBar);
+  box.style.position = "relative";
+  box.appendChild(wrap);
+  wrap._maxFinish = maxFinish;
+  return wrap;
+}
+
+function curtainIn() {
+  const box    = document.querySelector(".ticker-box");
+  const header = document.querySelector(".ticker-header");
+  rowEls.forEach(w => {
+    const row = innerRow(w);
+    row.classList.remove("anim-hide-left", "anim-hide-right", "anim-in", "trans-anim", "trans-anim-out", "flipped");
+    row.classList.add("curtain-flip");
+    w.style.display = "";
+  });
+  header.classList.remove("anim-hide-left", "anim-hide-right", "anim-in", "trans-anim", "trans-anim-out", "flipped");
+  header.classList.add("curtain-flip");
+  header.style.display = "";
+  const wrap = buildCurtain(box);
+  void wrap.offsetHeight;
+  wrap.classList.add("strips-grow");
+  const afterStrips = Math.ceil(wrap._maxFinish) + 500;
+  setTimeout(() => {
+    const strips = wrap.querySelectorAll(".curtain-strip");
+    let maxDropFinish = 0;
+    strips.forEach(strip => {
+      const delay = Math.random() * 400;
+      const dur   = 0.3 + Math.random() * 0.3;
+      strip.style.transitionDelay = delay + "ms";
+      strip.style.setProperty("--strip-drop-dur", dur + "s");
+      const finish = delay + dur * 1000;
+      if (finish > maxDropFinish) maxDropFinish = finish;
+      void strip.offsetHeight;
+      strip.classList.add("dropping");
+    });
+    header.classList.add("flipped");
+    const visibleRows = rowEls
+      .filter(w => w.style.display !== "none")
+      .sort((a, b) => (parseFloat(a.style.top) || 0) - (parseFloat(b.style.top) || 0));
+    visibleRows.forEach((w, i) => {
+      setTimeout(() => innerRow(w).classList.add("flipped"), i * 60);
+    });
+    setTimeout(() => { wrap.remove(); box.style.position = ""; }, Math.ceil(maxDropFinish) + 100);
+  }, afterStrips);
+}
+
+function curtainOut() {
+  if (_firstCurtain) {
+    _firstCurtain = false;
+    const h = document.querySelector(".ticker-header");
+    h.classList.remove("anim-hide-left", "anim-hide-right", "anim-in", "trans-anim", "trans-anim-out");
+    h.style.display = "none";
+    rowEls.forEach(w => {
+      innerRow(w).classList.remove("anim-hide-left", "anim-hide-right", "anim-in", "trans-anim", "trans-anim-out");
+      w.style.display = "none";
+    });
+    return;
+  }
+  const box    = document.querySelector(".ticker-box");
+  const header = document.querySelector(".ticker-header");
+  const wrap = buildCurtain(box);
+  void wrap.offsetHeight;
+  wrap.classList.add("strips-grow");
+  const afterStrips = Math.ceil(wrap._maxFinish) + 500;
+  setTimeout(() => {
+    rowEls.forEach(w => {
+      innerRow(w).classList.remove("curtain-flip", "flipped");
+      w.style.display = "none";
+    });
+    header.classList.remove("curtain-flip", "flipped");
+    header.style.display = "none";
+    const strips = wrap.querySelectorAll(".curtain-strip");
+    let maxDropFinish = 0;
+    strips.forEach(strip => {
+      const delay = Math.random() * 400;
+      const dur   = 0.3 + Math.random() * 0.3;
+      strip.style.transitionDelay = delay + "ms";
+      strip.style.setProperty("--strip-drop-dur", dur + "s");
+      const finish = delay + dur * 1000;
+      if (finish > maxDropFinish) maxDropFinish = finish;
+      void strip.offsetHeight;
+      strip.classList.add("dropping");
+    });
+    setTimeout(() => { wrap.remove(); box.style.position = ""; }, Math.ceil(maxDropFinish) + 100);
+  }, afterStrips);
+}
+
+function loadCurtainCSS() {
+  if (!curtainLinkEl) {
+    curtainLinkEl = document.createElement("link");
+    curtainLinkEl.rel = "stylesheet";
+    curtainLinkEl.href = "css/curtain.css";
+    document.head.appendChild(curtainLinkEl);
+  }
+}
+
+function unloadCurtainCSS() {
+  if (curtainLinkEl) {
+    curtainLinkEl.remove();
+    curtainLinkEl = null;
+  }
+}
+
 function applyAnim() {
+  if (animType === "curtain") {
+    if (animState === "in") curtainIn();
+    else curtainOut();
+    return;
+  }
+  if (animType !== "default") return;
   animTimers.forEach(t => clearTimeout(t));
   animTimers = [];
 
@@ -377,6 +513,13 @@ db.ref("/live-graphics/state").on("value", snap => {
   applyAnim();
 });
 
+db.ref("/live-graphics/animation-type").on("value", snap => {
+  animType = (snap.val() || "default").toLowerCase();
+  if (animType === "curtain") loadCurtainCSS();
+  else unloadCurtainCSS();
+  applyAnim();
+});
+
 setTimeout(() => {
   animState = "out";
   applyAnim();
@@ -406,4 +549,5 @@ db.ref("/live-graphics/theme/ticker").on("value", function(snap) {
   if (t.elimsRow)      root.style.setProperty("--col-elims-row", t.elimsRow);
   if (t.ptsHeader)     root.style.setProperty("--col-pts-header", t.ptsHeader);
   if (t.ptsRow)        root.style.setProperty("--col-pts-row", t.ptsRow);
+  if (t.curtainColor)  root.style.setProperty("--curtain-color", t.curtainColor);
 });

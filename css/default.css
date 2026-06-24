@@ -1,0 +1,81 @@
+.row-wrap.top-frag-wrap {
+  animation: top-frag-glow 2.5s ease-in-out infinite;
+  z-index: 2;
+}
+@keyframes top-frag-glow {
+  0%, 100% { filter: drop-shadow(0 0 6px rgba(255,200,0,0.7)) drop-shadow(0 0 12px rgba(255,180,0,0.5)); }
+  50%       { filter: drop-shadow(0 0 10px rgba(255,220,60,1))  drop-shadow(0 0 22px rgba(255,200,0,0.8)); }
+}
+
+.row-wrap.top-frag-wrap .ticker-row {
+  animation: top-frag-bg 2.5s ease-in-out infinite;
+}
+@keyframes top-frag-bg {
+  0%, 100% { background-color: #d4a017; }
+  50%       { background-color: #ffd700; }
+}
+
+.anim-hide-left   { clip-path: inset(0 100% 0 0); }
+.anim-hide-right  { clip-path: inset(0 0 0 100%); }
+.anim-in          { clip-path: inset(0 0 0 0); }
+
+.trans-anim {
+  transition: clip-path  0.55s cubic-bezier(0.25,0.46,0.45,0.94);
+}
+.trans-anim-out {
+  transition: clip-path  0.5s  cubic-bezier(0.55,0.06,0.68,0.53);
+}
+
+.elim-overlay.not-played-overlay {
+  clip-path: inset(0 0 0 0);
+  background: rgba(0,0,0,0.6);
+  opacity: 1;
+  transition: none;
+}
+.elim-overlay.not-played-overlay span {
+  display: none;
+}
+
+.alive-bar {
+  width: var(--bar-width);
+  height: var(--bar-height);
+  background: var(--bar-dead);
+  border-radius: 2px;
+  transition: background 0.3s;
+}
+.alive-bar.active {
+  background: var(--bar-alive);
+}
+
+.elim-overlay {
+  position: absolute;
+  align-self: unset;
+  margin: 0;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: 6px;
+  z-index: 3;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(200,40,40,0.95), rgba(160,20,20,0.95));
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.5s ease-in-out;
+}
+.elim-overlay.show {
+  clip-path: inset(0 0 0 0);
+}
+.elim-overlay.exit {
+  clip-path: inset(0 0 0 100%);
+}
+.elim-overlay.final {
+  clip-path: inset(0 0 0 0);
+  background: rgba(0,0,0,0.5);
+  transition: background 0.4s ease-in-out;
+}
+.elim-overlay.final span {
+  opacity: 0;
+}
