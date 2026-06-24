@@ -38,8 +38,8 @@
   --elims-shift: -14px;
   --pts-shift: 7px;
 
-  --curtain-strip-count: 150;
-  --curtain-strip-width: 3px;
+  --curtain-strip-count: 60;
+  --curtain-strip-width: 5px;
   --curtain-color: #26b2f2;
 
   --col-rank-header: #000000;
