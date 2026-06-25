@@ -1,0 +1,119 @@
+:root {
+  --logo-bg: #800080;
+  --elims-bg: #ffffff;
+  --elim-txt-bg: #ff0000;
+  --hash-txt: #ffffff;
+  --elims-txt: #000000;
+  --elim-txt: #000000;
+  --bmps-curtain-strip-count: 50;
+  --bmps-strip-height: 3px;
+  --size-hash: 21px;
+  --size-elims: 23px;
+  --size-elim-txt: 28px;
+  --box-w: 150px;
+  --rect-w: 300px;
+  --logo-size: 100px;
+  --font: 'Oswald', sans-serif;
+}
+.bmps-wrap {
+  width: 100%;
+  height: 100%;
+  display: none;
+  padding-top: 69px;
+  align-items: flex-start;
+  justify-content: center;
+}
+.bmps-wrap.shown {
+  display: flex;
+}
+.bmps {
+  display: flex;
+}
+.bmps-box {
+  width: var(--box-w);
+  height: var(--box-w);
+  background: var(--logo-bg);
+  position: relative;
+  flex-shrink: 0;
+}
+.bmps-hash {
+  position: absolute;
+  top: 6px;
+  left: 8px;
+  font-size: var(--size-hash);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--hash-txt);
+}
+.bmps-logo {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.bmps-logo img {
+  width: var(--logo-size);
+  height: var(--logo-size);
+  object-fit: contain;
+}
+.bmps-rect {
+  height: var(--box-w);
+  width: var(--rect-w);
+  display: flex;
+  flex-direction: column;
+}
+.bmps-upper {
+  flex: 1;
+  background: var(--elims-bg);
+  display: flex;
+  align-items: center;
+  padding: 0 41px;
+  gap: 6px;
+  font-size: var(--size-elims);
+  font-weight: 700;
+  color: var(--elims-txt);
+  white-space: nowrap;
+  letter-spacing: 3px;
+}
+.bmps-lower {
+  flex: 1;
+  background: var(--elim-txt-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--size-elim-txt);
+  font-weight: 700;
+  color: var(--elim-txt);
+  letter-spacing: 11px;
+}
+
+/* BMPS curtain animation */
+.bmps-curtain-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  overflow: hidden;
+}
+.bmps-curtain-wrap.dir-in .bmps-curtain-strip {
+  left: 0;
+  right: auto;
+  width: 0;
+}
+.bmps-curtain-wrap.dir-out .bmps-curtain-strip {
+  right: 0;
+  left: auto;
+  width: 0;
+}
+.bmps-curtain-wrap.strips-grow .bmps-curtain-strip {
+  width: 100%;
+}
+.bmps-curtain-strip {
+  position: absolute;
+  height: var(--bmps-strip-height, 3px);
+  background: var(--curtain-color, #26b2f2);
+  transition: width var(--strip-dur, 0.5s) cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+

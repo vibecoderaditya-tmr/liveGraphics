@@ -9,20 +9,42 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
 <link rel="stylesheet" href="css/team-eliminated/center.css">
+<link rel="stylesheet" href="css/team-eliminated/bmps.css">
 </head>
 <body>
-<div class="elim-wrap">
-  <div class="elim-card" id="elimCard">
-    <div class="left-box">
-      <div class="hash-tag">#0</div>
-      <div class="logo-box">
-        <img src="./img/logos/tmr.webp" alt="team logo" />
+<div class="center-wrap shown">
+  <div class="center">
+    <div class="elim-card" id="elimCard">
+      <div class="left-box">
+        <div class="hash-tag">#0</div>
+        <div class="logo-box">
+          <img src="./img/logos/tmr.webp" alt="team logo" />
+        </div>
+      </div>
+      <div class="right-box">
+        <div class="right-inner">
+          <div class="elim-count">0 ELIMINATIONS</div>
+          <div class="team-name">---</div>
+        </div>
       </div>
     </div>
-    <div class="right-box">
-      <div class="right-inner">
-        <div class="elim-count">0 ELIMINATIONS</div>
-        <div class="team-name">---</div>
+  </div>
+</div>
+<div class="bmps-wrap">
+  <div class="bmps" id="bmpsCard">
+    <div class="bmps-box">
+      <div class="bmps-hash">#0</div>
+      <div class="bmps-logo">
+        <img src="./img/logos/tg.webp" alt="team logo" />
+      </div>
+    </div>
+    <div class="bmps-rect">
+      <div class="bmps-upper">
+        <span class="bmps-elims-label">ELIMINATIONS:</span>
+        <span class="bmps-elims-count">0</span>
+      </div>
+      <div class="bmps-lower">
+        <span class="bmps-elim-txt">ELIMINATED</span>
       </div>
     </div>
   </div>

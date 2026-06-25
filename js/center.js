@@ -10,13 +10,25 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
+let currentDesign = "center";
+db.ref("/live-graphics/teamEliminatedStyle").on("value", snap => {
+  const val = snap.val();
+  currentDesign = (val === "bmps" || val === "center") ? val : "center";
+  document.querySelector(".center-wrap").classList.toggle("shown", currentDesign === "center");
+  document.querySelector(".bmps-wrap").classList.toggle("shown", currentDesign === "bmps");
+});
+
 const card = document.getElementById('elimCard');
 const hashEl = card.querySelector('.hash-tag');
 const teamNameEl = card.querySelector('.team-name');
 const elimCountEl = card.querySelector('.elim-count');
 const logoImg = card.querySelector('.logo-box img');
-const leftBox = card.querySelector('.left-box');
-const rightBox = card.querySelector('.right-box');
+
+const bmpsCard = document.getElementById('bmpsCard');
+const bmpsHash = bmpsCard.querySelector('.bmps-hash');
+const bmpsLogo = bmpsCard.querySelector('.bmps-logo img');
+const bmpsElimsCount = bmpsCard.querySelector('.bmps-elims-count');
+bmpsCard.style.visibility = 'hidden';
 
 const prevAlive = {};
 const queue = [];
@@ -49,21 +61,36 @@ function processQueue() {
 }
 
 function showCard(tag, hash, name, kills) {
-  card.classList.remove('show');
-  card.style.display = 'none';
-  hashEl.textContent = '#' + hash;
-  teamNameEl.textContent = name;
-  elimCountEl.textContent = kills + ' ELIMINATIONS';
-  logoImg.src = './img/logos/' + tag + '.webp';
-  card.style.display = 'flex';
-  void card.offsetWidth;
-  card.classList.add('show');
-  setTimeout(() => {
+  if (currentDesign === "center") {
     card.classList.remove('show');
     card.style.display = 'none';
-    showing = false;
-    processQueue();
-  }, 3000);
+    hashEl.textContent = '#' + hash;
+    teamNameEl.textContent = name;
+    elimCountEl.textContent = kills + ' ELIMINATIONS';
+    logoImg.src = './img/logos/' + tag + '.webp';
+    card.style.display = 'flex';
+    void card.offsetWidth;
+    card.classList.add('show');
+  } else {
+    bmpsCard.style.visibility = 'hidden';
+    bmpsHash.textContent = '#' + hash;
+    bmpsLogo.src = './img/logos/' + tag + '.webp';
+    bmpsElimsCount.textContent = kills;
+    bmpsCurtainIn(bmpsCard);
+  }
+  setTimeout(() => {
+    if (currentDesign === "center") {
+      card.classList.remove('show');
+      card.style.display = 'none';
+      showing = false;
+      processQueue();
+    } else {
+      bmpsCurtainOut(bmpsCard, () => {
+        showing = false;
+        processQueue();
+      });
+    }
+  }, 3800);
 }
 
 db.ref("/live-graphics/theme/eliminated").on("value", function(snap) {
@@ -76,3 +103,132 @@ db.ref("/live-graphics/theme/eliminated").on("value", function(snap) {
   if (t.rightTeam)  root.style.setProperty("--right-team", t.rightTeam);
   if (t.rightElim)  root.style.setProperty("--right-elim", t.rightElim);
 });
+
+db.ref("/live-graphics/theme/eliminated-bmps").on("value", function(snap) {
+  var t = snap.val();
+  if (!t) return;
+  var root = document.documentElement;
+  if (t.logoBg)     root.style.setProperty("--logo-bg", t.logoBg);
+  if (t.elimsBg)    root.style.setProperty("--elims-bg", t.elimsBg);
+  if (t.elimTxtBg)  root.style.setProperty("--elim-txt-bg", t.elimTxtBg);
+  if (t.hashTxt)    root.style.setProperty("--hash-txt", t.hashTxt);
+  if (t.elimsTxt)   root.style.setProperty("--elims-txt", t.elimsTxt);
+  if (t.elimTxt)    root.style.setProperty("--elim-txt", t.elimTxt);
+});
+
+db.ref("/live-graphics/teamEliminatedCommand").on("value", snap => {
+  const cmd = snap.val();
+  if (!cmd) return;
+  if (cmd === "in") {
+    queue.push({ tag: "TEST", hash: 1, kills: 5, name: "TEST TEAM" });
+    processQueue();
+  } else if (cmd === "out") {
+    if (showing) {
+      if (currentDesign === "center") {
+        card.classList.remove('show');
+        card.style.display = 'none';
+        showing = false;
+        processQueue();
+      } else {
+        bmpsCurtainOut(bmpsCard, () => {
+          showing = false;
+          processQueue();
+        });
+      }
+    }
+  }
+});
+
+function getBmpsCurtainN() {
+  return parseInt(getComputedStyle(document.documentElement).getPropertyValue('--bmps-curtain-strip-count')) || 50;
+}
+
+function buildBmpsCurtain(card, dir) {
+  const wrap = document.createElement("div");
+  wrap.className = "bmps-curtain-wrap " + dir;
+  wrap.style.visibility = "visible";
+  const n = getBmpsCurtainN();
+  let maxFinish = 0;
+  for (let i = 0; i < n; i++) {
+    const s = document.createElement("div");
+    s.className = "bmps-curtain-strip";
+    s.style.top = (i / n * 100) + "%";
+    const delay = Math.random() * 400;
+    const dur = 0.3 + Math.random() * 0.3;
+    s.dataset.growDelay = delay;
+    s.dataset.growDur = dur;
+    s.style.transitionDelay = delay + "ms";
+    s.style.setProperty("--strip-dur", dur + "s");
+    const finish = delay + dur * 1000;
+    if (finish > maxFinish) maxFinish = finish;
+    wrap.appendChild(s);
+  }
+  card.style.position = "relative";
+  card.appendChild(wrap);
+  wrap._maxFinish = maxFinish;
+  return wrap;
+}
+
+function bmpsCurtainIn(card) {
+  const wrap = buildBmpsCurtain(card, "dir-in");
+  void wrap.offsetHeight;
+  wrap.classList.add("strips-grow");
+  setTimeout(() => {
+    card.style.visibility = 'visible';
+    const strips = wrap.querySelectorAll(".bmps-curtain-strip");
+    strips.forEach(s => {
+      s.style.transition = "none";
+      s.style.transitionDelay = "0ms";
+      s.style.left = "auto";
+      s.style.right = "0";
+      s.style.width = "100%";
+    });
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        let maxShrink = 0;
+        strips.forEach(s => {
+          const delay = Math.random() * 400;
+          const dur = 0.3 + Math.random() * 0.3;
+          s.style.transition = `width ${dur}s cubic-bezier(0.4, 0, 0.2, 1) ${delay}ms`;
+          s.style.width = "0%";
+          const finish = delay + dur * 1000;
+          if (finish > maxShrink) maxShrink = finish;
+        });
+        setTimeout(() => { wrap.remove(); card.style.position = ""; card.style.visibility = ""; }, Math.ceil(maxShrink) + 100);
+      });
+    });
+  }, Math.ceil(wrap._maxFinish) + 350);
+}
+
+function bmpsCurtainOut(card, callback) {
+  const wrap = buildBmpsCurtain(card, "dir-out");
+  void wrap.offsetHeight;
+  wrap.classList.add("strips-grow");
+  setTimeout(() => {
+    card.style.visibility = 'hidden';
+    const strips = wrap.querySelectorAll(".bmps-curtain-strip");
+    strips.forEach(s => {
+      s.style.transition = "none";
+      s.style.transitionDelay = "0ms";
+      s.style.left = "0";
+      s.style.right = "auto";
+      s.style.width = "100%";
+    });
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        let maxShrink = 0;
+        strips.forEach(s => {
+          const delay = Math.random() * 400;
+          const dur = 0.3 + Math.random() * 0.3;
+          const finish = delay + dur * 1000;
+          if (finish > maxShrink) maxShrink = finish;
+          setTimeout(() => {
+            s.style.transition = `width ${dur}s cubic-bezier(0.4, 0, 0.2, 1)`;
+            s.style.width = "0";
+          }, delay);
+        });
+        setTimeout(() => { wrap.remove(); card.style.position = ""; card.style.visibility = "hidden"; if (callback) callback(); }, Math.ceil(maxShrink) + 100);
+      });
+    });
+  }, Math.ceil(wrap._maxFinish) + 350);
+}

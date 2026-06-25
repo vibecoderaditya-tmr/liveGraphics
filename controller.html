@@ -45,10 +45,7 @@
           <button class="ctrl-btn" id="btn-in"    onclick="setTicker('state','IN')">IN</button>
           <button class="ctrl-btn" id="btn-out"   onclick="setTicker('state','OUT')">OUT</button>
         </div>
-      </div>
-
-      <div class="ctrl-section">
-        <div class="section-label">Points Column</div>
+        <div class="section-label" style="margin-top:8px">Points Column</div>
         <div class="btn-grid btn-grid-2">
           <button class="ctrl-btn" id="btn-pts-show" onclick="setPtsVis('show')">SHOW</button>
           <button class="ctrl-btn" id="btn-pts-hide" onclick="setPtsVis('hide')">HIDE</button>
@@ -60,6 +57,17 @@
         <div class="btn-grid btn-grid-2">
           <button class="ctrl-btn" id="btn-slide-left"  onclick="setSlideDir('left')">LEFT</button>
           <button class="ctrl-btn" id="btn-slide-right" onclick="setSlideDir('right')">RIGHT</button>
+        </div>
+      </div>
+
+      <div class="ctrl-section">
+        <div class="section-label">Team Eliminated</div>
+        <div style="display:flex;gap:5px">
+          <select class="ctrl-select" id="team-elim-style" onchange="setTeamEliminatedStyle(this.value)" style="flex:1">
+            <option value="center">Center</option>
+            <option value="bmps">BMPS</option>
+          </select>
+          <button class="ctrl-btn" id="btn-team-elim-in" onclick="setTeamElimCmd('in')" style="flex-shrink:0;min-width:70px">IN</button>
         </div>
       </div>
 

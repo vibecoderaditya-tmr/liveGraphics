@@ -20,12 +20,15 @@ html, body {
   font-family: var(--font);
   color: var(--right-elim);
 }
-.elim-wrap {
+.center-wrap, .bmps-wrap {
   width: 100%;
   height: 100%;
-  display: flex;
+  display: none;
   align-items: flex-start;
   justify-content: center;
+}
+.center-wrap.shown, .bmps-wrap.shown {
+  display: flex;
 }
 .elim-card {
   display: none;

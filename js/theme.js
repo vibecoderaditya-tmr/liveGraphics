@@ -12,9 +12,11 @@ var db = firebase.database();
 
 var tickerThemeRef = db.ref("/live-graphics/theme/ticker");
 var elimThemeRef   = db.ref("/live-graphics/theme/eliminated");
+var elimBmpsThemeRef = db.ref("/live-graphics/theme/eliminated-bmps");
 
 var TICKER_KEYS = ["headerBg","headerText","headerBorder","rowBg","rowBgAlt","rowText","rowBorder","rowPts","barAlive","barDead","rankHeader","rankRow","teamHeader","teamRow","aliveHeader","aliveRow","elimsHeader","elimsRow","ptsHeader","ptsRow","curtainColor"];
 var ELIM_KEYS   = ["bgLeft","bgRight","leftHash","rightTeam","rightElim"];
+var ELIM_BMPS_KEYS = ["logoBg","elimsBg","elimTxtBg","hashTxt","elimsTxt","elimTxt"];
 
 function isValidHex(str) {
   return /^#?[0-9a-fA-F]{6}$/.test(str.trim());
@@ -55,7 +57,8 @@ function scheduleWrite(prefix) {
   if (writeTimers[prefix]) clearTimeout(writeTimers[prefix]);
   writeTimers[prefix] = setTimeout(function() {
     if (prefix === "tkr") writeTickerTheme();
-    else                  writeElimTheme();
+    else if (prefix === "elm") writeElimTheme();
+    else writeElimBmpsTheme();
   }, 120);
 }
 
@@ -77,6 +80,15 @@ function writeElimTheme() {
   elimThemeRef.set(data);
 }
 
+function writeElimBmpsTheme() {
+  var data = {};
+  ELIM_BMPS_KEYS.forEach(function(k) {
+    var el = document.getElementById("elmBmps-" + k);
+    if (el) data[k] = el.value;
+  });
+  elimBmpsThemeRef.set(data);
+}
+
 function loadThemeVals(ref, keys, prefix) {
   ref.once("value", function(snap) {
     var val = snap.val() || {};
@@ -95,6 +107,7 @@ function loadThemeVals(ref, keys, prefix) {
 
 loadThemeVals(tickerThemeRef, TICKER_KEYS, "tkr");
 loadThemeVals(elimThemeRef,   ELIM_KEYS,   "elm");
+loadThemeVals(elimBmpsThemeRef, ELIM_BMPS_KEYS, "elmBmps");
 
 function copyHex(inputId, btn) {
   var el = document.getElementById(inputId);

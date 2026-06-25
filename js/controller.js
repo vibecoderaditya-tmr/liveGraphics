@@ -14,6 +14,7 @@ var lgRef      = db.ref("/live-graphics");
 var stateRef   = lgRef.child("state");
 var animRef    = lgRef.child("animate-from-to");
 var animTypeRef = lgRef.child("animation-type");
+var teamElimCmdRef = lgRef.child("teamEliminatedCommand");
 var tickerState = null, tickerAnim = null, animType = "default";
 
 function setTicker(key, val) {
@@ -29,6 +30,17 @@ function setAnimType(val) {
   updateTickerUI();
 }
 window.setAnimType = setAnimType;
+
+function setTeamEliminatedStyle(val) {
+  lgRef.child("teamEliminatedStyle").set(val);
+}
+window.setTeamEliminatedStyle = setTeamEliminatedStyle;
+
+function setTeamElimCmd(cmd) {
+  teamElimCmdRef.set(cmd);
+  setTimeout(function() { teamElimCmdRef.set(null); }, 100);
+}
+window.setTeamElimCmd = setTeamElimCmd;
 
 function updateTickerUI() {
   ["btn-in","btn-out","btn-left","btn-right"].forEach(function(id) {
@@ -50,6 +62,8 @@ lgRef.on("value", function(snap) {
   animType    = val["animation-type"]  || "default";
   var sel = document.getElementById("anim-type");
   if (sel) sel.value = animType;
+  var elimSel = document.getElementById("team-elim-style");
+  if (elimSel) elimSel.value = val["teamEliminatedStyle"] || "center";
   updateTickerUI();
 });
 
