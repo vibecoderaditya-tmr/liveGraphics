@@ -13,9 +13,10 @@ const db = firebase.database();
 let currentDesign = "center";
 db.ref("/live-graphics/teamEliminatedStyle").on("value", snap => {
   const val = snap.val();
-  currentDesign = (val === "bmps" || val === "center") ? val : "center";
+  currentDesign = (val === "bmps" || val === "standard" || val === "center") ? val : "center";
   document.querySelector(".center-wrap").classList.toggle("shown", currentDesign === "center");
   document.querySelector(".bmps-wrap").classList.toggle("shown", currentDesign === "bmps");
+  document.querySelector(".standard-wrap").classList.toggle("shown", currentDesign === "standard");
 });
 
 const card = document.getElementById('elimCard');
@@ -29,6 +30,12 @@ const bmpsHash = bmpsCard.querySelector('.bmps-hash');
 const bmpsLogo = bmpsCard.querySelector('.bmps-logo img');
 const bmpsElimsCount = bmpsCard.querySelector('.bmps-elims-count');
 bmpsCard.style.visibility = 'hidden';
+
+const standardCard = document.getElementById('standardCard');
+const standardHash = standardCard.querySelector('.standard-hash');
+const standardLogo = standardCard.querySelector('.standard-logo img');
+const standardElimsCount = standardCard.querySelector('.standard-elims-count');
+standardCard.style.visibility = 'hidden';
 
 const prevAlive = {};
 const queue = [];
@@ -71,26 +78,38 @@ function showCard(tag, hash, name, kills) {
     card.style.display = 'flex';
     void card.offsetWidth;
     card.classList.add('show');
-  } else {
+  } else if (currentDesign === "bmps") {
     bmpsCard.style.visibility = 'hidden';
     bmpsHash.textContent = '#' + hash;
     bmpsLogo.src = './img/logos/' + tag + '.webp';
     bmpsElimsCount.textContent = kills;
     bmpsCurtainIn(bmpsCard);
+  } else {
+    standardCard.style.visibility = 'hidden';
+    standardHash.textContent = '#' + hash;
+    standardLogo.src = './img/logos/' + tag + '.webp';
+    standardElimsCount.textContent = kills;
+    standardCurtainIn(standardCard);
   }
+  const displayMs = 3800;
   setTimeout(() => {
     if (currentDesign === "center") {
       card.classList.remove('show');
       card.style.display = 'none';
       showing = false;
       processQueue();
-    } else {
+    } else if (currentDesign === "bmps") {
       bmpsCurtainOut(bmpsCard, () => {
         showing = false;
         processQueue();
       });
+    } else {
+      standardCurtainOut(standardCard, () => {
+        showing = false;
+        processQueue();
+      });
     }
-  }, 3800);
+  }, displayMs);
 }
 
 db.ref("/live-graphics/theme/eliminated").on("value", function(snap) {
@@ -129,8 +148,13 @@ db.ref("/live-graphics/teamEliminatedCommand").on("value", snap => {
         card.style.display = 'none';
         showing = false;
         processQueue();
-      } else {
+      } else if (currentDesign === "bmps") {
         bmpsCurtainOut(bmpsCard, () => {
+          showing = false;
+          processQueue();
+        });
+      } else {
+        standardCurtainOut(standardCard, () => {
           showing = false;
           processQueue();
         });
@@ -231,4 +255,21 @@ function bmpsCurtainOut(card, callback) {
       });
     });
   }, Math.ceil(wrap._maxFinish) + 350);
+}
+
+function standardCurtainIn(card) {
+  card.style.visibility = 'visible';
+  card.classList.remove('standard-fade-out', 'standard-slide-in');
+  void card.offsetWidth;
+  card.classList.add('standard-slide-in');
+}
+
+function standardCurtainOut(card, callback) {
+  card.classList.remove('standard-slide-in');
+  card.classList.add('standard-fade-out');
+  setTimeout(() => {
+    card.classList.remove('standard-fade-out');
+    card.style.visibility = 'hidden';
+    if (callback) callback();
+  }, 800);
 }
