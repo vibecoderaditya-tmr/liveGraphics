@@ -127,7 +127,6 @@ function sendReply() {
   ta.style.height = "auto";
   setInputState(false);
   document.getElementById("prompt-box").style.display = "none";
-  addLog(val, "opr");
   db.ref("session/replies/" + currentPromptId).push({
     text: val,
     ts: firebase.database.ServerValue.TIMESTAMP
@@ -176,6 +175,8 @@ function startListeners() {
       var rv = replySnap.val();
       if (rv && rv.text) {
         addLog(rv.text, "opr");
+        setInputState(false);
+        document.getElementById("prompt-box").style.display = "none";
       }
     });
   });
