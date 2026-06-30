@@ -549,5 +549,11 @@ db.ref("/live-graphics/theme/ticker").on("value", function(snap) {
   if (t.elimsRow)      root.style.setProperty("--col-elims-row", t.elimsRow);
   if (t.ptsHeader)     root.style.setProperty("--col-pts-header", t.ptsHeader);
   if (t.ptsRow)        root.style.setProperty("--col-pts-row", t.ptsRow);
+  if (t.rankBg)        root.style.setProperty("--col-rank-bg", t.rankBg);
+  if (t.teamBg)        root.style.setProperty("--col-team-bg", t.teamBg);
+  if (t.aliveBg)       root.style.setProperty("--col-alive-bg", t.aliveBg);
+  if (t.elimsBg)       root.style.setProperty("--col-elims-bg", t.elimsBg);
+  if (t.ptsBg)         root.style.setProperty("--col-pts-bg", t.ptsBg);
+  if (t.endBg)         root.style.setProperty("--col-end-bg", t.endBg);
   if (t.curtainColor)  root.style.setProperty("--curtain-color", t.curtainColor);
 });

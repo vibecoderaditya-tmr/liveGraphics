@@ -293,7 +293,7 @@ html, body {
 .logo-wrap {
   width: var(--row-height);
   height: var(--row-height);
-  border-radius: 50%;
+  clip-path: circle(50%);
   background: #00499b;
   display: flex;
   align-items: center;

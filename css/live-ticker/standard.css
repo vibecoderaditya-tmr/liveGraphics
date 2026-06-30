@@ -38,7 +38,7 @@
   --elims-shift: -14px;
   --pts-shift: 7px;
 
-  --curtain-strip-count: 60;
+  --curtain-strip-count: 150;
   --curtain-strip-width: 5px;
   --curtain-color: #26b2f2;
 
@@ -52,6 +52,13 @@
   --col-elims-row: #ffffff;
   --col-pts-header: #ffffff;
   --col-pts-row: #ffffff;
+
+  --col-rank-bg: #00499b;
+  --col-team-bg: #00499b;
+  --col-alive-bg: #00499b;
+  --col-elims-bg: #00499b;
+  --col-pts-bg: #00499b;
+  --col-end-bg: #00499b;
 
   --box-width: calc(
     var(--gap-left) +
@@ -126,13 +133,13 @@ html, body {
   position: absolute;
   inset: 0;
   display: flex;
-  align-items: center;
+  align-items: stretch;
   height: var(--row-height);
   background: var(--row-bg);
   border-bottom: 1px solid var(--row-border);
   font-size: 20px;
   color: var(--row-text);
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
 
 .ticker-row .col-rank,
@@ -181,11 +188,12 @@ html, body {
   width: var(--col-small);
 }
 
-.ticker-row .col-rank    { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; margin-left: var(--gap-left); color: var(--col-rank-row); }
-.ticker-row .col-team    { text-align: left;   display: flex; align-items: center; gap: 10px; padding-left: var(--team-pad); color: var(--col-team-row); }
-.ticker-row .col-elims   { display: flex; align-items: center; justify-content: center; text-align: center; margin-left: var(--elims-shift); color: var(--col-elims-row); }
-.ticker-row .col-pts     { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; margin-left: var(--pts-shift); color: var(--col-pts-row); }
-.ticker-row .col-alive   { position: relative; text-align: center; display: flex; align-items: center; justify-content: center; gap: var(--bar-gap); margin-left: var(--alive-shift); margin-right: var(--gap-right); color: var(--col-alive-row); }
+.ticker-row .col-rank    { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; margin-left: var(--gap-left); color: var(--col-rank-row); background: var(--col-rank-bg); }
+.ticker-row .col-team    { text-align: left;   display: flex; align-items: center; gap: 10px; padding-left: var(--team-pad); color: var(--col-team-row); background: var(--col-team-bg); }
+.ticker-row .col-elims   { display: flex; align-items: center; justify-content: center; text-align: center; margin-left: var(--elims-shift); color: var(--col-elims-row); background: var(--col-elims-bg); }
+.ticker-row .col-pts     { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; margin-left: var(--pts-shift); color: var(--col-pts-row); background: var(--col-pts-bg); }
+.ticker-row .col-alive   { position: relative; text-align: center; display: flex; align-items: center; justify-content: center; gap: var(--bar-gap); margin-left: var(--alive-shift); margin-right: var(--gap-right); color: var(--col-alive-row); background: var(--col-alive-bg); }
+.ticker-row .col-end     { background: var(--col-end-bg); }
 .col-alive.struck::after {
   content: '';
   position: absolute;
@@ -207,7 +215,7 @@ html, body {
 .logo-wrap {
   width: var(--row-height);
   height: var(--row-height);
-  border-radius: 50%;
+  clip-path: circle(50%);
   background: #00499b;
   display: flex;
   align-items: center;
