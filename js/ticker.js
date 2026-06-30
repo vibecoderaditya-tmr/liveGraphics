@@ -320,4 +320,5 @@ db.ref("/live-graphics/theme/ticker").on("value", function(snap) {
   if (t.ptsBg)         root.style.setProperty("--col-pts-bg", t.ptsBg);
   if (t.endBg)         root.style.setProperty("--col-end-bg", t.endBg);
   if (t.curtainColor)  root.style.setProperty("--curtain-color", t.curtainColor);
+  if (t.topFragColor)  root.style.setProperty("--top-frag-color", t.topFragColor);
 });

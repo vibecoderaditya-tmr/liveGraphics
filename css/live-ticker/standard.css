@@ -39,8 +39,9 @@
   --pts-shift: 7px;
 
   --curtain-strip-count: 150;
-  --curtain-strip-width: 5px;
+  --curtain-strip-width: 3px;
   --curtain-color: #26b2f2;
+  --top-frag-color: #d4af37;
 
   --col-rank-header: #000000;
   --col-rank-row: #ffffff;
@@ -119,6 +120,8 @@ html, body {
 .ticker-rows {
   position: relative;
   height: calc(var(--row-height) * 12 + var(--row-gap) * 11);
+  overflow-x: hidden;
+  overflow-y: visible;
 }
 
 .row-wrap {
@@ -139,7 +142,7 @@ html, body {
   border-bottom: 1px solid var(--row-border);
   font-size: 20px;
   color: var(--row-text);
-  /*overflow: hidden;*/
+  overflow: hidden;
 }
 
 .ticker-row .col-rank,

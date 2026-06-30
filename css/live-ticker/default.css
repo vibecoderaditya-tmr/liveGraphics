@@ -1,19 +1,26 @@
 .row-wrap.top-frag-wrap {
-  animation: top-frag-glow 2.5s ease-in-out infinite;
   z-index: 2;
 }
+.row-wrap.top-frag-wrap::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 5;
+  animation: top-frag-glow 2.5s ease-in-out infinite;
+}
 @keyframes top-frag-glow {
-  0%, 100% { filter: drop-shadow(0 0 6px rgba(255,200,0,0.7)) drop-shadow(0 0 12px rgba(255,180,0,0.5)); }
-  50%       { filter: drop-shadow(0 0 10px rgba(255,220,60,1))  drop-shadow(0 0 22px rgba(255,200,0,0.8)); }
+  0%,100% { box-shadow: inset 0 0 6px 2px color-mix(in srgb, var(--top-frag-color) 55%, transparent), inset 0 0 12px 4px color-mix(in srgb, var(--top-frag-color) 35%, transparent); }
+  50% { box-shadow: inset 0 0 10px 3px color-mix(in srgb, var(--top-frag-color) 80%, transparent), inset 0 0 18px 6px color-mix(in srgb, var(--top-frag-color) 50%, transparent); }
 }
 
-.row-wrap.top-frag-wrap .ticker-row {
-  animation: top-frag-bg 2.5s ease-in-out infinite;
-}
-@keyframes top-frag-bg {
-  0%, 100% { background-color: #d4a017; }
-  50%       { background-color: #ffd700; }
-}
+.row-wrap.top-frag-wrap .ticker-row .col-alive,
+.row-wrap.top-frag-wrap .ticker-row .col-elims,
+.row-wrap.top-frag-wrap .ticker-row .col-pts,
+.row-wrap.top-frag-wrap .ticker-row .col-end { background: var(--top-frag-color); }
+.row-wrap.top-frag-wrap .ticker-row .col-alive { box-shadow: calc(var(--gap-right) + var(--elims-shift) + 1px) 0 0 0 var(--top-frag-color); }
+.row-wrap.top-frag-wrap .ticker-row .col-elims { box-shadow: calc(var(--pts-shift) + 1px) 0 0 0 var(--top-frag-color); }
+.row-wrap.top-frag-wrap .ticker-row .col-pts { box-shadow: calc(0px - var(--elims-shift) - var(--pts-shift) + 1px) 0 0 0 var(--top-frag-color); }
 
 .anim-hide-left   { clip-path: inset(0 100% 0 0); }
 .anim-hide-right  { clip-path: inset(0 0 0 100%); }
@@ -79,3 +86,8 @@
 .elim-overlay.final span {
   opacity: 0;
 }
+
+.anim-fade-in { opacity: 1; }
+.anim-fade-out { opacity: 0; }
+.trans-fade { transition: opacity 0.55s cubic-bezier(0.25,0.46,0.45,0.94); }
+.trans-fade-out { transition: opacity 0.5s cubic-bezier(0.55,0.06,0.68,0.53); }

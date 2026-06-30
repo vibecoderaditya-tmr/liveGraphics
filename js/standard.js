@@ -435,70 +435,53 @@ function unloadCurtainCSS() {
   }
 }
 
+function resetAnimState() {
+  animTimers.forEach(function(t) { clearTimeout(t); }); animTimers = [];
+  document.querySelectorAll('.curtain-wrap').forEach(function(w) { w.remove(); });
+  var all = [document.querySelector('.ticker-header')].concat(rowEls.map(function(w) { return innerRow(w); })).filter(Boolean);
+  all.forEach(function(el) {
+    el.classList.remove('anim-hide-left','anim-hide-right','anim-in','anim-fade-in','anim-fade-out','trans-anim','trans-anim-out','trans-fade','trans-fade-out','curtain-flip','flipped');
+    el.style.transition = ''; el.style.opacity = '';
+  });
+}
+
 function applyAnim() {
   if (animType === "curtain") {
     if (animState === "in") curtainIn();
     else curtainOut();
     return;
   }
+  if (animType === "fade") {
+    resetAnimState();
+    var header = document.querySelector(".ticker-header");
+    var wrapRows = rowEls.filter(function(w) { return w.style.display !== "none"; }).slice().sort(function(a,b) { return (parseFloat(a.style.top)||0) - (parseFloat(b.style.top)||0); });
+    var rowTargets = wrapRows.map(function(w) { return innerRow(w); });
+    var allTargets = [header].concat(rowTargets).filter(Boolean);
+    if (animState === "in") {
+      allTargets.forEach(function(el) { el.style.transition = "none"; el.classList.remove("anim-fade-in","anim-fade-out"); el.classList.add("anim-fade-out"); });
+      void header.offsetHeight; allTargets.forEach(function(el) { el.style.transition = ""; });
+      header.classList.remove("trans-fade-out"); header.classList.add("trans-fade"); header.classList.remove("anim-fade-out"); header.classList.add("anim-fade-in");
+      rowTargets.forEach(function(rowEl,i) { var t = setTimeout(function() { rowEl.classList.remove("trans-fade-out"); rowEl.classList.add("trans-fade"); rowEl.classList.remove("anim-fade-out"); rowEl.classList.add("anim-fade-in"); }, 80 + i * 60); animTimers.push(t); });
+    } else {
+      rowTargets.forEach(function(rowEl,i) { var t = setTimeout(function() { rowEl.classList.remove("trans-fade"); rowEl.classList.add("trans-fade-out"); rowEl.classList.remove("anim-fade-in"); rowEl.classList.add("anim-fade-out"); }, (rowTargets.length - 1 - i) * 60); animTimers.push(t); });
+      var t = setTimeout(function() { header.classList.remove("trans-fade"); header.classList.add("trans-fade-out"); header.classList.remove("anim-fade-in"); header.classList.add("anim-fade-out"); }, rowTargets.length * 60 + 80); animTimers.push(t);
+    }
+    return;
+  }
   if (animType !== "default") return;
-  animTimers.forEach(t => clearTimeout(t));
-  animTimers = [];
-
-  const header = document.querySelector(".ticker-header");
-  const wrapRows = rowEls
-    .filter(wrap => wrap.style.display !== "none")
-    .slice()
-    .sort((a, b) => (parseFloat(a.style.top) || 0) - (parseFloat(b.style.top) || 0));
-
-  const headerTarget = header;
-  const rowTargets   = wrapRows.map(wrap => innerRow(wrap));
-  const allTargets   = [headerTarget, ...rowTargets];
-
-  const isIn     = animState === "in";
-  const hideCls  = hideClassFor(animDirection);
-  const otherHideCls = hideCls === "anim-hide-left" ? "anim-hide-right" : "anim-hide-left";
-
+  resetAnimState();
+  var header = document.querySelector(".ticker-header");
+  var wrapRows = rowEls.filter(function(w) { return w.style.display !== "none"; }).slice().sort(function(a,b) { return (parseFloat(a.style.top)||0) - (parseFloat(b.style.top)||0); });
+  var headerTarget = header; var rowTargets = wrapRows.map(function(w) { return innerRow(w); }); var allTargets = [headerTarget].concat(rowTargets);
+  var isIn = animState === "in"; var hideCls = hideClassFor(animDirection); var otherHideCls = hideCls === "anim-hide-left" ? "anim-hide-right" : "anim-hide-left";
   if (isIn) {
-    allTargets.forEach(el => {
-      el.style.transition = "none";
-      el.classList.remove("anim-in", otherHideCls, hideCls);
-      el.classList.add(hideCls);
-    });
-    void header.offsetHeight;
-    allTargets.forEach(el => { el.style.transition = ""; });
-
-    header.classList.remove("trans-anim-out");
-    header.classList.add("trans-anim");
-    header.classList.remove(hideCls);
-    header.classList.add("anim-in");
-
-    rowTargets.forEach((rowEl, i) => {
-      const t = setTimeout(() => {
-        rowEl.classList.remove("trans-anim-out");
-        rowEl.classList.add("trans-anim");
-        rowEl.classList.remove(hideCls);
-        rowEl.classList.add("anim-in");
-      }, 80 + i * 60);
-      animTimers.push(t);
-    });
+    allTargets.forEach(function(el) { el.style.transition = "none"; el.classList.remove("anim-in", otherHideCls, hideCls); el.classList.add(hideCls); });
+    void header.offsetHeight; allTargets.forEach(function(el) { el.style.transition = ""; });
+    header.classList.remove("trans-anim-out"); header.classList.add("trans-anim"); header.classList.remove(hideCls); header.classList.add("anim-in");
+    rowTargets.forEach(function(rowEl, i) { var t = setTimeout(function() { rowEl.classList.remove("trans-anim-out"); rowEl.classList.add("trans-anim"); rowEl.classList.remove(hideCls); rowEl.classList.add("anim-in"); }, 80 + i * 60); animTimers.push(t); });
   } else {
-    rowTargets.forEach((rowEl, i) => {
-      const t = setTimeout(() => {
-        rowEl.classList.remove("trans-anim");
-        rowEl.classList.add("trans-anim-out");
-        rowEl.classList.remove("anim-in");
-        rowEl.classList.add(hideCls);
-      }, (rowTargets.length - 1 - i) * 60);
-      animTimers.push(t);
-    });
-    const t = setTimeout(() => {
-      header.classList.remove("trans-anim");
-      header.classList.add("trans-anim-out");
-      header.classList.remove("anim-in");
-      header.classList.add(hideCls);
-    }, rowTargets.length * 60 + 80);
-    animTimers.push(t);
+    rowTargets.forEach(function(rowEl, i) { var t = setTimeout(function() { rowEl.classList.remove("trans-anim"); rowEl.classList.add("trans-anim-out"); rowEl.classList.remove("anim-in"); rowEl.classList.add(hideCls); }, (rowTargets.length - 1 - i) * 60); animTimers.push(t); });
+    var t = setTimeout(function() { header.classList.remove("trans-anim"); header.classList.add("trans-anim-out"); header.classList.remove("anim-in"); header.classList.add(hideCls); }, rowTargets.length * 60 + 80); animTimers.push(t);
   }
 }
 
@@ -556,4 +539,5 @@ db.ref("/live-graphics/theme/ticker").on("value", function(snap) {
   if (t.ptsBg)         root.style.setProperty("--col-pts-bg", t.ptsBg);
   if (t.endBg)         root.style.setProperty("--col-end-bg", t.endBg);
   if (t.curtainColor)  root.style.setProperty("--curtain-color", t.curtainColor);
+  if (t.topFragColor) { root.style.setProperty("--top-frag-color", t.topFragColor); console.log("[theme-ticker] applied --top-frag-color =", t.topFragColor, "computed:", getComputedStyle(root).getPropertyValue("--top-frag-color")); } else { console.log("[theme-ticker] t.topFragColor is missing/falsy:", t.topFragColor); }
 });

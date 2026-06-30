@@ -14,7 +14,7 @@ var tickerThemeRef = db.ref("/live-graphics/theme/ticker");
 var elimThemeRef   = db.ref("/live-graphics/theme/eliminated");
 var elimBmpsThemeRef = db.ref("/live-graphics/theme/eliminated-bmps");
 
-var TICKER_KEYS = ["headerBg","headerText","headerBorder","rowBg","rowBgAlt","rowText","rowBorder","rowPts","barAlive","barDead","rankHeader","rankRow","teamHeader","teamRow","aliveHeader","aliveRow","elimsHeader","elimsRow","ptsHeader","ptsRow","curtainColor","rankBg","teamBg","aliveBg","elimsBg","ptsBg","endBg"];
+var TICKER_KEYS = ["headerBg","headerText","headerBorder","rowBg","rowBgAlt","rowText","rowBorder","rowPts","barAlive","barDead","rankHeader","rankRow","teamHeader","teamRow","aliveHeader","aliveRow","elimsHeader","elimsRow","ptsHeader","ptsRow","rankBg","teamBg","aliveBg","elimsBg","ptsBg","endBg","curtainColor","topFragColor"];
 var ELIM_KEYS   = ["bgLeft","bgRight","leftHash","rightTeam","rightElim"];
 var ELIM_BMPS_KEYS = ["logoBg","elimsBg","elimTxtBg","hashTxt","elimsTxt","elimTxt"];
 

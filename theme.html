@@ -439,6 +439,21 @@
           </div>
         </div>
 
+        <div class="theme-field">
+          <div class="theme-field-label">
+            <span class="theme-field-name">Top Frag Color</span>
+            <span class="theme-field-desc">top fragger highlight</span>
+          </div>
+          <div class="color-pair">
+            <div class="color-swatch-wrap">
+              <input type="color" id="tkr-topFragColor" value="#d4af37" oninput="onColorPick(this,'tkr')">
+            </div>
+            <input class="hex-text" type="text" id="hex-tkr-topFragColor" value="#D4AF37" maxlength="7" oninput="onHexType(this,'tkr')">
+            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-topFragColor',this)" title="Copy">COPY COLOR</button>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -535,7 +550,7 @@
         <div class="theme-field">
           <div class="theme-field-label">
             <span class="theme-field-name">Logo BG</span>
-            <span class="theme-field-desc">logo box background</span>
+            <span class="theme-field-desc">box background</span>
           </div>
           <div class="color-pair">
             <div class="color-swatch-wrap">
@@ -550,7 +565,7 @@
         <div class="theme-field">
           <div class="theme-field-label">
             <span class="theme-field-name">Elims BG</span>
-            <span class="theme-field-desc">upper rect bg</span>
+            <span class="theme-field-desc">upper rect background</span>
           </div>
           <div class="color-pair">
             <div class="color-swatch-wrap">
@@ -564,8 +579,8 @@
 
         <div class="theme-field">
           <div class="theme-field-label">
-            <span class="theme-field-name">Elim TXT BG</span>
-            <span class="theme-field-desc">lower rect bg</span>
+            <span class="theme-field-name">Elim BG</span>
+            <span class="theme-field-desc">lower rect background</span>
           </div>
           <div class="color-pair">
             <div class="color-swatch-wrap">
@@ -594,8 +609,8 @@
 
         <div class="theme-field">
           <div class="theme-field-label">
-            <span class="theme-field-name">Elims TXT</span>
-            <span class="theme-field-desc">elims count text</span>
+            <span class="theme-field-name">Elims Text</span>
+            <span class="theme-field-desc">elimination count text</span>
           </div>
           <div class="color-pair">
             <div class="color-swatch-wrap">
@@ -609,8 +624,8 @@
 
         <div class="theme-field">
           <div class="theme-field-label">
-            <span class="theme-field-name">Elim TXT</span>
-            <span class="theme-field-desc">ELIMINATED text</span>
+            <span class="theme-field-name">Elim Text</span>
+            <span class="theme-field-desc">eliminated text color</span>
           </div>
           <div class="color-pair">
             <div class="color-swatch-wrap">
