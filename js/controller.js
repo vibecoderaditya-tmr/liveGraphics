@@ -153,6 +153,12 @@ function startMapRand() {
 window.startMapRand = startMapRand;
 updateMapStatusText();
 
+function setWinRateTest(cmd) {
+  lgRef.child("winRate").set(cmd);
+  setTimeout(function() { lgRef.child("winRate").set(null); }, 100);
+}
+window.setWinRateTest = setWinRateTest;
+
 var SHEETS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxdffw25BTozZypQ69JzbTh5q4FhhNsUhb4fnlUym43mK92v8e9dTmTAcXquDWRYjTUQQ/exec";
 
 function exportToSheets() {

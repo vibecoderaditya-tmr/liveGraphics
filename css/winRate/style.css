@@ -1,0 +1,127 @@
+:root {
+  --box-w: 60px;
+  --box-h: 50px;
+  --rect-w: 150px;
+  --rect-h: 50px;
+  --box-bg: #800080;
+  --upper-bg: #26b2f2;
+  --lower-bg: #ff0000;
+  --lower-w: 140px;
+  --font: 'Oswald', sans-serif;
+  --card-gap: 0;
+  --bar-w: 5px;
+  --bar-h: 23px;
+  --bar-gap: 5px;
+  --bar-color: #000000;
+  --bar-alive-color: #000000;
+  --bar-dead-color: #444444;
+  --upper-text: #ffffff;
+  --lower-text: #ffffff;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 1920px;
+  height: 1080px;
+  background: transparent;
+  overflow: hidden;
+  font-family: var(--font);
+}
+.winrate-wrap {
+  width: 1000px;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 28px;
+}
+.winrate-row {
+  display: flex;
+  gap: 69px;
+}
+.winrate-card {
+  display: grid;
+  grid-template-columns: var(--box-w) 140px;
+  grid-template-rows: var(--box-h) 30px;
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.6s ease;
+}
+.winrate-card.hidden {
+  transform: translateY(-120px);
+  opacity: 0;
+  pointer-events: none;
+}
+.winrate-box {
+  grid-row: 1 / 2;
+  grid-column: 1 / 2;
+  background: var(--box-bg);
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+}
+.winrate-upper {
+  grid-row: 1 / 2;
+  grid-column: 2 / 3;
+  background: var(--upper-bg);
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  position: relative;
+  z-index: 1;
+  width: 140px;
+}
+.winrate-lower {
+  grid-row: 2 / 3;
+  grid-column: 2 / 3;
+  width: 120px;
+  justify-self: end;
+  background: var(--lower-bg);
+  clip-path: polygon(12% 33%, 90% 37%, 101% 93%, 4% 95%);
+  color: var(--lower-text);
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  position: relative;
+  z-index: 3;
+  margin-top: -20px;
+  padding-top: 18px;
+  text-align: center;
+}
+.winrate-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+}
+.winrate-box img {
+  display: block;
+  height: 45px;
+  object-fit: contain;
+}
+.winrate-upper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  position: relative;
+  z-index: 1;
+}
+.winrate-upper-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--bar-gap);
+}
+.bar-label {
+  color: var(--upper-text);
+  font-size: 28px;
+  font-weight: 700;
+  white-space: nowrap;
+  width: 77px;
+  text-align: left;
+}
+.bar {
+  width: var(--bar-w);
+  height: var(--bar-h);
+}
+.bar.alive {
+  background: var(--bar-alive-color);
+}
+.bar.dead {
+  background: var(--bar-dead-color);
+}

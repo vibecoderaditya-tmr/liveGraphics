@@ -13,10 +13,12 @@ var db = firebase.database();
 var tickerThemeRef = db.ref("/live-graphics/theme/ticker");
 var elimThemeRef   = db.ref("/live-graphics/theme/eliminated");
 var elimBmpsThemeRef = db.ref("/live-graphics/theme/eliminated-bmps");
+var winRateThemeRef = db.ref("/live-graphics/theme/winRate");
 
 var TICKER_KEYS = ["headerBg","headerText","headerBorder","rowBg","rowBgAlt","rowText","rowBorder","rowPts","barAlive","barDead","rankHeader","rankRow","teamHeader","teamRow","aliveHeader","aliveRow","elimsHeader","elimsRow","ptsHeader","ptsRow","rankBg","teamBg","aliveBg","elimsBg","ptsBg","endBg","curtainColor","topFragColor"];
 var ELIM_KEYS   = ["bgLeft","bgRight","leftHash","rightTeam","rightElim"];
 var ELIM_BMPS_KEYS = ["logoBg","elimsBg","elimTxtBg","hashTxt","elimsTxt","elimTxt"];
+var WINRATE_KEYS   = ["boxBg","upperBg","upperText","lowerBg","lowerText"];
 
 function isValidHex(str) {
   return /^#?[0-9a-fA-F]{6}$/.test(str.trim());
@@ -58,7 +60,8 @@ function scheduleWrite(prefix) {
   writeTimers[prefix] = setTimeout(function() {
     if (prefix === "tkr") writeTickerTheme();
     else if (prefix === "elm") writeElimTheme();
-    else writeElimBmpsTheme();
+    else if (prefix === "elmBmps") writeElimBmpsTheme();
+    else writeWinRateTheme();
   }, 120);
 }
 
@@ -89,6 +92,15 @@ function writeElimBmpsTheme() {
   elimBmpsThemeRef.set(data);
 }
 
+function writeWinRateTheme() {
+  var data = {};
+  WINRATE_KEYS.forEach(function(k) {
+    var el = document.getElementById("wr-" + k);
+    if (el) data[k] = el.value;
+  });
+  winRateThemeRef.set(data);
+}
+
 function loadThemeVals(ref, keys, prefix) {
   ref.once("value", function(snap) {
     var val = snap.val() || {};
@@ -108,6 +120,7 @@ function loadThemeVals(ref, keys, prefix) {
 loadThemeVals(tickerThemeRef, TICKER_KEYS, "tkr");
 loadThemeVals(elimThemeRef,   ELIM_KEYS,   "elm");
 loadThemeVals(elimBmpsThemeRef, ELIM_BMPS_KEYS, "elmBmps");
+loadThemeVals(winRateThemeRef, WINRATE_KEYS, "wr");
 
 function copyHex(inputId, btn) {
   var el = document.getElementById(inputId);
