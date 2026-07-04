@@ -12,27 +12,27 @@ var db = firebase.database();
 
 var cards = document.querySelectorAll('.winrate-card');
 var cardTags = [null, null, null, null];
+var hideTimeouts = [null, null, null, null];
 
 function hideSingleCard(idx) {
+  if (hideTimeouts[idx]) clearTimeout(hideTimeouts[idx]);
   cards[idx].classList.add('hidden');
-  setTimeout(function() {
+  hideTimeouts[idx] = setTimeout(function() {
     cards[idx].style.display = 'none';
+    hideTimeouts[idx] = null;
   }, 600);
 }
 
 function showSingleCard(idx) {
+  if (hideTimeouts[idx]) clearTimeout(hideTimeouts[idx]);
+  hideTimeouts[idx] = null;
   cards[idx].style.display = '';
   void cards[idx].offsetWidth;
   cards[idx].classList.remove('hidden');
 }
 
 function hideAllCards() {
-  for (var i = 0; i < cards.length; i++) {
-    cards[i].classList.add('hidden');
-    setTimeout(function(idx) {
-      return function() { cards[idx].style.display = 'none'; };
-    }(i), 600);
-  }
+  for (var i = 0; i < cards.length; i++) hideSingleCard(i);
   cardTags = [null, null, null, null];
 }
 
