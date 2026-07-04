@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>TMR · Layout Editor</title>
+<link rel="icon" href="icon.ico" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<link rel="stylesheet" href="css/editor/editor.css">
+</head>
+<body>
+<div class="editor-wrap">
+  <div class="editor-header">
+    <div class="editor-logo">TM<em>R</em></div>
+    <div class="editor-title">Layout Editor</div>
+    <div class="editor-header-line"></div>
+  </div>
+  <div class="tab-bar" id="tabBar">
+    <button class="tab-btn active" data-tab="winner">Winner</button>
+    <button class="tab-btn" data-tab="ticker">Ticker</button>
+    <button class="tab-btn" data-tab="teamEliminated">Team Eliminated</button>
+    <button class="tab-btn" data-tab="winRate">WinRate</button>
+  </div>
+  <div class="tab-body" id="tabBody"></div>
+</div>
+<script src="js/editor.js"></script>
+</body>
+</html>
