@@ -14,11 +14,13 @@ var tickerThemeRef = db.ref("/live-graphics/theme/ticker");
 var elimThemeRef   = db.ref("/live-graphics/theme/eliminated");
 var elimBmpsThemeRef = db.ref("/live-graphics/theme/eliminated-bmps");
 var winRateThemeRef = db.ref("/live-graphics/theme/winRate");
+var winnerThemeRef = db.ref("/live-graphics/theme/winner");
 
 var TICKER_KEYS = ["headerBg","headerText","headerBorder","rowBg","rowBgAlt","rowText","rowBorder","rowPts","barAlive","barDead","rankHeader","rankRow","teamHeader","teamRow","aliveHeader","aliveRow","elimsHeader","elimsRow","ptsHeader","ptsRow","rankBg","teamBg","aliveBg","elimsBg","ptsBg","endBg","curtainColor","topFragColor"];
 var ELIM_KEYS   = ["bgLeft","bgRight","leftHash","rightTeam","rightElim"];
 var ELIM_BMPS_KEYS = ["logoBg","elimsBg","elimTxtBg","hashTxt","elimsTxt","elimTxt"];
 var WINRATE_KEYS   = ["boxBg","upperBg","upperText","lowerBg","lowerText"];
+var WINNER_KEYS    = ["statsText","cardBorder","cardBadge","nameBarBg","statsBg","textColor","nameTextColor","labelColor","contriBar","contriNumber","mvpBg","mvpText","stageText","crBg","crText","gameBg","gameText"];
 
 function isValidHex(str) {
   return /^#?[0-9a-fA-F]{6}$/.test(str.trim());
@@ -61,7 +63,8 @@ function scheduleWrite(prefix) {
     if (prefix === "tkr") writeTickerTheme();
     else if (prefix === "elm") writeElimTheme();
     else if (prefix === "elmBmps") writeElimBmpsTheme();
-    else writeWinRateTheme();
+    else if (prefix === "wr") writeWinRateTheme();
+    else writeWinnerTheme();
   }, 120);
 }
 
@@ -101,6 +104,15 @@ function writeWinRateTheme() {
   winRateThemeRef.set(data);
 }
 
+function writeWinnerTheme() {
+  var data = {};
+  WINNER_KEYS.forEach(function(k) {
+    var el = document.getElementById("wnr-" + k);
+    if (el) data[k] = el.value;
+  });
+  winnerThemeRef.set(data);
+}
+
 function loadThemeVals(ref, keys, prefix) {
   ref.once("value", function(snap) {
     var val = snap.val() || {};
@@ -121,6 +133,7 @@ loadThemeVals(tickerThemeRef, TICKER_KEYS, "tkr");
 loadThemeVals(elimThemeRef,   ELIM_KEYS,   "elm");
 loadThemeVals(elimBmpsThemeRef, ELIM_BMPS_KEYS, "elmBmps");
 loadThemeVals(winRateThemeRef, WINRATE_KEYS, "wr");
+loadThemeVals(winnerThemeRef, WINNER_KEYS, "wnr");
 
 function copyHex(inputId, btn) {
   var el = document.getElementById(inputId);
