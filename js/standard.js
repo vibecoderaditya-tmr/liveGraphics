@@ -515,6 +515,7 @@ db.ref("/live-graphics/theme/ticker").on("value", function(snap) {
   if (t.headerBg)      root.style.setProperty("--header-bg", t.headerBg);
   if (t.headerText)    root.style.setProperty("--header-text", t.headerText);
   if (t.headerBorder)  root.style.setProperty("--header-border", t.headerBorder);
+  if (t.logoBg)        root.style.setProperty("--logo-bg", t.logoBg);
   if (t.rowBg)         root.style.setProperty("--row-bg", t.rowBg);
   if (t.rowText)       root.style.setProperty("--row-text", t.rowText);
   if (t.rowBorder)     root.style.setProperty("--row-border", t.rowBorder);

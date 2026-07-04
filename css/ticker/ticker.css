@@ -292,7 +292,7 @@ html, body {
   width: var(--row-height);
   height: var(--row-height);
   clip-path: circle(50%);
-  background: #00499b;
+  background: var(--logo-bg, #00499b);
   display: flex;
   align-items: center;
   justify-content: center;

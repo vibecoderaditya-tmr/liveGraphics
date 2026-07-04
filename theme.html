@@ -77,6 +77,21 @@
 
         <div class="theme-field">
           <div class="theme-field-label">
+            <span class="theme-field-name">Logo BG</span>
+            <span class="theme-field-desc">team logo circle background</span>
+          </div>
+          <div class="color-pair">
+            <div class="color-swatch-wrap">
+              <input type="color" id="tkr-logoBg" value="#00499b" oninput="onColorPick(this,'tkr')">
+            </div>
+            <input class="hex-text" type="text" id="hex-tkr-logoBg" value="#00499B" maxlength="7" oninput="onHexType(this,'tkr')">
+            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-logoBg',this)" title="Copy">COPY COLOR</button>
+          </div>
+        </div>
+
+        <div class="theme-field">
+          <div class="theme-field-label">
             <span class="theme-field-name">Row BG</span>
             <span class="theme-field-desc">team row background</span>
           </div>
