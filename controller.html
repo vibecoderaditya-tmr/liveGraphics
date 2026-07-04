@@ -98,16 +98,23 @@
     <div class="col-util">
 
       <div class="ctrl-section">
-        <div class="section-label">Theme</div>
+        <div class="section-label">Win Rate</div>
         <div class="btn-grid btn-grid-1">
-          <button class="ctrl-btn" onclick="window.open('theme.html','_blank')">Open Editor</button>
+          <button class="ctrl-btn primary" onclick="setWinRateTest('in')">WR TEST</button>
         </div>
       </div>
 
       <div class="ctrl-section">
-        <div class="section-label">Win Rate</div>
-        <div class="btn-grid btn-grid-1">
-          <button class="ctrl-btn primary" onclick="setWinRateTest('in')">WR TEST</button>
+        <div class="section-label">Winner</div>
+        <div class="btn-grid btn-grid-3">
+          <button class="ctrl-btn primary" onclick="setWinnerTest('show')">SHOW</button>
+          <button class="ctrl-btn" onclick="setWinnerTest('shuffle')">SHUFFLE</button>
+          <button class="ctrl-btn" onclick="setWinnerTest('hide')">HIDE</button>
+        </div>
+        <div class="section-label" style="margin-top:10px">Tournament Stage</div>
+        <div style="display:flex;gap:5px">
+          <input type="text" id="winnerStageInput" placeholder="GRAND FINALS" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text-low);font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:10px 8px;outline:none">
+          <button class="ctrl-btn" onclick="setTournamentStage()" style="flex-shrink:0">SET</button>
         </div>
       </div>
 

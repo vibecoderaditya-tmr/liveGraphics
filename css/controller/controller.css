@@ -128,6 +128,7 @@ body {
 .btn-grid   { display: grid; gap: 5px; }
 .btn-grid-2 { grid-template-columns: 1fr 1fr; }
 .btn-grid-1 { grid-template-columns: 1fr; }
+.btn-grid-3 { grid-template-columns: 1fr 1fr 1fr; }
 
 .ctrl-btn {
   background: var(--card);

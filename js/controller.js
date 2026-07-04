@@ -159,6 +159,20 @@ function setWinRateTest(cmd) {
 }
 window.setWinRateTest = setWinRateTest;
 
+function setWinnerTest(cmd) {
+  lgRef.child("winner").set(cmd);
+  if (cmd !== 'hide') {
+    setTimeout(function() { lgRef.child("winner").set(null); }, 100);
+  }
+}
+window.setWinnerTest = setWinnerTest;
+
+function setTournamentStage() {
+  var val = document.getElementById('winnerStageInput').value.trim();
+  if (val) { lgRef.child("tournamentStage").set(val); }
+}
+window.setTournamentStage = setTournamentStage;
+
 var SHEETS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxdffw25BTozZypQ69JzbTh5q4FhhNsUhb4fnlUym43mK92v8e9dTmTAcXquDWRYjTUQQ/exec";
 
 function exportToSheets() {
