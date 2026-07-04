@@ -65,18 +65,18 @@ lgRef.on("value", function(snap) {
 });
 
 var ptsVisRef = db.ref("/live-graphics/status");
+var ptsVisState = "show";
 
-function setPtsVis(val) {
-  ptsVisRef.set(val);
-  document.getElementById("btn-pts-show").classList.toggle("active", val === "show");
-  document.getElementById("btn-pts-hide").classList.toggle("active", val === "hide");
+function togglePts() {
+  var next = ptsVisState === "show" ? "hide" : "show";
+  ptsVisRef.set(next);
 }
-window.setPtsVis = setPtsVis;
+window.togglePts = togglePts;
 
-ptsVisRef.once("value", function(snap) {
-  var val = snap.val() || "show";
-  document.getElementById("btn-pts-show").classList.toggle("active", val === "show");
-  document.getElementById("btn-pts-hide").classList.toggle("active", val === "hide");
+ptsVisRef.on("value", function(snap) {
+  ptsVisState = snap.val() || "show";
+  var btn = document.getElementById("btn-pts-toggle");
+  if (btn) btn.textContent = "TOGGLE ( " + ptsVisState.toUpperCase() + " )";
 });
 
 
