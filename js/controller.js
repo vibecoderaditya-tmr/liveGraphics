@@ -76,7 +76,7 @@ window.togglePts = togglePts;
 ptsVisRef.on("value", function(snap) {
   ptsVisState = snap.val() || "show";
   var btn = document.getElementById("btn-pts-toggle");
-  if (btn) btn.textContent = "TOGGLE ( " + ptsVisState.toUpperCase() + " )";
+  if (btn) btn.textContent = ptsVisState === "show" ? "HIDE" : "SHOW";
 });
 
 
