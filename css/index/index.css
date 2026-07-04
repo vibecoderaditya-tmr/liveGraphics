@@ -168,7 +168,7 @@ body::after {
 }
 
 .nav-card.full {
-  grid-column: span 2;
+  grid-column: 1 / -1;
   flex-direction: row;
   align-items: center;
   gap: 24px;
@@ -245,6 +245,26 @@ body::after {
   letter-spacing: 0.15em;
   text-transform: uppercase;
   opacity: 0.6;
+}
+
+.nav-divider {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0 4px;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+.nav-divider::before,
+.nav-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(202,220,230,0.12);
 }
 
 @media (max-width: 768px) {
