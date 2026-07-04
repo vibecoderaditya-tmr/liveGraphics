@@ -524,6 +524,7 @@ function applyAnim() {
 db.ref("/live-graphics/animate-from-to").on("value", snap => {
   const val = (snap.val() || "left").toLowerCase().trim();
   animDirection = (val === "right") ? "right" : "left";
+  var w = document.querySelector('.ticker-wrap'); if (w) { w.classList.remove('dir-left','dir-right'); w.classList.add('dir-'+animDirection); }
   if (animState === "in") applyAnim();
 });
 
@@ -542,6 +543,7 @@ db.ref("/live-graphics/animation-type").on("value", snap => {
 setTimeout(() => {
   animState = "out";
   applyAnim();
+  var w = document.querySelector('.ticker-wrap'); if (w && !w.classList.contains('dir-left') && !w.classList.contains('dir-right')) w.classList.add('dir-left');
 }, 0);
 
 db.ref("/live-graphics/theme/ticker").on("value", function(snap) {

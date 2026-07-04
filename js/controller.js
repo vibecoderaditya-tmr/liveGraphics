@@ -46,9 +46,6 @@ function updateTickerUI() {
   ["btn-in","btn-out","btn-left","btn-right"].forEach(function(id) {
     document.getElementById(id).classList.remove("active");
   });
-  var dirDisabled = animType !== "default";
-  document.getElementById("btn-left").disabled = dirDisabled;
-  document.getElementById("btn-right").disabled = dirDisabled;
   if (tickerState === "IN")    document.getElementById("btn-in").classList.add("active");
   if (tickerState === "OUT")   document.getElementById("btn-out").classList.add("active");
   if (tickerAnim  === "LEFT")  document.getElementById("btn-left").classList.add("active");

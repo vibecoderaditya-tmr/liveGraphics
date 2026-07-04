@@ -234,3 +234,5 @@ html, body {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.ticker-wrap.dir-left  { align-items: flex-start; }
+.ticker-wrap.dir-right { align-items: flex-end; }
