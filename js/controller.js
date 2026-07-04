@@ -82,20 +82,6 @@ ptsVisRef.once("value", function(snap) {
   document.getElementById("btn-pts-hide").classList.toggle("active", val === "hide");
 });
 
-var slideDirRef = db.ref("/live-graphics/overview/slideDirection");
-
-function setSlideDir(dir) {
-  slideDirRef.set(dir);
-  document.getElementById("btn-slide-left").classList.toggle("active", dir === "left");
-  document.getElementById("btn-slide-right").classList.toggle("active", dir === "right");
-}
-window.setSlideDir = setSlideDir;
-
-slideDirRef.once("value", function(snap) {
-  var dir = snap.val() || "left";
-  document.getElementById("btn-slide-left").classList.toggle("active", dir === "left");
-  document.getElementById("btn-slide-right").classList.toggle("active", dir === "right");
-});
 
 var COOLDOWN   = 3;
 var ALL_MAPS   = ["Bermuda", "Purgatory", "Kalahari", "Alpine", "Nexterra", "Solara"];
