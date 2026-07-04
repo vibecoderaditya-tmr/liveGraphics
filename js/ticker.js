@@ -289,6 +289,15 @@ db.ref("/live-graphics/status").on("value", snap => {
   header.classList.toggle("pts-hidden", hide);
 });
 
+db.ref("/live-graphics/editor/ticker").on("value", function(snap) {
+  var vals = snap.val();
+  if (!vals) return;
+  var root = document.documentElement;
+  for (var key in vals) {
+    root.style.setProperty("--" + key, vals[key] + "px");
+  }
+});
+
 db.ref("/live-graphics/theme/ticker").on("value", function(snap) {
   var t = snap.val();
   if (!t) return;

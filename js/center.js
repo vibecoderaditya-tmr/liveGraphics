@@ -11,12 +11,29 @@ firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
 let currentDesign = "center";
+let teamEliminatedEditorData = {};
+
+function applyTeamEliminatedEditor() {
+  const data = teamEliminatedEditorData[currentDesign];
+  if (!data) return;
+  const root = document.documentElement;
+  for (const key in data) {
+    root.style.setProperty("--" + key, data[key] + "px");
+  }
+}
+
 db.ref("/live-graphics/teamEliminatedStyle").on("value", snap => {
   const val = snap.val();
   currentDesign = (val === "bmps" || val === "standard" || val === "center") ? val : "center";
   document.querySelector(".center-wrap").classList.toggle("shown", currentDesign === "center");
   document.querySelector(".bmps-wrap").classList.toggle("shown", currentDesign === "bmps");
   document.querySelector(".standard-wrap").classList.toggle("shown", currentDesign === "standard");
+  applyTeamEliminatedEditor();
+});
+
+db.ref("/live-graphics/editor/teamEliminated").on("value", snap => {
+  teamEliminatedEditorData = snap.val() || {};
+  applyTeamEliminatedEditor();
 });
 
 const card = document.getElementById('elimCard');
