@@ -42,8 +42,9 @@
         <div class="btn-grid btn-grid-2">
           <button class="ctrl-btn" id="btn-left"  onclick="setTicker('animate-from-to','LEFT')">LEFT</button>
           <button class="ctrl-btn" id="btn-right" onclick="setTicker('animate-from-to','RIGHT')">RIGHT</button>
-          <button class="ctrl-btn" id="btn-in"    onclick="setTicker('state','IN')">IN</button>
-          <button class="ctrl-btn" id="btn-out"   onclick="setTicker('state','OUT')">OUT</button>
+        </div>
+        <div class="btn-grid btn-grid-1" style="margin-top:6px">
+          <button class="ctrl-btn" id="btn-state-toggle" onclick="toggleState()">SHOW</button>
         </div>
         <div class="section-label" style="margin-top:8px">Points Column</div>
         <div class="btn-grid btn-grid-1">
@@ -97,10 +98,8 @@
 
       <div class="ctrl-section">
         <div class="section-label">Winner</div>
-        <div class="btn-grid btn-grid-3">
-          <button class="ctrl-btn" id="btn-winner-show" onclick="setWinnerTest('show')">SHOW</button>
-          <button class="ctrl-btn" id="btn-winner-shuffle" onclick="setWinnerTest('shuffle')">SHUFFLE</button>
-          <button class="ctrl-btn" id="btn-winner-hide" onclick="setWinnerTest('hide')">HIDE</button>
+        <div class="btn-grid btn-grid-1">
+          <button class="ctrl-btn" id="btn-winner-toggle" onclick="toggleWinner()">SHOW</button>
         </div>
         <div class="section-label" style="margin-top:10px">Tournament Stage</div>
         <div style="display:flex;gap:5px">

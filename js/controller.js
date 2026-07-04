@@ -43,14 +43,36 @@ function setTeamElimCmd(cmd) {
 window.setTeamElimCmd = setTeamElimCmd;
 
 function updateTickerUI() {
-  ["btn-in","btn-out","btn-left","btn-right"].forEach(function(id) {
+  ["btn-left","btn-right"].forEach(function(id) {
     document.getElementById(id).classList.remove("active");
   });
-  if (tickerState === "IN")    document.getElementById("btn-in").classList.add("active");
-  if (tickerState === "OUT")   document.getElementById("btn-out").classList.add("active");
   if (tickerAnim  === "LEFT")  document.getElementById("btn-left").classList.add("active");
   if (tickerAnim  === "RIGHT") document.getElementById("btn-right").classList.add("active");
+  var stateBtn = document.getElementById("btn-state-toggle");
+  if (stateBtn) stateBtn.textContent = tickerState === "IN" ? "HIDE" : "SHOW";
 }
+
+function toggleState() {
+  var next = tickerState === "IN" ? "OUT" : "IN";
+  stateRef.set(next);
+  tickerState = next;
+  updateTickerUI();
+}
+window.toggleState = toggleState;
+
+var winnerState = "hide";
+
+function toggleWinner() {
+  var next = winnerState === "show" ? "hide" : "show";
+  lgRef.child("winner").set(next);
+  if (next === "show") {
+    setTimeout(function() { lgRef.child("winner").set(null); }, 100);
+  }
+  winnerState = next;
+  var btn = document.getElementById("btn-winner-toggle");
+  if (btn) btn.textContent = winnerState === "show" ? "HIDE" : "SHOW";
+}
+window.toggleWinner = toggleWinner;
 
 lgRef.on("value", function(snap) {
   var val = snap.val() || {};
@@ -141,20 +163,6 @@ function setWinRateTest(cmd) {
   setTimeout(function() { lgRef.child("winRate").set(null); }, 100);
 }
 window.setWinRateTest = setWinRateTest;
-
-function setWinnerTest(cmd) {
-  lgRef.child("winner").set(cmd);
-  if (cmd !== 'hide') {
-    setTimeout(function() { lgRef.child("winner").set(null); }, 100);
-  }
-  ["btn-winner-show","btn-winner-shuffle","btn-winner-hide"].forEach(function(id) {
-    document.getElementById(id).classList.remove("active");
-  });
-  document.getElementById("btn-winner-" + cmd).classList.add("active");
-}
-window.setWinnerTest = setWinnerTest;
-
-
 
 function setTournamentStage() {
   var val = document.getElementById('winnerStageInput').value.trim();
