@@ -147,7 +147,7 @@ function renderWinner(tag, rosters, totalKills, advanceCycle) {
         mvpBadge +
       '</div>' +
       '<div class="winner-card-right">' +
-        '<div class="winner-card-right-name">' + (p.playerName || 'Player ' + (i + 1)) + '</div>' +
+        '<div class="winner-card-right-name"></div>' +
         '<div class="winner-card-right-body">' +
           '<div class="winner-stats-row">' +
             '<div class="winner-stat-col">' +
@@ -170,6 +170,9 @@ function renderWinner(tag, rosters, totalKills, advanceCycle) {
           '</div>' +
         '</div>' +
       '</div>';
+
+    var nameEl = card.querySelector('.winner-card-right-name');
+    if (nameEl) nameEl.textContent = p.playerName || 'Player ' + (i + 1);
 
     grid.appendChild(card);
   }
@@ -231,8 +234,18 @@ db.ref('/matches').on('value', function(snap) {
   }
 });
 
+var storedCrWidth = 0;
 db.ref('/matches/championRushPoint').on('value', function(snap) {
-  crEl.style.display = (parseInt(snap.val()) || 0) > 0 ? 'inline-block' : 'none';
+  var show = (parseInt(snap.val()) || 0) > 0;
+  crEl.style.display = show ? 'inline-block' : 'none';
+  if (show) {
+    document.querySelector('.winner-subheader').style.setProperty('--cr-extra-gap', '0px');
+    if (!storedCrWidth) {
+      requestAnimationFrame(function() { storedCrWidth = crEl.offsetWidth || 250; });
+    }
+  } else {
+    document.querySelector('.winner-subheader').style.setProperty('--cr-extra-gap', (storedCrWidth || 250) + 'px');
+  }
 });
 
 db.ref('/live-graphics/tournamentStage').on('value', function(snap) {
@@ -243,23 +256,24 @@ db.ref('/live-graphics/theme/winner').on('value', function(snap) {
   var t = snap.val();
   if (!t) return;
   var root = document.documentElement;
-  if (t.statsText)      root.style.setProperty('--winner-stats-text', t.statsText);
-  if (t.cardBorder)     root.style.setProperty('--winner-card-border', t.cardBorder);
-  if (t.cardBadge)      root.style.setProperty('--winner-card-badge', t.cardBadge);
-  if (t.textColor)      root.style.setProperty('--winner-text', t.textColor);
-  if (t.nameTextColor)  root.style.setProperty('--winner-name-text', t.nameTextColor);
-  if (t.nameBarBg)      root.style.setProperty('--winner-name-bar-bg', t.nameBarBg);
-  if (t.statsBg)        root.style.setProperty('--winner-stats-bg', t.statsBg);
-  if (t.labelColor)     root.style.setProperty('--winner-label', t.labelColor);
-  if (t.contriBar)      root.style.setProperty('--winner-contri-bar', t.contriBar);
-  if (t.contriNumber)   root.style.setProperty('--winner-contri-number', t.contriNumber);
-  if (t.mvpBg)          root.style.setProperty('--winner-mvp-bg', t.mvpBg);
-  if (t.mvpText)        root.style.setProperty('--winner-mvp-text', t.mvpText);
-  if (t.stageText)      root.style.setProperty('--winner-stage-text', t.stageText);
-  if (t.crBg)           root.style.setProperty('--winner-cr-bg', t.crBg);
-  if (t.crText)         root.style.setProperty('--winner-cr-text', t.crText);
-  if (t.gameBg)         root.style.setProperty('--winner-game-bg', t.gameBg);
-  if (t.gameText)       root.style.setProperty('--winner-game-text', t.gameText);
+  function _h(v){ return typeof v === 'string' && v[0] === '#'; }
+  if (_h(t.statsText))      root.style.setProperty('--winner-stats-text', t.statsText);
+  if (_h(t.cardBorder))     root.style.setProperty('--winner-card-border', t.cardBorder);
+  if (_h(t.cardBadge))      root.style.setProperty('--winner-card-badge', t.cardBadge);
+  if (_h(t.textColor))      root.style.setProperty('--winner-text', t.textColor);
+  if (_h(t.nameTextColor))  root.style.setProperty('--winner-name-text', t.nameTextColor);
+  if (_h(t.nameBarBg))      root.style.setProperty('--winner-name-bar-bg', t.nameBarBg);
+  if (_h(t.statsBg))        root.style.setProperty('--winner-stats-bg', t.statsBg);
+  if (_h(t.labelColor))     root.style.setProperty('--winner-label', t.labelColor);
+  if (_h(t.contriBar))      root.style.setProperty('--winner-contri-bar', t.contriBar);
+  if (_h(t.contriNumber))   root.style.setProperty('--winner-contri-number', t.contriNumber);
+  if (_h(t.mvpBg))          root.style.setProperty('--winner-mvp-bg', t.mvpBg);
+  if (_h(t.mvpText))        root.style.setProperty('--winner-mvp-text', t.mvpText);
+  if (_h(t.stageText))      root.style.setProperty('--winner-stage-text', t.stageText);
+  if (_h(t.crBg))           root.style.setProperty('--winner-cr-bg', t.crBg);
+  if (_h(t.crText))         root.style.setProperty('--winner-cr-text', t.crText);
+  if (_h(t.gameBg))         root.style.setProperty('--winner-game-bg', t.gameBg);
+  if (_h(t.gameText))       root.style.setProperty('--winner-game-text', t.gameText);
 });
 
 db.ref('/live-graphics/editor/winner').on('value', function(snap) {
@@ -267,7 +281,8 @@ db.ref('/live-graphics/editor/winner').on('value', function(snap) {
   if (!vals) return;
   var root = document.documentElement;
   for (var key in vals) {
-    root.style.setProperty('--' + key, vals[key] + 'px');
+    var num = parseFloat(vals[key]);
+    if (isFinite(num)) root.style.setProperty('--' + key, num + 'px');
   }
 });
 

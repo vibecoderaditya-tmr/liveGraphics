@@ -21,7 +21,7 @@ var TABS = [
         fields: [
           { key: 'winner-booyah-offset-x', label: 'BOOYAH X', desc: 'Move BOOYAH image horizontally', default: -350 },
           { key: 'winner-booyah-offset-y', label: 'BOOYAH Y', desc: 'Move BOOYAH image vertically', default: -69 },
-          { key: 'winner-booyah-size', label: 'BOOYAH Size', desc: 'BOOYAH image height', default: 402 },
+          { key: 'winner-booyah-size', label: 'BOOYAH Size', desc: 'BOOYAH image height', default: 400 },
           { key: 'winner-subhead-offset-x', label: 'TEAM STATS X', desc: 'Move TEAM STATS text horizontally', default: -400 },
           { key: 'winner-subhead-offset-y', label: 'TEAM STATS Y', desc: 'Move TEAM STATS text vertically', default: -56 },
           { key: 'winner-subhead-size', label: 'TEAM STATS Size', desc: 'TEAM STATS font size', default: 56 },
@@ -35,15 +35,15 @@ var TABS = [
           { key: 'winner-stage-offset-y', label: 'Stage Y', desc: 'Move tournament stage text vertically', default: -170 },
           { key: 'winner-stage-size', label: 'Stage Size', desc: 'Tournament stage font size', default: 28 },
           { key: 'winner-stage-ls', label: 'Stage LS', desc: 'Tournament stage letter spacing', default: 5 },
-          { key: 'winner-cr-offset-x', label: 'CR X', desc: 'Move CHAMPION RUSH badge horizontally', default: -250 },
+          { key: 'winner-cr-offset-x', label: 'CR X', desc: 'Move CHAMPION RUSH badge horizontally', default: -280 },
           { key: 'winner-cr-offset-y', label: 'CR Y', desc: 'Move CHAMPION RUSH badge vertically', default: -170 },
-          { key: 'winner-game-offset-x', label: 'Game X', desc: 'Move GAME X - MAP badge horizontally', default: -250 },
+          { key: 'winner-game-offset-x', label: 'Game X', desc: 'Move GAME X - MAP badge horizontally', default: -281 },
           { key: 'winner-game-offset-y', label: 'Game Y', desc: 'Move GAME X - MAP badge vertically', default: -170 },
-          { key: 'winner-game-size', label: 'Game Size', desc: 'GAME X - MAP font size', default: 22 },
-          { key: 'winner-subheader-gap', label: 'Gap', desc: 'Space between stage text and badges', default: 28 },
-          { key: 'winner-badge-extra-w', label: 'Badge Extra W', desc: 'Extra width added beyond fit-content', default: 45 },
+          { key: 'winner-game-size', label: 'Game Size', desc: 'GAME X - MAP font size', default: 23 },
+          { key: 'winner-subheader-gap', label: 'Gap', desc: 'Space between stage text and badges', default: 60 },
+          { key: 'winner-badge-extra-w', label: 'Badge Extra W', desc: 'Extra width added beyond fit-content', default: 44 },
           { key: 'winner-badge-pad-y', label: 'Badge Pad Y', desc: 'Badge vertical padding', default: 8 },
-          { key: 'winner-radius', label: 'Radius', desc: 'Badge corner radius', default: 4 }
+          { key: 'winner-radius', label: 'Radius', desc: 'Badge corner radius', default: 3 }
         ]
       },
       {
@@ -115,7 +115,7 @@ var TABS = [
         label: 'Spacing',
         fields: [
           { key: 'bar-width', label: 'Bar Width', desc: 'Alive player bar width', default: 6 },
-          { key: 'bar-height', label: 'Bar Height', desc: 'Alive player bar height', default: 28 },
+          { key: 'bar-height', label: 'Bar Height', desc: 'Alive player bar height', default: 25 },
           { key: 'bar-gap', label: 'Bar Gap', desc: 'Gap between alive bars', default: 3 },
           { key: 'team-pad', label: 'Team Pad', desc: 'Team column padding', default: 0 },
           { key: 'header-team-pad', label: 'Header Team Pad', desc: 'Header team column padding', default: 38 },
@@ -226,7 +226,7 @@ function buildGroupHTML(group) {
 
 function renderTab(tabIndex) {
   var tab = TABS[tabIndex];
-  var html = '<div class="tab-pane active" data-tab="' + tab.id + '">';
+  var html = '<div class="tab-pane active" data-tab="' + tab.id + '" data-tab-index="' + tabIndex + '">';
 
   if (tab.isTeamEliminated) {
     html += '<div class="editor-group">';
@@ -256,6 +256,7 @@ function renderTab(tabIndex) {
     }
   }
 
+  html += '<button class="reset-btn" data-tab="' + tab.id + '">Reset to defaults</button>';
   html += '</div>';
   tabBody.innerHTML = html;
 
@@ -333,6 +334,16 @@ function bindEvents() {
       });
     })(plusBtns[i]);
   }
+
+  var resetBtns = document.querySelectorAll('.reset-btn');
+  for (var i = 0; i < resetBtns.length; i++) {
+    (function(btn) {
+      btn.addEventListener('click', function() {
+        var idx = parseInt(btn.closest('.tab-pane').dataset.tabIndex);
+        if (!isNaN(idx)) resetTab(idx);
+      });
+    })(resetBtns[i]);
+  }
 }
 
 function saveField(row) {
@@ -355,6 +366,40 @@ function saveField(row) {
   } else {
     var ref = db.ref(tab.path + '/' + key);
     ref.set(val);
+  }
+}
+
+function resetTab(tabIndex) {
+  var tab = TABS[tabIndex];
+  if (!tab) return;
+
+  var fields = [];
+  if (tab.isTeamEliminated) {
+    var sty = tab.styles.find(function(s) { return s.id === tab.currentStyle; });
+    if (sty) fields = sty.fields;
+  } else {
+    for (var g = 0; g < tab.groups.length; g++) {
+      fields = fields.concat(tab.groups[g].fields);
+    }
+  }
+
+  var remaining = fields.length;
+  if (remaining === 0) { populateFields(tabIndex); return; }
+
+  var fallback = setTimeout(function() { populateFields(tabIndex); }, 2000);
+
+  for (var i = 0; i < fields.length; i++) {
+    var f = fields[i];
+    var ref;
+    if (tab.isTeamEliminated) {
+      ref = db.ref(tab.path + '/' + tab.currentStyle + '/' + f.key);
+    } else {
+      ref = db.ref(tab.path + '/' + f.key);
+    }
+    ref.remove(function() {
+      remaining--;
+      if (remaining <= 0) { clearTimeout(fallback); populateFields(tabIndex); }
+    });
   }
 }
 

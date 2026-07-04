@@ -18,7 +18,8 @@ function applyTeamEliminatedEditor() {
   if (!data) return;
   const root = document.documentElement;
   for (const key in data) {
-    root.style.setProperty("--" + key, data[key] + "px");
+    const num = parseFloat(data[key]);
+    if (isFinite(num)) root.style.setProperty("--" + key, num + "px");
   }
 }
 
@@ -133,8 +134,9 @@ db.ref("/live-graphics/theme/eliminated").on("value", function(snap) {
   var t = snap.val();
   if (!t) return;
   var root = document.documentElement;
-  if (t.bgLeft)     root.style.setProperty("--bg-left", t.bgLeft);
-  if (t.bgRight)    root.style.setProperty("--bg-right", t.bgRight);
+  function _h(v){ return typeof v === 'string' && v[0] === '#'; }
+  if (_h(t.bgLeft))     root.style.setProperty("--bg-left", t.bgLeft);
+  if (_h(t.bgRight))    root.style.setProperty("--bg-right", t.bgRight);
   if (t.leftHash)   root.style.setProperty("--left-hash", t.leftHash);
   if (t.rightTeam)  root.style.setProperty("--right-team", t.rightTeam);
   if (t.rightElim)  root.style.setProperty("--right-elim", t.rightElim);
@@ -144,12 +146,13 @@ db.ref("/live-graphics/theme/eliminated-bmps").on("value", function(snap) {
   var t = snap.val();
   if (!t) return;
   var root = document.documentElement;
-  if (t.logoBg)     root.style.setProperty("--logo-bg", t.logoBg);
-  if (t.elimsBg)    root.style.setProperty("--elims-bg", t.elimsBg);
-  if (t.elimTxtBg)  root.style.setProperty("--elim-txt-bg", t.elimTxtBg);
-  if (t.hashTxt)    root.style.setProperty("--hash-txt", t.hashTxt);
-  if (t.elimsTxt)   root.style.setProperty("--elims-txt", t.elimsTxt);
-  if (t.elimTxt)    root.style.setProperty("--elim-txt", t.elimTxt);
+  function _h(v){ return typeof v === 'string' && v[0] === '#'; }
+  if (_h(t.logoBg))     root.style.setProperty("--logo-bg", t.logoBg);
+  if (_h(t.elimsBg))    root.style.setProperty("--elims-bg", t.elimsBg);
+  if (_h(t.elimTxtBg))  root.style.setProperty("--elim-txt-bg", t.elimTxtBg);
+  if (_h(t.hashTxt))    root.style.setProperty("--hash-txt", t.hashTxt);
+  if (_h(t.elimsTxt))   root.style.setProperty("--elims-txt", t.elimsTxt);
+  if (_h(t.elimTxt))    root.style.setProperty("--elim-txt", t.elimTxt);
 });
 
 db.ref("/live-graphics/teamEliminatedCommand").on("value", snap => {

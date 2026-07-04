@@ -114,19 +114,21 @@ db.ref('/live-graphics/theme/ticker').on('value', function(snap) {
   var t = snap.val();
   if (!t) return;
   var root = document.documentElement;
-  if (t.barAlive) root.style.setProperty('--bar-alive-color', t.barAlive);
-  if (t.barDead)  root.style.setProperty('--bar-dead-color', t.barDead);
+  function _h(v){ return typeof v === 'string' && v[0] === '#'; }
+  if (_h(t.barAlive)) root.style.setProperty('--bar-alive-color', t.barAlive);
+  if (_h(t.barDead))  root.style.setProperty('--bar-dead-color', t.barDead);
 });
 
 db.ref('/live-graphics/theme/winRate').on('value', function(snap) {
   var t = snap.val();
   if (!t) return;
   var root = document.documentElement;
-  if (t.boxBg)     root.style.setProperty('--box-bg', t.boxBg);
-  if (t.upperBg)   root.style.setProperty('--upper-bg', t.upperBg);
-  if (t.upperText) root.style.setProperty('--upper-text', t.upperText);
-  if (t.lowerBg)   root.style.setProperty('--lower-bg', t.lowerBg);
-  if (t.lowerText) root.style.setProperty('--lower-text', t.lowerText);
+  function _h(v){ return typeof v === 'string' && v[0] === '#'; }
+  if (_h(t.boxBg))     root.style.setProperty('--box-bg', t.boxBg);
+  if (_h(t.upperBg))   root.style.setProperty('--upper-bg', t.upperBg);
+  if (_h(t.upperText)) root.style.setProperty('--upper-text', t.upperText);
+  if (_h(t.lowerBg))   root.style.setProperty('--lower-bg', t.lowerBg);
+  if (_h(t.lowerText)) root.style.setProperty('--lower-text', t.lowerText);
 });
 
 db.ref('/live-graphics/editor/winRate').on('value', function(snap) {
@@ -134,7 +136,8 @@ db.ref('/live-graphics/editor/winRate').on('value', function(snap) {
   if (!vals) return;
   var root = document.documentElement;
   for (var key in vals) {
-    root.style.setProperty('--' + key, vals[key] + 'px');
+    var num = parseFloat(vals[key]);
+    if (isFinite(num)) root.style.setProperty('--' + key, num + 'px');
   }
 });
 

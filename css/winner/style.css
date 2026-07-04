@@ -30,24 +30,24 @@
   --winner-subhead-offset-y: -56px;          /* Move TEAM STATS text up (-) / down (+) */
   --winner-stage-offset-x: -350px;           /* Move stage text left (-) / right (+) */
   --winner-stage-offset-y: -170px;           /* Move stage text up (-) / down (+) */
-  --winner-cr-offset-x: -250px;              /* Move CHAMPION RUSH badge left (-) / right (+) */
+  --winner-cr-offset-x: -280px;              /* Move CHAMPION RUSH badge left (-) / right (+) */
   --winner-cr-offset-y: -170px;              /* Move CHAMPION RUSH badge up (-) / down (+) */
-  --winner-game-offset-x: -250px;            /* Move GAME X - MAP badge left (-) / right (+) */
+  --winner-game-offset-x: -281px;            /* Move GAME X - MAP badge left (-) / right (+) */
   --winner-game-offset-y: -170px;            /* Move GAME X - MAP badge up (-) / down (+) */
   --winner-grid-offset-x: 0px;             /* Move card grid left (-) / right (+) */
   --winner-grid-offset-y: -150px;            /* Move card grid up (-) / down (+) */
-  --winner-subheader-gap: 28px;          /* Gap between sub-header columns */
+  --winner-subheader-gap: 60px;          /* Gap between sub-header columns */
   --winner-stage-text: #000000;          /* Tournament stage text color */
   --winner-stage-size: 28px;             /* Tournament stage font size */
   --winner-cr-bg: #e94560;               /* CHAMPION RUSH badge background */
   --winner-cr-text: #ffffff;             /* CHAMPION RUSH badge text color */
   --winner-game-bg: #2a2a4e;            /* GAME X - MAP badge background */
   --winner-game-text: #ffffff;           /* GAME X - MAP badge text color */
-  --winner-game-size: 22px;              /* GAME X - MAP font size */
-  --winner-badge-extra-w: 45px;          /* Extra width added to each badge beyond fit-content */
+  --winner-game-size: 23px;              /* GAME X - MAP font size */
+  --winner-badge-extra-w: 44px;          /* Extra width added to each badge beyond fit-content */
   --winner-badge-pad-x: calc(var(--winner-badge-extra-w) / 2);
   --winner-badge-pad-y: 8px;             /* Badge vertical padding */
-  --winner-radius: 4px;                  /* Badge border radius */
+  --winner-radius: 3px;                  /* Badge border radius */
   --winner-rows-offset: 23px;            /* Extra bottom padding inside the stats area */
   --winner-wrapper-w: 1920px;            /* Full screen width (match your broadcast) */
   --winner-wrapper-h: 1080px;            /* Full screen height */
@@ -136,7 +136,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--winner-subheader-gap);
+  gap: calc(var(--winner-subheader-gap) + var(--cr-extra-gap, 0px));
 }
 
 .winner-badges {

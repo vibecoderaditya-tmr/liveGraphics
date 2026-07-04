@@ -247,6 +247,24 @@ body {
 .te-style-fields { display: none; }
 .te-style-fields.active { display: block; }
 
+.reset-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 4px;
+  background: #c0392b;
+  border: none;
+  border-radius: var(--r-sm);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.reset-btn:hover { background: #e74c3c; }
+
 @media (max-width: 600px) {
   body { padding: 16px 10px; }
 
