@@ -1,0 +1,336 @@
+:root {
+  /* ===== COLORS (pick any color code) ===== */
+  --winner-stats-text: #ffffff;           /* "TEAM STATS" sub-heading color */
+  --winner-card-border: #2a2a4e;         /* Card outline color */
+  --winner-card-badge: #2a2a4e;          /* Image/logo area background inside each card */
+  --winner-name-bar-bg: #2a2a4e;         /* Player name bar background */
+  --winner-stats-bg: transparent;        /* Stats area background (ELIMINATIONS/KNOCKS/CONTRIBUTION) */
+  --winner-text: #ffffff;                /* Stat number color (kills, knocks) */
+  --winner-name-text: #ffffff;           /* Player name text color in the top bar */
+  --winner-label: #888888;               /* Stat label text (ELIMINATIONS, KNOCKS, CONTRIBUTION) */
+  --winner-contri-bar: #e94560;          /* Contribution bar fill color */
+  --winner-contri-number: #26b2f2;       /* Contribution percentage number color */
+  --winner-mvp-bg: #FFD700;              /* MVP badge background (gold ribbon) */
+  --winner-mvp-text: #000000;            /* "MVP" text on the badge */
+
+  /* ===== MVP BADGE POSITION & SIZE ===== */
+  --winner-mvp-bottom: -11px;            /* Distance from bottom of left box */
+  --winner-mvp-left: 0px;                /* Distance from left edge of left box */
+  --winner-mvp-w: 131px;                 /* MVP badge width */
+  --winner-mvp-h: 56px;                  /* MVP badge height */
+  --winner-mvp-text-bottom: 9px;         /* "MVP" text position from bottom */
+  --winner-mvp-text-left: 14px;          /* "MVP" text position from left */
+
+  /* ===== LAYOUT & SPACING ===== */
+  --winner-wrapper-offset-x: 0px;          /* Move entire wrapper left (-) / right (+) */
+  --winner-wrapper-offset-y: 0px;          /* Move entire wrapper up (-) / down (+) */
+  --winner-booyah-offset-x: -350px;          /* Move BOOYAH image left (-) / right (+) */
+  --winner-booyah-offset-y: -69px;           /* Move BOOYAH image up (-) / down (+) */
+  --winner-subhead-offset-x: -400px;         /* Move TEAM STATS text left (-) / right (+) */
+  --winner-subhead-offset-y: -56px;          /* Move TEAM STATS text up (-) / down (+) */
+  --winner-stage-offset-x: -350px;           /* Move stage text left (-) / right (+) */
+  --winner-stage-offset-y: -170px;           /* Move stage text up (-) / down (+) */
+  --winner-cr-offset-x: -250px;              /* Move CHAMPION RUSH badge left (-) / right (+) */
+  --winner-cr-offset-y: -170px;              /* Move CHAMPION RUSH badge up (-) / down (+) */
+  --winner-game-offset-x: -250px;            /* Move GAME X - MAP badge left (-) / right (+) */
+  --winner-game-offset-y: -170px;            /* Move GAME X - MAP badge up (-) / down (+) */
+  --winner-grid-offset-x: 0px;             /* Move card grid left (-) / right (+) */
+  --winner-grid-offset-y: -150px;            /* Move card grid up (-) / down (+) */
+  --winner-subheader-gap: 28px;          /* Gap between sub-header columns */
+  --winner-stage-text: #000000;          /* Tournament stage text color */
+  --winner-stage-size: 28px;             /* Tournament stage font size */
+  --winner-cr-bg: #e94560;               /* CHAMPION RUSH badge background */
+  --winner-cr-text: #ffffff;             /* CHAMPION RUSH badge text color */
+  --winner-game-bg: #2a2a4e;            /* GAME X - MAP badge background */
+  --winner-game-text: #ffffff;           /* GAME X - MAP badge text color */
+  --winner-game-size: 22px;              /* GAME X - MAP font size */
+  --winner-badge-extra-w: 45px;          /* Extra width added to each badge beyond fit-content */
+  --winner-badge-pad-x: calc(var(--winner-badge-extra-w) / 2);
+  --winner-badge-pad-y: 8px;             /* Badge vertical padding */
+  --winner-radius: 4px;                  /* Badge border radius */
+  --winner-rows-offset: 23px;            /* Extra bottom padding inside the stats area */
+  --winner-wrapper-w: 1920px;            /* Full screen width (match your broadcast) */
+  --winner-wrapper-h: 1080px;            /* Full screen height */
+  --winner-card-w: 699px;                /* Each card width */
+  --winner-card-h: 330px;                /* Each card height */
+  --winner-card-gap: 69px;               /* Gap between the 4 cards (grid spacing) */
+  --winner-card-border-w: 2px;           /* Card outline thickness */
+  --winner-left-w: 200px;                /* Left section width (player image area) */
+  --winner-right-name-h: 55px;           /* Player name bar height at top of right section */
+  --winner-right-pad-y: 12px;            /* Top & bottom padding inside right section */
+  --winner-right-pad-x: 18px;            /* Left & right padding inside right section */
+  --winner-row-gap: 32px;                /* Space between stats row and contribution row */
+
+  /* ===== FONT SIZES ===== */
+  --winner-booyah-size: 400px;           /* "BOOYAH!" image height */
+  --winner-subhead-size: 56px;           /* "TEAM STATS" text size */
+  --winner-stat-label-size: 28px;        /* ELIMINATIONS / KNOCKS / CONTRIBUTION label size */
+  --winner-stat-value-size: 69px;        /* Kill & knock number size */
+  --winner-contri-value-size: 38px;      /* Contribution percentage number size */
+  --winner-player-name-size: 28px;       /* Player name text size */
+  --winner-mvp-text-size: 28px;          /* "MVP" badge text size */
+  --winner-contri-track-h: 11px;         /* Contribution bar thickness */
+
+  /* ===== LETTER SPACING ===== */
+  --winner-stage-ls: 5px;                 /* Tournament stage letter spacing */
+  --winner-subhead-ls: 3px;              /* "TEAM STATS" letter spacing */
+  --winner-stat-label-ls: 3px;           /* Stat label letter spacing */
+  --winner-mvp-ls: 11px;                 /* "MVP" badge letter spacing */
+
+  /* ===== FONT ===== */
+  --font: 'Segoe UI', sans-serif;        /* Overall font family */
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  width: 1920px;
+  height: 1080px;
+  background: transparent;
+  overflow: hidden;
+  font-family: var(--font);
+}
+
+.winner-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.winner-wrapper {
+  width: var(--winner-wrapper-w);
+  height: var(--winner-wrapper-h);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  transform: translate(var(--winner-wrapper-offset-x), var(--winner-wrapper-offset-y));
+}
+
+.winner-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 21px;
+  margin-bottom: 0px;
+}
+
+.winner-booyah {
+  height: var(--winner-booyah-size);
+  display: block;
+  transform: translate(var(--winner-booyah-offset-x), var(--winner-booyah-offset-y));
+}
+
+.winner-subhead {
+  font-size: var(--winner-subhead-size);
+  font-weight: 500;
+  color: var(--winner-stats-text);
+  letter-spacing: var(--winner-subhead-ls);
+  text-transform: uppercase;
+  transform: translate(var(--winner-subhead-offset-x), var(--winner-subhead-offset-y));
+}
+
+.winner-subheader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--winner-subheader-gap);
+}
+
+.winner-badges {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.winner-stage {
+  font-size: var(--winner-stage-size);
+  font-weight: 600;
+  color: var(--winner-stage-text);
+  letter-spacing: var(--winner-stage-ls);
+  text-transform: uppercase;
+  transform: translate(var(--winner-stage-offset-x), var(--winner-stage-offset-y));
+}
+
+.winner-cr {
+  display: none;
+  font-size: var(--winner-game-size);
+  font-weight: 700;
+  color: var(--winner-cr-text);
+  background: var(--winner-cr-bg);
+  padding: var(--winner-badge-pad-y) var(--winner-badge-pad-x);
+  border-radius: var(--winner-radius);
+  transform: translate(var(--winner-cr-offset-x), var(--winner-cr-offset-y));
+}
+
+.winner-game {
+  display: inline-block;
+  font-size: var(--winner-game-size);
+  font-weight: 700;
+  color: var(--winner-game-text);
+  background: var(--winner-game-bg);
+  padding: var(--winner-badge-pad-y) var(--winner-badge-pad-x);
+  border-radius: var(--winner-radius);
+  transform: translate(var(--winner-game-offset-x), var(--winner-game-offset-y));
+}
+
+.winner-grid {
+  display: grid;
+  grid-template-columns: var(--winner-card-w) var(--winner-card-w);
+  grid-template-rows: var(--winner-card-h) var(--winner-card-h);
+  gap: var(--winner-card-gap);
+  transform: translate(var(--winner-grid-offset-x), var(--winner-grid-offset-y));
+}
+
+.winner-card {
+  display: flex;
+  overflow: hidden;
+}
+
+/* ===== Card entrance animation ===== */
+.winner-card-left { transform: translateY(100%); opacity: 0; }
+.winner-card-logo-clip { overflow: hidden; height: 100%; }
+.winner-card-logo-clip img { transform: translateY(100%); }
+.winner-card-right-name { transform: translateX(-100%); opacity: 0; }
+.winner-card-right-body { transform: translateX(-100%); opacity: 0; }
+
+.winner-card.visible .winner-card-left { transform: translateY(0); opacity: 1; transition: transform 0.6s ease-out, opacity 0.6s ease-out; }
+.winner-card.visible .winner-card-logo-clip img { transform: translateY(0); transition: transform 0.4s ease-out 420ms; }
+.winner-card.visible .winner-card-right-name { transform: translateX(0); opacity: 1; transition: transform 0.4s ease-out 540ms, opacity 0.4s ease-out 540ms; }
+.winner-card.visible .winner-card-right-body { transform: translateX(0); opacity: 1; transition: transform 0.4s ease-out 740ms, opacity 0.4s ease-out 740ms; }
+/* ===== end card animation ===== */
+
+.winner-card-left {
+  width: var(--winner-left-w);
+  display: flex;
+  position: relative;
+  border: var(--winner-card-border-w) solid var(--winner-card-border);
+}
+
+.winner-card-logo {
+  flex: 1;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  background: var(--winner-card-badge);
+}
+
+.winner-card-logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.winner-card-right {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.winner-card-right-name {
+  height: var(--winner-right-name-h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--winner-name-bar-bg);
+  font-size: var(--winner-player-name-size);
+  font-weight: 600;
+  color: var(--winner-name-text);
+  text-align: center;
+  line-height: 1.2;
+  flex-shrink: 0;
+}
+
+.winner-card-right-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: var(--winner-row-gap);
+  padding: var(--winner-right-pad-y) var(--winner-right-pad-x) calc(var(--winner-right-pad-y) + var(--winner-rows-offset));
+  background: var(--winner-stats-bg);
+}
+
+.winner-mvp-badge {
+  position: absolute;
+  bottom: var(--winner-mvp-bottom);
+  left: var(--winner-mvp-left);
+  width: var(--winner-mvp-w);
+  height: var(--winner-mvp-h);
+  background: var(--winner-mvp-bg);
+  clip-path: polygon(7% 16%, 94% 11%, 77% 84%, -19% 87%);
+  z-index: 1;
+}
+
+.winner-mvp-text {
+  position: absolute;
+  bottom: var(--winner-mvp-text-bottom);
+  left: var(--winner-mvp-text-left);
+  font-size: var(--winner-mvp-text-size);
+  font-weight: 700;
+  color: var(--winner-mvp-text);
+  letter-spacing: var(--winner-mvp-ls);
+}
+
+.winner-stats-row {
+  display: flex;
+  gap: 12px;
+}
+
+.winner-stat-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.winner-stat-label {
+  font-size: var(--winner-stat-label-size);
+  font-weight: 500;
+  color: var(--winner-label);
+  letter-spacing: var(--winner-stat-label-ls);
+  text-transform: uppercase;
+}
+
+.winner-stat-value {
+  font-size: var(--winner-stat-value-size);
+  font-weight: 700;
+  color: var(--winner-text);
+  line-height: 1;
+}
+
+.winner-contri-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.winner-contri-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.winner-contri-value {
+  font-size: var(--winner-contri-value-size);
+  font-weight: 700;
+  color: var(--winner-contri-number);
+}
+
+.winner-contri-track {
+  width: 100%;
+  height: var(--winner-contri-track-h);
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.winner-contri-fill {
+  height: 100%;
+  background: var(--winner-contri-bar);
+  border-radius: 4px;
+}

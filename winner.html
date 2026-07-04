@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1920, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>Winner</title>
+<link rel="icon" type="image/x-icon" href="icon.ico">
+<script>
+(function(){
+  var CVER = '3';
+  var q = window.location.search.match(/[?&]v=(\d+)/);
+  if (!q || q[1] !== CVER) {
+    var url = window.location.pathname + '?v=' + CVER;
+    window.location.replace(url);
+  }
+})();
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<link rel="stylesheet" href="css/winner/style.css?v=3">
+</head>
+<body>
+<div class="winner-container">
+  <div class="winner-wrapper">
+    <div class="winner-header">
+      <img class="winner-booyah" src="img/booyah.webp" alt="">
+      <span class="winner-subhead">TEAM STATS</span>
+    </div>
+    <div class="winner-subheader">
+      <span class="winner-stage"  id="winnerStage"></span>
+      <div class="winner-badges">
+        <span class="winner-cr"     id="winnerCr">CHAMPION RUSH</span>
+        <span class="winner-game"   id="winnerGame"></span>
+      </div>
+    </div>
+    <div class="winner-grid" id="winnerGrid"></div>
+  </div>
+</div>
+<script src="js/winner.js?v=3"></script>
+</body>
+</html>
