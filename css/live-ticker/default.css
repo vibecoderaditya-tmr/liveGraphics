@@ -22,15 +22,15 @@
 .row-wrap.top-frag-wrap .ticker-row .col-elims { box-shadow: calc(var(--pts-shift) + 1px) 0 0 0 var(--top-frag-color); }
 .row-wrap.top-frag-wrap .ticker-row .col-pts { box-shadow: calc(0px - var(--elims-shift) - var(--pts-shift) + 1px) 0 0 0 var(--top-frag-color); }
 
-.anim-hide-left   { clip-path: inset(0 100% 0 0); }
-.anim-hide-right  { clip-path: inset(0 0 0 100%); }
-.anim-in          { clip-path: inset(0 0 0 0); }
+.anim-hide-left   { transform: translateX(-100%); opacity: 0; }
+.anim-hide-right  { transform: translateX(100%); opacity: 0; }
+.anim-in          { transform: translateX(0); opacity: 1; }
 
 .trans-anim {
-  transition: clip-path  0.55s cubic-bezier(0.25,0.46,0.45,0.94);
+  transition: transform 0.55s cubic-bezier(0.25,0.46,0.45,0.94), opacity 0.55s ease;
 }
 .trans-anim-out {
-  transition: clip-path  0.5s  cubic-bezier(0.55,0.06,0.68,0.53);
+  transition: transform 0.5s cubic-bezier(0.55,0.06,0.68,0.53), opacity 0.5s ease;
 }
 
 .elim-overlay.not-played-overlay {

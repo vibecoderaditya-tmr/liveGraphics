@@ -87,8 +87,8 @@ html, body {
   height: var(--canvas-height);
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  padding-top: 60px;
+  align-items: center;
+  justify-content: center;
 }
 
 .ticker-box {
