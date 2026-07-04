@@ -16,7 +16,7 @@ var elimBmpsThemeRef = db.ref("/live-graphics/theme/eliminated-bmps");
 var winRateThemeRef = db.ref("/live-graphics/theme/winRate");
 var winnerThemeRef = db.ref("/live-graphics/theme/winner");
 
-var TICKER_KEYS = ["headerBg","headerText","headerBorder","rowBg","rowBgAlt","rowText","rowBorder","rowPts","barAlive","barDead","rankHeader","rankRow","teamHeader","teamRow","aliveHeader","aliveRow","elimsHeader","elimsRow","ptsHeader","ptsRow","rankBg","teamBg","aliveBg","elimsBg","ptsBg","endBg","curtainColor","topFragColor"];
+var TICKER_KEYS = ["headerBg","headerText","headerBorder","rowBg","rowText","rowBorder","barAlive","barDead","rankHeader","rankRow","teamHeader","teamRow","aliveHeader","aliveRow","elimsHeader","elimsRow","ptsHeader","ptsRow","rankBg","teamBg","aliveBg","elimsBg","ptsBg","endBg","curtainColor","topFragColor"];
 var ELIM_KEYS   = ["bgLeft","bgRight","leftHash","rightTeam","rightElim"];
 var ELIM_BMPS_KEYS = ["logoBg","elimsBg","elimTxtBg","hashTxt","elimsTxt","elimTxt"];
 var WINRATE_KEYS   = ["boxBg","upperBg","upperText","lowerBg","lowerText"];

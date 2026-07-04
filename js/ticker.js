@@ -306,10 +306,8 @@ db.ref("/live-graphics/theme/ticker").on("value", function(snap) {
   if (t.headerText)    root.style.setProperty("--header-text", t.headerText);
   if (t.headerBorder)  root.style.setProperty("--header-border", t.headerBorder);
   if (t.rowBg)         root.style.setProperty("--row-bg", t.rowBg);
-  if (t.rowBgAlt)      root.style.setProperty("--row-bg-alt", t.rowBgAlt);
   if (t.rowText)       root.style.setProperty("--row-text", t.rowText);
   if (t.rowBorder)     root.style.setProperty("--row-border", t.rowBorder);
-  if (t.rowPts)        root.style.setProperty("--row-pts", t.rowPts);
   if (t.barAlive)      root.style.setProperty("--bar-alive", t.barAlive);
   if (t.barDead)       root.style.setProperty("--bar-dead", t.barDead);
   if (t.rankHeader)    root.style.setProperty("--col-rank-header", t.rankHeader);
