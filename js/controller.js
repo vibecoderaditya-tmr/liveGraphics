@@ -164,8 +164,14 @@ function setWinnerTest(cmd) {
   if (cmd !== 'hide') {
     setTimeout(function() { lgRef.child("winner").set(null); }, 100);
   }
+  ["btn-winner-show","btn-winner-shuffle","btn-winner-hide"].forEach(function(id) {
+    document.getElementById(id).classList.remove("active");
+  });
+  document.getElementById("btn-winner-" + cmd).classList.add("active");
 }
 window.setWinnerTest = setWinnerTest;
+
+
 
 function setTournamentStage() {
   var val = document.getElementById('winnerStageInput').value.trim();
