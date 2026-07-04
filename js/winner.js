@@ -121,15 +121,21 @@ function renderWinner(tag, rosters, totalKills, advanceCycle) {
 
   grid.innerHTML = '';
 
-  var maxKills = 0;
+  var maxKills = 0, maxKnocks = 0;
   for (var i = 0; i < sorted.length; i++) {
-    if (sorted[i].kills > maxKills) maxKills = sorted[i].kills;
+    if (sorted[i].kills > maxKills) { maxKills = sorted[i].kills; maxKnocks = 0; }
+    if (sorted[i].kills === maxKills && sorted[i].knocks > maxKnocks) maxKnocks = sorted[i].knocks;
   }
+
+  var totalKnocks = 0;
+  for (var i = 0; i < sorted.length; i++) totalKnocks += sorted[i].knocks || 0;
 
   for (var i = 0; i < sorted.length; i++) {
     var p = sorted[i];
-    var contri = totalKills > 0 ? ((p.kills / totalKills) * 100).toFixed(2) : '0.00';
-    var isMvp = p.kills >= maxKills && maxKills > 0;
+    var shareKills  = totalKills > 0 ? (p.kills || 0) / totalKills : 0;
+    var shareKnocks = totalKnocks > 0 ? (p.knocks || 0) / totalKnocks : 0;
+    var contri = (shareKills * 70 + shareKnocks * 30).toFixed(2);
+    var isMvp = p.kills === maxKills && p.knocks >= maxKnocks && maxKills > 0;
 
     var mvpBadge = isMvp ? '<div class="winner-mvp-badge"><span class="winner-mvp-text">MVP</span></div>' : '';
 
@@ -180,8 +186,10 @@ function renderWinner(tag, rosters, totalKills, advanceCycle) {
       setTimeout(function() {
         var cards = grid.querySelectorAll('.winner-card');
         for (var ci = 0; ci < cards.length; ci++) {
-          (function(card, p, totalKills) {
-            var contri = totalKills > 0 ? (p.kills / totalKills) * 100 : 0;
+          (function(card, p, totalKills, totalKnocks) {
+            var shareKills  = totalKills > 0 ? (p.kills || 0) / totalKills : 0;
+            var shareKnocks = totalKnocks > 0 ? (p.knocks || 0) / totalKnocks : 0;
+            var contri = (shareKills * 70 + shareKnocks * 30);
             var elimsSpan = card.querySelector('.winner-stat-col:first-child .winner-stat-value');
             var knocksSpan = card.querySelector('.winner-stat-col:last-child .winner-stat-value');
             var contriSpan = card.querySelector('.winner-contri-value');
@@ -193,7 +201,7 @@ function renderWinner(tag, rosters, totalKills, advanceCycle) {
               contriFill.style.transition = 'width 1.2s ease-in-out';
               contriFill.style.width = contri + '%';
             }
-          })(cards[ci], sorted[ci], totalKills);
+          })(cards[ci], sorted[ci], totalKills, totalKnocks);
         }
       }, 1140);
 
