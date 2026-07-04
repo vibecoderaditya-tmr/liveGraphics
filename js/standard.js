@@ -458,6 +458,11 @@ function applyAnim() {
     var rowTargets = wrapRows.map(function(w) { return innerRow(w); });
     var allTargets = [header].concat(rowTargets).filter(Boolean);
     if (animState === "in") {
+      header.style.display = "";
+      rowEls.forEach(function(w) { w.style.display = ""; });
+      wrapRows = rowEls.slice().sort(function(a,b) { return (parseFloat(a.style.top)||0) - (parseFloat(b.style.top)||0); });
+      rowTargets = wrapRows.map(function(w) { return innerRow(w); });
+      allTargets = [header].concat(rowTargets).filter(Boolean);
       allTargets.forEach(function(el) { el.style.transition = "none"; el.classList.remove("anim-fade-in","anim-fade-out"); el.classList.add("anim-fade-out"); });
       void header.offsetHeight; allTargets.forEach(function(el) { el.style.transition = ""; });
       header.classList.remove("trans-fade-out"); header.classList.add("trans-fade"); header.classList.remove("anim-fade-out"); header.classList.add("anim-fade-in");
@@ -465,6 +470,11 @@ function applyAnim() {
     } else {
       rowTargets.forEach(function(rowEl,i) { var t = setTimeout(function() { rowEl.classList.remove("trans-fade"); rowEl.classList.add("trans-fade-out"); rowEl.classList.remove("anim-fade-in"); rowEl.classList.add("anim-fade-out"); }, (rowTargets.length - 1 - i) * 60); animTimers.push(t); });
       var t = setTimeout(function() { header.classList.remove("trans-fade"); header.classList.add("trans-fade-out"); header.classList.remove("anim-fade-in"); header.classList.add("anim-fade-out"); }, rowTargets.length * 60 + 80); animTimers.push(t);
+      var hideT = setTimeout(function() {
+        document.querySelector(".ticker-header").style.display = "none";
+        rowEls.forEach(function(w) { w.style.display = "none"; });
+      }, rowTargets.length * 60 + 80 + 600);
+      animTimers.push(hideT);
     }
     return;
   }
@@ -475,6 +485,11 @@ function applyAnim() {
   var headerTarget = header; var rowTargets = wrapRows.map(function(w) { return innerRow(w); }); var allTargets = [headerTarget].concat(rowTargets);
   var isIn = animState === "in"; var hideCls = hideClassFor(animDirection); var otherHideCls = hideCls === "anim-hide-left" ? "anim-hide-right" : "anim-hide-left";
   if (isIn) {
+    header.style.display = "";
+    rowEls.forEach(function(w) { w.style.display = ""; });
+    wrapRows = rowEls.slice().sort(function(a,b) { return (parseFloat(a.style.top)||0) - (parseFloat(b.style.top)||0); });
+    rowTargets = wrapRows.map(function(w) { return innerRow(w); });
+    allTargets = [headerTarget].concat(rowTargets);
     allTargets.forEach(function(el) { el.style.transition = "none"; el.classList.remove("anim-in", otherHideCls, hideCls); el.classList.add(hideCls); });
     void header.offsetHeight; allTargets.forEach(function(el) { el.style.transition = ""; });
     header.classList.remove("trans-anim-out"); header.classList.add("trans-anim"); header.classList.remove(hideCls); header.classList.add("anim-in");
@@ -482,6 +497,11 @@ function applyAnim() {
   } else {
     rowTargets.forEach(function(rowEl, i) { var t = setTimeout(function() { rowEl.classList.remove("trans-anim"); rowEl.classList.add("trans-anim-out"); rowEl.classList.remove("anim-in"); rowEl.classList.add(hideCls); }, (rowTargets.length - 1 - i) * 60); animTimers.push(t); });
     var t = setTimeout(function() { header.classList.remove("trans-anim"); header.classList.add("trans-anim-out"); header.classList.remove("anim-in"); header.classList.add(hideCls); }, rowTargets.length * 60 + 80); animTimers.push(t);
+    var hideT = setTimeout(function() {
+      document.querySelector(".ticker-header").style.display = "none";
+      rowEls.forEach(function(w) { w.style.display = "none"; });
+    }, rowTargets.length * 60 + 80 + 500);
+    animTimers.push(hideT);
   }
 }
 
