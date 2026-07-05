@@ -81,10 +81,6 @@ html, body {
 
 .ticker-box {
   width: var(--box-width);
-  transition: width var(--pts-duration) var(--pts-easing);
-}
-.ticker-box.pts-hidden {
-  width: calc(var(--box-width) - var(--col-pts));
 }
 
 .ticker-header {
@@ -154,16 +150,19 @@ html, body {
 .ticker-header .col-elims {
   width: var(--col-small);
   flex-shrink: 0;
+  transition: width var(--pts-duration) var(--pts-easing);
 }
 .ticker-row .col-alive,
 .ticker-header .col-alive {
   width: var(--col-large);
   flex-shrink: 0;
+  transition: width var(--pts-duration) var(--pts-easing);
 }
 .ticker-row .col-team,
 .ticker-header .col-team {
   width: var(--col-team);
   flex-shrink: 0;
+  transition: width var(--pts-duration) var(--pts-easing);
 }
 
 .col-pts {
@@ -173,15 +172,12 @@ html, body {
   white-space: nowrap;
   opacity: 1;
   transition:
-    width     var(--pts-duration) var(--pts-easing),
-    opacity   calc(var(--pts-duration) * 0.6) var(--pts-easing),
-    padding   var(--pts-duration) var(--pts-easing);
+    width   var(--pts-duration) var(--pts-easing),
+    opacity calc(var(--pts-duration) * 0.6) var(--pts-easing);
 }
 .pts-hidden .col-pts {
   width: 0 !important;
   opacity: 0 !important;
-  padding: 0 !important;
-  border: none !important;
 }
 
 .col-end {
@@ -190,8 +186,20 @@ html, body {
   overflow: hidden;
   transition: width var(--pts-duration) var(--pts-easing);
 }
+
+/* Distribute PTS freed space equally among remaining columns */
+.pts-hidden .col-rank,
+.pts-hidden .col-elims {
+  width: calc(var(--col-small) + var(--col-pts) / 5);
+}
+.pts-hidden .col-team {
+  width: calc(var(--col-team) + var(--col-pts) / 5);
+}
+.pts-hidden .col-alive {
+  width: calc(var(--col-large) + var(--col-pts) / 5);
+}
 .pts-hidden .col-end {
-  width: var(--col-small);
+  width: calc(0px + var(--col-pts) / 5);
 }
 
 .ticker-row .col-rank    { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; margin-left: var(--gap-left); color: var(--col-rank-row); }
