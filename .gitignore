@@ -7,3 +7,5 @@ main.py
 robot.ico
 version.txt
 *.spec
+__pycache__
+
