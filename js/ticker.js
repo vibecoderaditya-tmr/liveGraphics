@@ -272,7 +272,7 @@ function renderTicker() {
   }
 }
 
-db.ref("/matches/0_teams").on("value", snap => {
+db.ref("/matches/2_teams").on("value", snap => {
   teamsData = snap.val() || {};
   renderTicker();
 });

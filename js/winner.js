@@ -235,7 +235,7 @@ db.ref('/matches').on('value', function(snap) {
 });
 
 var storedCrWidth = 0;
-db.ref('/matches/championRushPoint').on('value', function(snap) {
+db.ref('/matches/0_championRushPoints').on('value', function(snap) {
   var show = (parseInt(snap.val()) || 0) > 0;
   crEl.style.display = show ? 'inline-block' : 'none';
   if (show) {
