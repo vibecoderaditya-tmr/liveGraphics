@@ -155,6 +155,14 @@ db.ref("/live-graphics/theme/eliminated-bmps").on("value", function(snap) {
   if (_h(t.elimTxt))    root.style.setProperty("--elim-txt", t.elimTxt);
 });
 
+db.ref("/live-graphics/theme/ticker").on("value", function(snap) {
+  var t = snap.val();
+  if (!t) return;
+  var root = document.documentElement;
+  function _h(v){ return typeof v === 'string' && v[0] === '#'; }
+  if (_h(t.curtainColor)) root.style.setProperty("--curtain-color", t.curtainColor);
+});
+
 db.ref("/live-graphics/teamEliminatedCommand").on("value", snap => {
   const cmd = snap.val();
   if (!cmd) return;

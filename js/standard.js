@@ -563,20 +563,15 @@ db.ref("/live-graphics/theme/ticker").on("value", function(snap) {
   if (_h(t.barAlive))      root.style.setProperty("--bar-alive", t.barAlive);
   if (_h(t.barDead))       root.style.setProperty("--bar-dead", t.barDead);
   if (_h(t.rankHeader))    root.style.setProperty("--col-rank-header", t.rankHeader);
-  if (_h(t.rankRow))       root.style.setProperty("--col-rank-row", t.rankRow);
   if (_h(t.teamHeader))    root.style.setProperty("--col-team-header", t.teamHeader);
-  if (_h(t.teamRow))       root.style.setProperty("--col-team-row", t.teamRow);
   if (_h(t.aliveHeader))   root.style.setProperty("--col-alive-header", t.aliveHeader);
-  if (_h(t.aliveRow))      root.style.setProperty("--col-alive-row", t.aliveRow);
   if (_h(t.elimsHeader))   root.style.setProperty("--col-elims-header", t.elimsHeader);
-  if (_h(t.elimsRow))      root.style.setProperty("--col-elims-row", t.elimsRow);
   if (_h(t.ptsHeader))     root.style.setProperty("--col-pts-header", t.ptsHeader);
-  if (_h(t.ptsRow))        root.style.setProperty("--col-pts-row", t.ptsRow);
-  if (_h(t.rankBg))        root.style.setProperty("--col-rank-bg", t.rankBg);
-  if (_h(t.teamBg))        root.style.setProperty("--col-team-bg", t.teamBg);
-  if (_h(t.aliveBg))       root.style.setProperty("--col-alive-bg", t.aliveBg);
-  if (_h(t.elimsBg))       root.style.setProperty("--col-elims-bg", t.elimsBg);
-  if (_h(t.ptsBg))         root.style.setProperty("--col-pts-bg", t.ptsBg);
+  if (_h(t.rankTeamRow))   { root.style.setProperty("--col-rank-row", t.rankTeamRow); root.style.setProperty("--col-team-row", t.rankTeamRow); }
+  if (_h(t.aliveRow))      root.style.setProperty("--col-alive-row", t.aliveRow);
+  if (_h(t.rightRow))      { root.style.setProperty("--col-elims-row", t.rightRow); root.style.setProperty("--col-pts-row", t.rightRow); }
+  if (_h(t.rankTeamBg))    { root.style.setProperty("--col-rank-bg", t.rankTeamBg); root.style.setProperty("--col-team-bg", t.rankTeamBg); }
+  if (_h(t.rightBg))       { root.style.setProperty("--col-alive-bg", t.rightBg); root.style.setProperty("--col-elims-bg", t.rightBg); root.style.setProperty("--col-pts-bg", t.rightBg); }
   if (_h(t.endBg))         root.style.setProperty("--col-end-bg", t.endBg);
   if (_h(t.curtainColor))  root.style.setProperty("--curtain-color", t.curtainColor);
   if (_h(t.topFragColor)) { root.style.setProperty("--top-frag-color", t.topFragColor); console.log("[theme-ticker] applied --top-frag-color =", t.topFragColor, "computed:", getComputedStyle(root).getPropertyValue("--top-frag-color")); } else { console.log("[theme-ticker] t.topFragColor is missing/falsy:", t.topFragColor); }
