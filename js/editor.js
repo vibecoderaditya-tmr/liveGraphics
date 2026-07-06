@@ -96,40 +96,32 @@ var TABS = [
       }
     ]
   },
-  {
-    id: 'ticker',
-    label: 'Ticker',
-    path: '/live-graphics/editor/ticker',
-    groups: [
-      {
-        label: 'Columns',
-        fields: [
-          { key: 'col-small', label: 'Col Small', desc: 'Small column width (alive, elims)', default: 50 },
-          { key: 'col-large', label: 'Col Large', desc: 'Large column width (end spacer)', default: 70 },
-          { key: 'col-team', label: 'Col Team', desc: 'Team name column width', default: 120 },
-          { key: 'logo-size', label: 'Logo Size', desc: 'Team logo size', default: 36 },
-          { key: 'row-height', label: 'Row Height', desc: 'Each team row height', default: 40 }
-        ]
-      },
-      {
-        label: 'Spacing',
-        fields: [
-          { key: 'bar-width', label: 'Bar Width', desc: 'Alive player bar width', default: 6 },
-          { key: 'bar-height', label: 'Bar Height', desc: 'Alive player bar height', default: 25 },
-          { key: 'bar-gap', label: 'Bar Gap', desc: 'Gap between alive bars', default: 3 },
-          { key: 'team-pad', label: 'Team Pad', desc: 'Team column padding', default: 0 },
-          { key: 'header-team-pad', label: 'Header Team Pad', desc: 'Header team column padding', default: 38 },
-          { key: 'header-gap', label: 'Header Gap', desc: 'Header row gap', default: 5 },
-          { key: 'row-gap', label: 'Row Gap', desc: 'Gap between team rows', default: 5 },
-          { key: 'gap-left', label: 'Gap Left', desc: 'Left side box gap', default: 4 },
-          { key: 'gap-right', label: 'Gap Right', desc: 'Right side box gap', default: 16 },
-          { key: 'alive-shift', label: 'Alive Shift', desc: 'Shift alive column position', default: -10 },
-          { key: 'elims-shift', label: 'Elims Shift', desc: 'Shift eliminations column position', default: -14 },
-          { key: 'pts-shift', label: 'PTS Shift', desc: 'Shift points column position', default: 7 }
-        ]
-      }
-    ]
-  },
+    {
+      id: 'ticker',
+      label: 'Ticker',
+      path: '/live-graphics/editor/ticker',
+      groups: [
+        {
+          label: 'Layout',
+          fields: [
+            { key: 'logo-size', label: 'Logo Size', desc: 'Team logo size', default: 36 },
+            { key: 'row-height', label: 'Row Height', desc: 'Each team row height', default: 40 }
+          ]
+        },
+        {
+          label: 'Spacing',
+          fields: [
+            { key: 'bar-width', label: 'Bar Width', desc: 'Alive player bar width', default: 6 },
+            { key: 'bar-height', label: 'Bar Height', desc: 'Alive player bar height', default: 25 },
+            { key: 'bar-gap', label: 'Bar Gap', desc: 'Gap between alive bars', default: 3 },
+            { key: 'team-pad', label: 'Team Pad', desc: 'Team column padding', default: 0 },
+            { key: 'header-team-pad', label: 'Header Team Pad', desc: 'Header team column padding', default: 38 },
+            { key: 'header-gap', label: 'Header Gap', desc: 'Header row gap', default: 5 },
+            { key: 'row-gap', label: 'Row Gap', desc: 'Gap between team rows', default: 5 }
+          ]
+        }
+      ]
+    },
   {
     id: 'teamEliminated',
     label: 'Team Eliminated',

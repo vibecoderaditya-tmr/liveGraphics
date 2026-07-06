@@ -18,9 +18,6 @@
 .row-wrap.top-frag-wrap .ticker-row .col-elims,
 .row-wrap.top-frag-wrap .ticker-row .col-pts,
 .row-wrap.top-frag-wrap .ticker-row .col-end { background: var(--top-frag-color); }
-.row-wrap.top-frag-wrap .ticker-row .col-alive { box-shadow: calc(var(--gap-right) + var(--elims-shift) + 1px) 0 0 0 var(--top-frag-color); }
-.row-wrap.top-frag-wrap .ticker-row .col-elims { box-shadow: calc(var(--pts-shift) + 1px) 0 0 0 var(--top-frag-color); }
-.row-wrap.top-frag-wrap .ticker-row .col-pts { box-shadow: calc(0px - var(--elims-shift) - var(--pts-shift) + 1px) 0 0 0 var(--top-frag-color); }
 
 .anim-hide-left   { transform: translateX(-100%); opacity: 0; }
 .anim-hide-right  { transform: translateX(100%); opacity: 0; }

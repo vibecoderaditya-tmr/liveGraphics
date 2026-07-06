@@ -1,10 +1,15 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --col-small: 50px;
-  --col-large: 70px;
-  --col-team: 120px;
-  --alive-shift: -10px;
+  --box-width: 400px;
+
+  --col-rank:  16;
+  --col-team:  34;
+  --col-alive: 20;
+  --col-elims: 14;
+  --col-pts:   16;
+  --col-end:   0;
+  /* total = 100 */
 
   --header-bg: #26b2f2;
   --header-text: #000000;
@@ -27,14 +32,8 @@
   --row-height: 40px;
   --bar-left: 19px;
 
-  --col-pts: var(--col-small);
   --pts-duration: 0.45s;
   --pts-easing: cubic-bezier(0.4, 0, 0.2, 1);
-
-  --gap-left: 4px;
-  --gap-right: 16px;
-  --elims-shift: -14px;
-  --pts-shift: 7px;
 
   --curtain-strip-count: 150;
   --curtain-strip-width: 3px;
@@ -58,17 +57,6 @@
   --col-elims-bg: #00499b;
   --col-pts-bg: #00499b;
   --col-end-bg: #00499b;
-
-  --box-width: calc(
-    var(--gap-left) +
-    var(--gap-right) +
-    var(--col-small) +
-    var(--col-team) +
-    var(--col-small) +
-    var(--col-small) +
-    var(--alive-shift) +
-    var(--col-large)
-  );
 
   --canvas-width: 1920px;
   --canvas-height: 1080px;
@@ -139,70 +127,34 @@ html, body {
   overflow: hidden;
 }
 
-.ticker-row .col-rank,
-.ticker-row .col-elims,
-.ticker-header .col-rank,
-.ticker-header .col-elims {
-  width: var(--col-small);
-  flex-shrink: 0;
-  transition: width var(--pts-duration) var(--pts-easing);
-}
-.ticker-row .col-alive,
-.ticker-header .col-alive {
-  width: var(--col-large);
-  flex-shrink: 0;
-  transition: width var(--pts-duration) var(--pts-easing);
-}
-.ticker-row .col-team,
-.ticker-header .col-team {
-  width: var(--col-team);
-  flex-shrink: 0;
-  transition: width var(--pts-duration) var(--pts-easing);
-}
+.col-rank  { width: calc(var(--box-width) * var(--col-rank) / 100); flex-shrink: 0; transition: width var(--pts-duration) var(--pts-easing); }
+.col-team  { width: calc(var(--box-width) * var(--col-team) / 100); flex-shrink: 0; transition: width var(--pts-duration) var(--pts-easing); }
+.col-alive { width: calc(var(--box-width) * var(--col-alive) / 100); flex-shrink: 0; transition: width var(--pts-duration) var(--pts-easing); }
+.col-elims { width: calc(var(--box-width) * var(--col-elims) / 100); flex-shrink: 0; transition: width var(--pts-duration) var(--pts-easing); }
+.col-pts   { width: calc(var(--box-width) * var(--col-pts) / 100); flex-shrink: 0; overflow: hidden; white-space: nowrap; opacity: 1; transition: width var(--pts-duration) var(--pts-easing), opacity calc(var(--pts-duration) * 0.6) var(--pts-easing); }
+.col-end   { width: calc(var(--box-width) * var(--col-end) / 100); flex-shrink: 0; overflow: hidden; transition: width var(--pts-duration) var(--pts-easing); }
 
-.col-pts {
-  width: var(--col-pts);
-  flex-shrink: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  opacity: 1;
-  transition:
-    width   var(--pts-duration) var(--pts-easing),
-    opacity calc(var(--pts-duration) * 0.6) var(--pts-easing);
-}
 .pts-hidden .col-pts {
   width: 0 !important;
   opacity: 0 !important;
 }
 
-.col-end {
-  width: 0;
-  flex-shrink: 0;
-  overflow: hidden;
-  transition: width var(--pts-duration) var(--pts-easing);
-}
-
 /* Distribute PTS freed space equally among remaining columns */
-.pts-hidden .col-rank,
-.pts-hidden .col-elims {
-  width: calc(var(--col-small) + var(--col-pts) / 5);
-}
-.pts-hidden .col-team {
-  width: calc(var(--col-team) + var(--col-pts) / 5);
-}
-.pts-hidden .col-alive {
-  width: calc(var(--col-large) + var(--col-pts) / 5);
-}
-.pts-hidden .col-end {
-  width: calc(0px + var(--col-pts) / 5);
-}
+.pts-hidden .col-rank  { width: calc(var(--box-width) * (var(--col-rank) + var(--col-pts) / 5) / 100); }
+.pts-hidden .col-team  { width: calc(var(--box-width) * (var(--col-team) + var(--col-pts) / 5) / 100); }
+.pts-hidden .col-alive { width: calc(var(--box-width) * (var(--col-alive) + var(--col-pts) / 5) / 100); }
+.pts-hidden .col-elims { width: calc(var(--box-width) * (var(--col-elims) + var(--col-pts) / 5) / 100); }
+.pts-hidden .col-end   { width: calc(var(--box-width) * (var(--col-end) + var(--col-pts) / 5) / 100); }
 
-.ticker-row .col-rank    { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; margin-left: var(--gap-left); color: var(--col-rank-row); background: var(--col-rank-bg); }
+.ticker-row .col-rank    { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; color: var(--col-rank-row); background: var(--col-rank-bg); }
 .ticker-row .col-team    { text-align: left;   display: flex; align-items: center; gap: 10px; padding-left: var(--team-pad); color: var(--col-team-row); background: var(--col-team-bg); }
-.ticker-row .col-elims   { display: flex; align-items: center; justify-content: center; text-align: center; margin-left: var(--elims-shift); color: var(--col-elims-row); background: var(--col-elims-bg); }
-.ticker-row .col-pts     { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; margin-left: var(--pts-shift); color: var(--col-pts-row); background: var(--col-pts-bg); }
-.ticker-row .col-alive   { position: relative; text-align: center; display: flex; align-items: center; justify-content: center; gap: var(--bar-gap); margin-left: var(--alive-shift); margin-right: var(--gap-right); color: var(--col-alive-row); background: var(--col-alive-bg); }
+.ticker-row .col-elims   { display: flex; align-items: center; justify-content: center; text-align: center; color: var(--col-elims-row); background: var(--col-elims-bg); }
+.ticker-row .col-pts     { display: flex; align-items: center; justify-content: center; text-align: center; font-weight: 700; color: var(--col-pts-row); background: var(--col-pts-bg); }
+.ticker-row .col-alive   { position: relative; text-align: center; display: flex; align-items: center; justify-content: center; gap: var(--bar-gap); color: var(--col-alive-row); background: var(--col-alive-bg); }
 .ticker-row .col-end     { background: var(--col-end-bg); }
+.col-alive.struck {
+  position: relative;
+}
 .col-alive.struck::after {
   content: '';
   position: absolute;
@@ -215,11 +167,11 @@ html, body {
   z-index: 1;
   pointer-events: none;
 }
-.ticker-header .col-rank  { display: flex; align-items: center; justify-content: center; text-align: center; margin-left: var(--gap-left); color: var(--col-rank-header); }
+.ticker-header .col-rank  { display: flex; align-items: center; justify-content: center; text-align: center; color: var(--col-rank-header); }
 .ticker-header .col-team  { text-align: left; padding-left: var(--header-team-pad); display: flex; align-items: center; color: var(--col-team-header); }
-.ticker-header .col-elims { display: flex; align-items: center; justify-content: center; text-align: center; margin-left: var(--elims-shift); color: var(--col-elims-header); }
-.ticker-header .col-pts   { display: flex; align-items: center; justify-content: center; text-align: center; margin-left: var(--pts-shift); color: var(--col-pts-header); }
-.ticker-header .col-alive { text-align: center; display: flex; align-items: center; justify-content: center; margin-left: var(--alive-shift); margin-right: var(--gap-right); color: var(--col-alive-header); }
+.ticker-header .col-elims { display: flex; align-items: center; justify-content: center; text-align: center; color: var(--col-elims-header); }
+.ticker-header .col-pts   { display: flex; align-items: center; justify-content: center; text-align: center; color: var(--col-pts-header); }
+.ticker-header .col-alive { text-align: center; display: flex; align-items: center; justify-content: center; color: var(--col-alive-header); }
 
 .logo-wrap {
   width: var(--row-height);
