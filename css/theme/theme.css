@@ -59,6 +59,41 @@
 
 .ctrl-divider { height: 1px; background: var(--border); margin: 12px 0; }
 
+.tab-bar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0;
+  overflow-x: auto;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
+.tab-btn {
+  padding: 10px 20px;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+}
+.tab-btn:hover { color: var(--text-mid); }
+.tab-btn.active {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
 @media (max-width: 800px) { .theme-page-body .theme-fields { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 719px) { .theme-fields { grid-template-columns: 1fr; } }
 @media (max-width: 500px) { .theme-page-body .theme-fields { grid-template-columns: 1fr; } }

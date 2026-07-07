@@ -177,3 +177,20 @@ function pickColor(btn) {
   });
 }
 window.pickColor = pickColor;
+
+(function initTabs() {
+  var bar = document.getElementById('tabBar');
+  if (!bar) return;
+  var btns = bar.querySelectorAll('.tab-btn');
+  for (var i = 0; i < btns.length; i++) {
+    (function(btn) {
+      btn.addEventListener('click', function() {
+        var tab = btn.dataset.tab;
+        for (var j = 0; j < btns.length; j++) btns[j].classList.remove('active');
+        btn.classList.add('active');
+        var panes = document.querySelectorAll('#tabBody .tab-pane');
+        for (var j = 0; j < panes.length; j++) panes[j].classList.toggle('active', panes[j].dataset.tab === tab);
+      });
+    })(btns[i]);
+  }
+})();

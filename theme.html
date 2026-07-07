@@ -26,887 +26,899 @@
 
   <div class="theme-page-body">
 
-    <div class="theme-group">
-      <div class="theme-group-label">Ticker</div>
-      <div class="theme-fields" id="theme-fields-ticker">
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Header BG</span>
-            <span class="theme-field-desc">header background</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-headerBg" value="#26b2f2" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-headerBg" value="#26B2F2" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-headerBg',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Header Text</span>
-            <span class="theme-field-desc">header text color</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-headerText" value="#000000" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-headerText" value="#000000" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-headerText',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Header Border</span>
-            <span class="theme-field-desc">header border</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-headerBorder" value="#26b2f2" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-headerBorder" value="#26B2F2" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-headerBorder',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Logo BG</span>
-            <span class="theme-field-desc">team logo circle background</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-logoBg" value="#00499b" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-logoBg" value="#00499B" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-logoBg',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Row BG</span>
-            <span class="theme-field-desc">team row background</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-rowBg" value="#00499b" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-rowBg" value="#00499B" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-rowBg',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Row Text</span>
-            <span class="theme-field-desc">team text color</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-rowText" value="#ffffff" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-rowText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-rowText',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Row Border</span>
-            <span class="theme-field-desc">row separator</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-rowBorder" value="#00499b" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-rowBorder" value="#00499B" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-rowBorder',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field-sep">Column Backgrounds</div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Left BG</span>
-            <span class="theme-field-desc">rank + team column background</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-rankTeamBg" value="#00499b" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-rankTeamBg" value="#00499B" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-rankTeamBg',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Right BG</span>
-            <span class="theme-field-desc">elims + alive + pts column background</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-rightBg" value="#00499b" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-rightBg" value="#00499B" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-rightBg',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">End BG</span>
-            <span class="theme-field-desc">end spacer background</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-endBg" value="#00499b" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-endBg" value="#00499B" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-endBg',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field-sep">Column Header Text</div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Rank Header</span>
-            <span class="theme-field-desc">RANK header text</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-rankHeader" value="#000000" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-rankHeader" value="#000000" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-rankHeader',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Team Header</span>
-            <span class="theme-field-desc">TEAM header text</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-teamHeader" value="#000000" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-teamHeader" value="#000000" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-teamHeader',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Alive Header</span>
-            <span class="theme-field-desc">ALIVE header text</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-aliveHeader" value="#000000" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-aliveHeader" value="#000000" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-aliveHeader',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Elims Header</span>
-            <span class="theme-field-desc">ELIMS header text</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-elimsHeader" value="#000000" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-elimsHeader" value="#000000" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-elimsHeader',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">PTS Header</span>
-            <span class="theme-field-desc">PTS header text</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-ptsHeader" value="#ffffff" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-ptsHeader" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-ptsHeader',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field-sep">Column Row Text</div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Left Row</span>
-            <span class="theme-field-desc">rank + team row text</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-rankTeamRow" value="#ffffff" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-rankTeamRow" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-rankTeamRow',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Right Row</span>
-            <span class="theme-field-desc">elims + pts row text</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-rightRow" value="#ffffff" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-rightRow" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-rightRow',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Alive Row</span>
-            <span class="theme-field-desc">alive row text</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-aliveRow" value="#ffffff" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-aliveRow" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-aliveRow',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Bar Alive</span>
-            <span class="theme-field-desc">alive player bar</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-barAlive" value="#26b2f2" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-barAlive" value="#26B2F2" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-barAlive',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Bar Dead</span>
-            <span class="theme-field-desc">eliminated bar</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-barDead" value="#000000" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-barDead" value="#000000" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-barDead',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Curtain Color</span>
-            <span class="theme-field-desc">curtain animation strips</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-curtainColor" value="#26b2f2" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-curtainColor" value="#26B2F2" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-curtainColor',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Top Frag Color</span>
-            <span class="theme-field-desc">top fragger highlight</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="tkr-topFragColor" value="#d4af37" oninput="onColorPick(this,'tkr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-tkr-topFragColor" value="#D4AF37" maxlength="7" oninput="onHexType(this,'tkr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-tkr-topFragColor',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-      </div>
+    <div class="tab-bar" id="tabBar">
+      <button class="tab-btn active" data-tab="ticker">Ticker</button>
+      <button class="tab-btn" data-tab="eliminated">Eliminated</button>
+      <button class="tab-btn" data-tab="eliminated-bmps">Eliminated · BMPS</button>
+      <button class="tab-btn" data-tab="winrate">Win Rate</button>
+      <button class="tab-btn" data-tab="winner">Winner</button>
     </div>
 
-    <div class="ctrl-divider"></div>
+    <div id="tabBody">
 
-    <div class="theme-group">
-      <div class="theme-group-label">Eliminated</div>
-      <div class="theme-fields">
+      <div class="tab-pane active" data-tab="ticker">
+        <div class="theme-group">
+          <div class="theme-group-label">Ticker</div>
+          <div class="theme-fields" id="theme-fields-ticker">
 
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">BG Left</span>
-            <span class="theme-field-desc">left panel bg</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="elm-bgLeft" value="#48321e" oninput="onColorPick(this,'elm')">
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Header BG</span>
+                <span class="theme-field-desc">header background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-headerBg" value="#26b2f2" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-headerBg" value="#26B2F2" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-headerBg',this)" title="Copy">COPY COLOR</button>
+              </div>
             </div>
-            <input class="hex-text" type="text" id="hex-elm-bgLeft" value="#48321E" maxlength="7" oninput="onHexType(this,'elm')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-elm-bgLeft',this)" title="Copy">COPY COLOR</button>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Header Text</span>
+                <span class="theme-field-desc">header text color</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-headerText" value="#000000" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-headerText" value="#000000" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-headerText',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Header Border</span>
+                <span class="theme-field-desc">header border</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-headerBorder" value="#26b2f2" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-headerBorder" value="#26B2F2" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-headerBorder',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Logo BG</span>
+                <span class="theme-field-desc">team logo circle background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-logoBg" value="#00499b" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-logoBg" value="#00499B" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-logoBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Row BG</span>
+                <span class="theme-field-desc">team row background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-rowBg" value="#00499b" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-rowBg" value="#00499B" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-rowBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Row Text</span>
+                <span class="theme-field-desc">team text color</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-rowText" value="#ffffff" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-rowText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-rowText',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Row Border</span>
+                <span class="theme-field-desc">row separator</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-rowBorder" value="#00499b" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-rowBorder" value="#00499B" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-rowBorder',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field-sep">Column Backgrounds</div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Left BG</span>
+                <span class="theme-field-desc">rank + team column background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-rankTeamBg" value="#00499b" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-rankTeamBg" value="#00499B" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-rankTeamBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Right BG</span>
+                <span class="theme-field-desc">elims + alive + pts column background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-rightBg" value="#00499b" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-rightBg" value="#00499B" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-rightBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">End BG</span>
+                <span class="theme-field-desc">end spacer background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-endBg" value="#00499b" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-endBg" value="#00499B" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-endBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field-sep">Column Header Text</div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Rank Header</span>
+                <span class="theme-field-desc">RANK header text</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-rankHeader" value="#000000" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-rankHeader" value="#000000" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-rankHeader',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Team Header</span>
+                <span class="theme-field-desc">TEAM header text</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-teamHeader" value="#000000" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-teamHeader" value="#000000" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-teamHeader',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Alive Header</span>
+                <span class="theme-field-desc">ALIVE header text</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-aliveHeader" value="#000000" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-aliveHeader" value="#000000" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-aliveHeader',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Elims Header</span>
+                <span class="theme-field-desc">ELIMS header text</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-elimsHeader" value="#000000" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-elimsHeader" value="#000000" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-elimsHeader',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">PTS Header</span>
+                <span class="theme-field-desc">PTS header text</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-ptsHeader" value="#ffffff" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-ptsHeader" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-ptsHeader',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field-sep">Column Row Text</div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Left Row</span>
+                <span class="theme-field-desc">rank + team row text</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-rankTeamRow" value="#ffffff" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-rankTeamRow" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-rankTeamRow',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Right Row</span>
+                <span class="theme-field-desc">elims + pts row text</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-rightRow" value="#ffffff" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-rightRow" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-rightRow',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Alive Row</span>
+                <span class="theme-field-desc">alive row text</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-aliveRow" value="#ffffff" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-aliveRow" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-aliveRow',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Bar Alive</span>
+                <span class="theme-field-desc">alive player bar</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-barAlive" value="#26b2f2" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-barAlive" value="#26B2F2" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-barAlive',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Bar Dead</span>
+                <span class="theme-field-desc">eliminated bar</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-barDead" value="#000000" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-barDead" value="#000000" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-barDead',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Curtain Color</span>
+                <span class="theme-field-desc">curtain animation strips</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-curtainColor" value="#26b2f2" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-curtainColor" value="#26B2F2" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-curtainColor',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Top Frag Color</span>
+                <span class="theme-field-desc">top fragger highlight</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="tkr-topFragColor" value="#d4af37" oninput="onColorPick(this,'tkr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-tkr-topFragColor" value="#D4AF37" maxlength="7" oninput="onHexType(this,'tkr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-tkr-topFragColor',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
           </div>
         </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">BG Right</span>
-            <span class="theme-field-desc">right panel bg</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="elm-bgRight" value="#c1a882" oninput="onColorPick(this,'elm')">
-            </div>
-            <input class="hex-text" type="text" id="hex-elm-bgRight" value="#C1A882" maxlength="7" oninput="onHexType(this,'elm')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-elm-bgRight',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Hash Text</span>
-            <span class="theme-field-desc">hash number color</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="elm-leftHash" value="#ffffff" oninput="onColorPick(this,'elm')">
-            </div>
-            <input class="hex-text" type="text" id="hex-elm-leftHash" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'elm')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-elm-leftHash',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Team Name</span>
-            <span class="theme-field-desc">team name text</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="elm-rightTeam" value="#000000" oninput="onColorPick(this,'elm')">
-            </div>
-            <input class="hex-text" type="text" id="hex-elm-rightTeam" value="#000000" maxlength="7" oninput="onHexType(this,'elm')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-elm-rightTeam',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Elim Text</span>
-            <span class="theme-field-desc">elimination count</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="elm-rightElim" value="#000000" oninput="onColorPick(this,'elm')">
-            </div>
-            <input class="hex-text" type="text" id="hex-elm-rightElim" value="#000000" maxlength="7" oninput="onHexType(this,'elm')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-elm-rightElim',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
       </div>
-    </div>
 
-    <div class="ctrl-divider"></div>
+      <div class="tab-pane" data-tab="eliminated">
+        <div class="theme-group">
+          <div class="theme-group-label">Eliminated</div>
+          <div class="theme-fields">
 
-    <div class="theme-group">
-      <div class="theme-group-label">Eliminated · BMPS</div>
-      <div class="theme-fields">
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Logo BG</span>
-            <span class="theme-field-desc">box background</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="elmBmps-logoBg" value="#800080" oninput="onColorPick(this,'elmBmps')">
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">BG Left</span>
+                <span class="theme-field-desc">left panel bg</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="elm-bgLeft" value="#48321e" oninput="onColorPick(this,'elm')">
+                </div>
+                <input class="hex-text" type="text" id="hex-elm-bgLeft" value="#48321E" maxlength="7" oninput="onHexType(this,'elm')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-elm-bgLeft',this)" title="Copy">COPY COLOR</button>
+              </div>
             </div>
-            <input class="hex-text" type="text" id="hex-elmBmps-logoBg" value="#800080" maxlength="7" oninput="onHexType(this,'elmBmps')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-elmBmps-logoBg',this)" title="Copy">COPY COLOR</button>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">BG Right</span>
+                <span class="theme-field-desc">right panel bg</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="elm-bgRight" value="#c1a882" oninput="onColorPick(this,'elm')">
+                </div>
+                <input class="hex-text" type="text" id="hex-elm-bgRight" value="#C1A882" maxlength="7" oninput="onHexType(this,'elm')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-elm-bgRight',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Hash Text</span>
+                <span class="theme-field-desc">hash number color</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="elm-leftHash" value="#ffffff" oninput="onColorPick(this,'elm')">
+                </div>
+                <input class="hex-text" type="text" id="hex-elm-leftHash" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'elm')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-elm-leftHash',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Team Name</span>
+                <span class="theme-field-desc">team name text</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="elm-rightTeam" value="#000000" oninput="onColorPick(this,'elm')">
+                </div>
+                <input class="hex-text" type="text" id="hex-elm-rightTeam" value="#000000" maxlength="7" oninput="onHexType(this,'elm')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-elm-rightTeam',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Elim Text</span>
+                <span class="theme-field-desc">elimination count</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="elm-rightElim" value="#000000" oninput="onColorPick(this,'elm')">
+                </div>
+                <input class="hex-text" type="text" id="hex-elm-rightElim" value="#000000" maxlength="7" oninput="onHexType(this,'elm')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-elm-rightElim',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
           </div>
         </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Elims BG</span>
-            <span class="theme-field-desc">upper rect background</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="elmBmps-elimsBg" value="#ffffff" oninput="onColorPick(this,'elmBmps')">
-            </div>
-            <input class="hex-text" type="text" id="hex-elmBmps-elimsBg" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'elmBmps')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-elmBmps-elimsBg',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Elim BG</span>
-            <span class="theme-field-desc">lower rect background</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="elmBmps-elimTxtBg" value="#ff0000" oninput="onColorPick(this,'elmBmps')">
-            </div>
-            <input class="hex-text" type="text" id="hex-elmBmps-elimTxtBg" value="#FF0000" maxlength="7" oninput="onHexType(this,'elmBmps')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-elmBmps-elimTxtBg',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Hash TXT</span>
-            <span class="theme-field-desc">hash number</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="elmBmps-hashTxt" value="#ffffff" oninput="onColorPick(this,'elmBmps')">
-            </div>
-            <input class="hex-text" type="text" id="hex-elmBmps-hashTxt" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'elmBmps')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-elmBmps-hashTxt',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Elims Text</span>
-            <span class="theme-field-desc">elimination count text</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="elmBmps-elimsTxt" value="#ffffff" oninput="onColorPick(this,'elmBmps')">
-            </div>
-            <input class="hex-text" type="text" id="hex-elmBmps-elimsTxt" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'elmBmps')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-elmBmps-elimsTxt',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Elim Text</span>
-            <span class="theme-field-desc">eliminated text color</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="elmBmps-elimTxt" value="#000000" oninput="onColorPick(this,'elmBmps')">
-            </div>
-            <input class="hex-text" type="text" id="hex-elmBmps-elimTxt" value="#000000" maxlength="7" oninput="onHexType(this,'elmBmps')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-elmBmps-elimTxt',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
       </div>
-    </div>
 
-    <div class="ctrl-divider"></div>
+      <div class="tab-pane" data-tab="eliminated-bmps">
+        <div class="theme-group">
+          <div class="theme-group-label">Eliminated · BMPS</div>
+          <div class="theme-fields">
 
-    <div class="theme-group">
-      <div class="theme-group-label">Win Rate</div>
-      <div class="theme-fields">
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Box BG</span>
-            <span class="theme-field-desc">logo box background</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wr-boxBg" value="#800080" oninput="onColorPick(this,'wr')">
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Logo BG</span>
+                <span class="theme-field-desc">box background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="elmBmps-logoBg" value="#800080" oninput="onColorPick(this,'elmBmps')">
+                </div>
+                <input class="hex-text" type="text" id="hex-elmBmps-logoBg" value="#800080" maxlength="7" oninput="onHexType(this,'elmBmps')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-elmBmps-logoBg',this)" title="Copy">COPY COLOR</button>
+              </div>
             </div>
-            <input class="hex-text" type="text" id="hex-wr-boxBg" value="#800080" maxlength="7" oninput="onHexType(this,'wr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wr-boxBg',this)" title="Copy">COPY COLOR</button>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Elims BG</span>
+                <span class="theme-field-desc">upper rect background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="elmBmps-elimsBg" value="#ffffff" oninput="onColorPick(this,'elmBmps')">
+                </div>
+                <input class="hex-text" type="text" id="hex-elmBmps-elimsBg" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'elmBmps')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-elmBmps-elimsBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Elim BG</span>
+                <span class="theme-field-desc">lower rect background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="elmBmps-elimTxtBg" value="#ff0000" oninput="onColorPick(this,'elmBmps')">
+                </div>
+                <input class="hex-text" type="text" id="hex-elmBmps-elimTxtBg" value="#FF0000" maxlength="7" oninput="onHexType(this,'elmBmps')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-elmBmps-elimTxtBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Hash TXT</span>
+                <span class="theme-field-desc">hash number</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="elmBmps-hashTxt" value="#ffffff" oninput="onColorPick(this,'elmBmps')">
+                </div>
+                <input class="hex-text" type="text" id="hex-elmBmps-hashTxt" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'elmBmps')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-elmBmps-hashTxt',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Elims Text</span>
+                <span class="theme-field-desc">elimination count text</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="elmBmps-elimsTxt" value="#ffffff" oninput="onColorPick(this,'elmBmps')">
+                </div>
+                <input class="hex-text" type="text" id="hex-elmBmps-elimsTxt" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'elmBmps')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-elmBmps-elimsTxt',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Elim Text</span>
+                <span class="theme-field-desc">eliminated text color</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="elmBmps-elimTxt" value="#000000" oninput="onColorPick(this,'elmBmps')">
+                </div>
+                <input class="hex-text" type="text" id="hex-elmBmps-elimTxt" value="#000000" maxlength="7" oninput="onHexType(this,'elmBmps')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-elmBmps-elimTxt',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
           </div>
         </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Upper BG</span>
-            <span class="theme-field-desc">tag + bars background</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wr-upperBg" value="#26b2f2" oninput="onColorPick(this,'wr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-wr-upperBg" value="#26B2F2" maxlength="7" oninput="onHexType(this,'wr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wr-upperBg',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Upper Text</span>
-            <span class="theme-field-desc">tag label text</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wr-upperText" value="#ffffff" oninput="onColorPick(this,'wr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-wr-upperText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'wr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wr-upperText',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Lower BG</span>
-            <span class="theme-field-desc">win rate background</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wr-lowerBg" value="#ff0000" oninput="onColorPick(this,'wr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-wr-lowerBg" value="#FF0000" maxlength="7" oninput="onHexType(this,'wr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wr-lowerBg',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Lower Text</span>
-            <span class="theme-field-desc">win rate percentage text</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wr-lowerText" value="#ffffff" oninput="onColorPick(this,'wr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-wr-lowerText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'wr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wr-lowerText',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
       </div>
-    </div>
 
-    <div class="ctrl-divider"></div>
+      <div class="tab-pane" data-tab="winrate">
+        <div class="theme-group">
+          <div class="theme-group-label">Win Rate</div>
+          <div class="theme-fields">
 
-    <div class="theme-group">
-      <div class="theme-group-label">Winner</div>
-      <div class="theme-fields">
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Stats Text</span>
-            <span class="theme-field-desc">TEAM STATS sub-header</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wnr-statsText" value="#ffffff" oninput="onColorPick(this,'wnr')">
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Box BG</span>
+                <span class="theme-field-desc">logo box background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wr-boxBg" value="#800080" oninput="onColorPick(this,'wr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wr-boxBg" value="#800080" maxlength="7" oninput="onHexType(this,'wr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wr-boxBg',this)" title="Copy">COPY COLOR</button>
+              </div>
             </div>
-            <input class="hex-text" type="text" id="hex-wnr-statsText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'wnr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wnr-statsText',this)" title="Copy">COPY COLOR</button>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Upper BG</span>
+                <span class="theme-field-desc">tag + bars background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wr-upperBg" value="#26b2f2" oninput="onColorPick(this,'wr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wr-upperBg" value="#26B2F2" maxlength="7" oninput="onHexType(this,'wr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wr-upperBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Upper Text</span>
+                <span class="theme-field-desc">tag label text</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wr-upperText" value="#ffffff" oninput="onColorPick(this,'wr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wr-upperText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'wr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wr-upperText',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Lower BG</span>
+                <span class="theme-field-desc">win rate background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wr-lowerBg" value="#ff0000" oninput="onColorPick(this,'wr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wr-lowerBg" value="#FF0000" maxlength="7" oninput="onHexType(this,'wr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wr-lowerBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Lower Text</span>
+                <span class="theme-field-desc">win rate percentage text</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wr-lowerText" value="#ffffff" oninput="onColorPick(this,'wr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wr-lowerText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'wr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wr-lowerText',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
           </div>
         </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Name Bar BG</span>
-            <span class="theme-field-desc">player name bar background</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wnr-nameBarBg" value="#2a2a4e" oninput="onColorPick(this,'wnr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-wnr-nameBarBg" value="#2A2A4E" maxlength="7" oninput="onHexType(this,'wnr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wnr-nameBarBg',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Stats BG</span>
-            <span class="theme-field-desc">stats area background (ELIMINATIONS/KNOCKS/CONTRIBUTION)</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wnr-statsBg" value="#000000" oninput="onColorPick(this,'wnr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-wnr-statsBg" value="#000000" maxlength="7" oninput="onHexType(this,'wnr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wnr-statsBg',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Card Border</span>
-            <span class="theme-field-desc">card border color</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wnr-cardBorder" value="#2a2a4e" oninput="onColorPick(this,'wnr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-wnr-cardBorder" value="#2A2A4E" maxlength="7" oninput="onHexType(this,'wnr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wnr-cardBorder',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Logo Area BG</span>
-            <span class="theme-field-desc">player image area background</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wnr-cardBadge" value="#2a2a4e" oninput="onColorPick(this,'wnr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-wnr-cardBadge" value="#2A2A4E" maxlength="7" oninput="onHexType(this,'wnr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wnr-cardBadge',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Text</span>
-            <span class="theme-field-desc">stat values (kills, knocks)</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wnr-textColor" value="#ffffff" oninput="onColorPick(this,'wnr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-wnr-textColor" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'wnr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wnr-textColor',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Name Text</span>
-            <span class="theme-field-desc">player name bar text</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wnr-nameTextColor" value="#ffffff" oninput="onColorPick(this,'wnr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-wnr-nameTextColor" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'wnr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wnr-nameTextColor',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Label</span>
-            <span class="theme-field-desc">ELIMINATIONS/KNOCKS/CONTRI text</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wnr-labelColor" value="#888888" oninput="onColorPick(this,'wnr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-wnr-labelColor" value="#888888" maxlength="7" oninput="onHexType(this,'wnr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wnr-labelColor',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Contri Bar</span>
-            <span class="theme-field-desc">contribution bar fill</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wnr-contriBar" value="#e94560" oninput="onColorPick(this,'wnr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-wnr-contriBar" value="#E94560" maxlength="7" oninput="onHexType(this,'wnr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wnr-contriBar',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Contri Number</span>
-            <span class="theme-field-desc">contri percentage text</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wnr-contriNumber" value="#26b2f2" oninput="onColorPick(this,'wnr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-wnr-contriNumber" value="#26B2F2" maxlength="7" oninput="onHexType(this,'wnr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wnr-contriNumber',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">MVP BG</span>
-            <span class="theme-field-desc">MVP badge background</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wnr-mvpBg" value="#ffd700" oninput="onColorPick(this,'wnr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-wnr-mvpBg" value="#FFD700" maxlength="7" oninput="onHexType(this,'wnr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wnr-mvpBg',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">MVP Text</span>
-            <span class="theme-field-desc">MVP badge text color</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wnr-mvpText" value="#000000" oninput="onColorPick(this,'wnr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-wnr-mvpText" value="#000000" maxlength="7" oninput="onHexType(this,'wnr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wnr-mvpText',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
       </div>
-    </div>
 
-    <div class="ctrl-divider"></div>
+      <div class="tab-pane" data-tab="winner">
+        <div class="theme-group">
+          <div class="theme-group-label">Winner</div>
+          <div class="theme-fields">
 
-    <div class="theme-group">
-      <div class="theme-group-label">Sub-Header</div>
-      <div class="theme-fields">
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Stage Text</span>
-            <span class="theme-field-desc">tournament stage text color</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wnr-stageText" value="#ffffff" oninput="onColorPick(this,'wnr')">
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Stats Text</span>
+                <span class="theme-field-desc">TEAM STATS sub-header</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wnr-statsText" value="#ffffff" oninput="onColorPick(this,'wnr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wnr-statsText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'wnr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wnr-statsText',this)" title="Copy">COPY COLOR</button>
+              </div>
             </div>
-            <input class="hex-text" type="text" id="hex-wnr-stageText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'wnr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wnr-stageText',this)" title="Copy">COPY COLOR</button>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Name Bar BG</span>
+                <span class="theme-field-desc">player name bar background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wnr-nameBarBg" value="#2a2a4e" oninput="onColorPick(this,'wnr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wnr-nameBarBg" value="#2A2A4E" maxlength="7" oninput="onHexType(this,'wnr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wnr-nameBarBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Stats BG</span>
+                <span class="theme-field-desc">stats area background (ELIMINATIONS/KNOCKS/CONTRIBUTION)</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wnr-statsBg" value="#000000" oninput="onColorPick(this,'wnr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wnr-statsBg" value="#000000" maxlength="7" oninput="onHexType(this,'wnr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wnr-statsBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Card Border</span>
+                <span class="theme-field-desc">card border color</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wnr-cardBorder" value="#2a2a4e" oninput="onColorPick(this,'wnr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wnr-cardBorder" value="#2A2A4E" maxlength="7" oninput="onHexType(this,'wnr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wnr-cardBorder',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Logo Area BG</span>
+                <span class="theme-field-desc">player image area background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wnr-cardBadge" value="#2a2a4e" oninput="onColorPick(this,'wnr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wnr-cardBadge" value="#2A2A4E" maxlength="7" oninput="onHexType(this,'wnr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wnr-cardBadge',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Text</span>
+                <span class="theme-field-desc">stat values (kills, knocks)</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wnr-textColor" value="#ffffff" oninput="onColorPick(this,'wnr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wnr-textColor" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'wnr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wnr-textColor',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Name Text</span>
+                <span class="theme-field-desc">player name bar text</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wnr-nameTextColor" value="#ffffff" oninput="onColorPick(this,'wnr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wnr-nameTextColor" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'wnr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wnr-nameTextColor',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Label</span>
+                <span class="theme-field-desc">ELIMINATIONS/KNOCKS/CONTRI text</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wnr-labelColor" value="#888888" oninput="onColorPick(this,'wnr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wnr-labelColor" value="#888888" maxlength="7" oninput="onHexType(this,'wnr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wnr-labelColor',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Contri Bar</span>
+                <span class="theme-field-desc">contribution bar fill</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wnr-contriBar" value="#e94560" oninput="onColorPick(this,'wnr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wnr-contriBar" value="#E94560" maxlength="7" oninput="onHexType(this,'wnr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wnr-contriBar',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Contri Number</span>
+                <span class="theme-field-desc">contri percentage text</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wnr-contriNumber" value="#26b2f2" oninput="onColorPick(this,'wnr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wnr-contriNumber" value="#26B2F2" maxlength="7" oninput="onHexType(this,'wnr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wnr-contriNumber',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">MVP BG</span>
+                <span class="theme-field-desc">MVP badge background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wnr-mvpBg" value="#ffd700" oninput="onColorPick(this,'wnr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wnr-mvpBg" value="#FFD700" maxlength="7" oninput="onHexType(this,'wnr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wnr-mvpBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">MVP Text</span>
+                <span class="theme-field-desc">MVP badge text color</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wnr-mvpText" value="#000000" oninput="onColorPick(this,'wnr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wnr-mvpText" value="#000000" maxlength="7" oninput="onHexType(this,'wnr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wnr-mvpText',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
           </div>
         </div>
 
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">CR Badge BG</span>
-            <span class="theme-field-desc">CHAMPION RUSH badge background</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wnr-crBg" value="#e94560" oninput="onColorPick(this,'wnr')">
+        <div class="theme-group" style="margin-top:18px">
+          <div class="theme-group-label">Sub-Header</div>
+          <div class="theme-fields">
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Stage Text</span>
+                <span class="theme-field-desc">tournament stage text color</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wnr-stageText" value="#ffffff" oninput="onColorPick(this,'wnr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wnr-stageText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'wnr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wnr-stageText',this)" title="Copy">COPY COLOR</button>
+              </div>
             </div>
-            <input class="hex-text" type="text" id="hex-wnr-crBg" value="#E94560" maxlength="7" oninput="onHexType(this,'wnr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wnr-crBg',this)" title="Copy">COPY COLOR</button>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">CR Badge BG</span>
+                <span class="theme-field-desc">CHAMPION RUSH badge background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wnr-crBg" value="#e94560" oninput="onColorPick(this,'wnr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wnr-crBg" value="#E94560" maxlength="7" oninput="onHexType(this,'wnr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wnr-crBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">CR Badge Text</span>
+                <span class="theme-field-desc">CHAMPION RUSH badge text color</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wnr-crText" value="#ffffff" oninput="onColorPick(this,'wnr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wnr-crText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'wnr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wnr-crText',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Game Badge BG</span>
+                <span class="theme-field-desc">GAME X - MAP badge background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wnr-gameBg" value="#2a2a4e" oninput="onColorPick(this,'wnr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wnr-gameBg" value="#2A2A4E" maxlength="7" oninput="onHexType(this,'wnr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wnr-gameBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Game Badge Text</span>
+                <span class="theme-field-desc">GAME X - MAP badge text color</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="wnr-gameText" value="#ffffff" oninput="onColorPick(this,'wnr')">
+                </div>
+                <input class="hex-text" type="text" id="hex-wnr-gameText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'wnr')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-wnr-gameText',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
           </div>
         </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">CR Badge Text</span>
-            <span class="theme-field-desc">CHAMPION RUSH badge text color</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wnr-crText" value="#ffffff" oninput="onColorPick(this,'wnr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-wnr-crText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'wnr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wnr-crText',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Game Badge BG</span>
-            <span class="theme-field-desc">GAME X - MAP badge background</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wnr-gameBg" value="#2a2a4e" oninput="onColorPick(this,'wnr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-wnr-gameBg" value="#2A2A4E" maxlength="7" oninput="onHexType(this,'wnr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wnr-gameBg',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
-        <div class="theme-field">
-          <div class="theme-field-label">
-            <span class="theme-field-name">Game Badge Text</span>
-            <span class="theme-field-desc">GAME X - MAP badge text color</span>
-          </div>
-          <div class="color-pair">
-            <div class="color-swatch-wrap">
-              <input type="color" id="wnr-gameText" value="#ffffff" oninput="onColorPick(this,'wnr')">
-            </div>
-            <input class="hex-text" type="text" id="hex-wnr-gameText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'wnr')">
-            <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
-            <button class="hex-copy-btn" onclick="copyHex('hex-wnr-gameText',this)" title="Copy">COPY COLOR</button>
-          </div>
-        </div>
-
       </div>
+
     </div>
 
   </div>
