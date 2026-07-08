@@ -92,20 +92,20 @@ function showCard(tag, hash, name, kills) {
     hashEl.textContent = '#' + hash;
     teamNameEl.textContent = name;
     elimCountEl.textContent = kills + ' ELIMINATIONS';
-    logoImg.src = './img/logos/' + tag + '.webp';
+    logoImg.src = './img/logos/' + tag.toLowerCase() + '.webp';
     card.style.display = 'flex';
     void card.offsetWidth;
     card.classList.add('show');
   } else if (currentDesign === "bmps") {
     bmpsCard.style.visibility = 'hidden';
     bmpsHash.textContent = '#' + hash;
-    bmpsLogo.src = './img/logos/' + tag + '.webp';
+    bmpsLogo.src = './img/logos/' + tag.toLowerCase() + '.webp';
     bmpsElimsCount.textContent = kills;
     bmpsCurtainIn(bmpsCard);
   } else {
     standardCard.style.visibility = 'hidden';
     standardHash.textContent = '#' + hash;
-    standardLogo.src = './img/logos/' + tag + '.webp';
+    standardLogo.src = './img/logos/' + tag.toLowerCase() + '.webp';
     standardElimsCount.textContent = kills;
     standardCurtainIn(standardCard);
   }
