@@ -1,7 +1,7 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --box-width: 400px;
+  --box-width: 350px;
 
   --col-rank:  16;
   --col-team:  34;
@@ -34,6 +34,9 @@
 
   --pts-duration: 0.45s;
   --pts-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --crown-gap: 5px;
+  --crown-bg-size: 42px;
+  --crown-size: 32px;
 
   --curtain-strip-count: 150;
   --curtain-strip-width: 3px;
@@ -102,7 +105,7 @@ html, body {
 .ticker-rows {
   position: relative;
   height: calc(var(--row-height) * 12 + var(--row-gap) * 11);
-  overflow-x: hidden;
+  overflow-x: visible;
   overflow-y: visible;
 }
 
@@ -196,3 +199,28 @@ html, body {
 }
 .ticker-wrap.dir-left  { align-items: flex-start; }
 .ticker-wrap.dir-right { align-items: flex-end; }
+
+.crown-badge {
+  position: absolute;
+  width: var(--crown-bg-size);
+  height: var(--crown-bg-size);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+  pointer-events: none;
+  transition: top 0.6s ease-in-out;
+  right: calc(100% + var(--crown-gap));
+  background: var(--col-elims-bg);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+.crown-badge img {
+  display: block;
+  width: var(--crown-size);
+  height: var(--crown-size);
+  object-fit: contain;
+}
+.ticker-wrap.dir-left .crown-badge {
+  right: auto;
+  left: calc(100% + var(--crown-gap));
+}

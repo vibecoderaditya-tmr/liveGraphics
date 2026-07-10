@@ -32,6 +32,7 @@ function loadLogo(imgEl, tag) {
 
 const NUM_ROWS = 12;
 const rowsContainer = document.getElementById("ticker-rows");
+const tickerBox = document.querySelector(".ticker-box");
 
 function buildRows() {
   rowsContainer.innerHTML = "";
@@ -280,6 +281,32 @@ function renderTicker() {
     prevPts[e.tag] = e.pts;
     const bars = aliveEl.querySelectorAll(".alive-bar");
     bars.forEach((bar, bi) => bar.classList.toggle("active", bi < alive));
+  }
+
+  // Sync crown badges
+  var existing = rowsContainer.querySelectorAll('.crown-badge');
+  var activeCrownTags = [];
+  for (const wrap of rowEls) {
+    var tag = wrap.dataset.tag;
+    if (!tag) continue;
+    var cd = teamsData[tag];
+    if (cd && cd.isCrActivated == 1) {
+      activeCrownTags.push(tag);
+      var crown = rowsContainer.querySelector('.crown-badge[data-tag="' + tag + '"]');
+      if (!crown) {
+        crown = document.createElement('div');
+        crown.className = 'crown-badge';
+        crown.dataset.tag = tag;
+        var img = document.createElement('img');
+        img.src = 'img/crown.webp';
+        crown.appendChild(img);
+        rowsContainer.appendChild(crown);
+      }
+      if (wrap.style.top) crown.style.top = wrap.style.top;
+    }
+  }
+  for (var c = 0; c < existing.length; c++) {
+    if (activeCrownTags.indexOf(existing[c].dataset.tag) === -1) existing[c].remove();
   }
 }
 
