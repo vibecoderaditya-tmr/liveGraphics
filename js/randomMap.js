@@ -13,6 +13,7 @@ var db         = firebase.database();
 var statusRef  = db.ref('/maprand/status');
 var commandRef = db.ref('/maprand/command');
 var resultRef  = db.ref('/maprand/result');
+var poolRef    = db.ref('/maprand/pool');
 
 const MAPS = [
     { name: 'Bermuda',   img: 'img/maps/bermuda.webp'   },
@@ -75,12 +76,14 @@ function refillPool() {
     const j = Math.floor(Math.random() * (i + 1));
     [mapPool[i], mapPool[j]] = [mapPool[j], mapPool[i]];
   }
+  poolRef.set(mapPool);
 }
 
 function startSpin() {
   if (spinning) return;
   if (mapPool.length === 0) refillPool();
   targetIndex = mapPool.pop();
+  poolRef.set(mapPool);
 
   spinning = true;
   currentIndex = Math.floor(Math.random() * MAPS.length);
@@ -159,25 +162,33 @@ function lock() {
 }
 
 window.addEventListener('load', () => {
-  refillPool();
-  const initIndex = Math.floor(Math.random() * MAPS.length);
-  currentIndex = initIndex;
-  showMap(initIndex);
-  mapBg.style.filter = 'brightness(0.4) saturate(0.6)';
-  stateLabel.textContent = 'Ready';
-  eyebrow.textContent = 'Awaiting signal';
-  updateDots(99);
-
-  statusRef.set('ready');
-  resultRef.set('none');
-  commandRef.set('idle');
-
-  commandRef.on('value', function(snap) {
-    if (snap.val() === 'spin' && !spinning) {
-      mapBg.style.filter = 'brightness(0.55) saturate(0.85)';
-      statusRef.set('spinning');
-      commandRef.set('idle');
-      startSpin();
+  poolRef.once("value").then(snap => {
+    const val = snap.val();
+    if (Array.isArray(val) && val.length > 0) {
+      mapPool = val;
+    } else {
+      refillPool();
     }
+
+    const initIndex = Math.floor(Math.random() * MAPS.length);
+    currentIndex = initIndex;
+    showMap(initIndex);
+    mapBg.style.filter = 'brightness(0.4) saturate(0.6)';
+    stateLabel.textContent = 'Ready';
+    eyebrow.textContent = 'Awaiting signal';
+    updateDots(99);
+
+    statusRef.set('ready');
+    resultRef.set('none');
+    commandRef.set('idle');
+
+    commandRef.on('value', function(snap) {
+      if (snap.val() === 'spin' && !spinning) {
+        mapBg.style.filter = 'brightness(0.55) saturate(0.85)';
+        statusRef.set('spinning');
+        commandRef.set('idle');
+        startSpin();
+      }
+    });
   });
 });
