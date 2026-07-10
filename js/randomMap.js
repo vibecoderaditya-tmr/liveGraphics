@@ -41,7 +41,7 @@ let selectedMap      = null;
 let currentIndex     = 0;
 let spinning         = false;
 let spinTimer        = null;
-let lastLockedIndex  = -1;
+let mapPool = [];
 
 const mapBg       = document.getElementById('mapBg');
 const mapName     = document.getElementById('mapName');
@@ -67,15 +67,23 @@ function updateDots(stageIndex) {
   });
 }
 
+let targetIndex;
+
+function refillPool() {
+  mapPool = MAPS.map((_, i) => i);
+  for (let i = mapPool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [mapPool[i], mapPool[j]] = [mapPool[j], mapPool[i]];
+  }
+}
+
 function startSpin() {
   if (spinning) return;
-  spinning = true;
+  if (mapPool.length === 0) refillPool();
+  targetIndex = mapPool.pop();
 
-  let startIndex;
-  do {
-    startIndex = Math.floor(Math.random() * MAPS.length);
-  } while (startIndex === lastLockedIndex && MAPS.length > 1);
-  currentIndex = startIndex;
+  spinning = true;
+  currentIndex = Math.floor(Math.random() * MAPS.length);
   showMap(currentIndex);
 
   stateLabel.textContent = 'Randomizing...';
@@ -89,7 +97,7 @@ function startSpin() {
 
   function runStage() {
     if (stageIndex >= STAGES.length - 1) {
-      lock(currentIndex);
+      lock();
       return;
     }
 
@@ -117,19 +125,13 @@ function startSpin() {
   runStage();
 }
 
-function lock(winnerIndex) {
+function lock() {
   clearInterval(spinTimer);
   spinning = false;
 
-  if (winnerIndex === lastLockedIndex && MAPS.length > 1) {
-    let next;
-    do {
-      next = Math.floor(Math.random() * MAPS.length);
-    } while (next === lastLockedIndex);
-    winnerIndex = next;
-    currentIndex = next;
-    showMap(currentIndex);
-  }
+  const winnerIndex = targetIndex;
+  currentIndex = winnerIndex;
+  showMap(winnerIndex);
 
   setTimeout(() => {
     mapName.classList.add('locked');
@@ -146,8 +148,7 @@ function lock(winnerIndex) {
     stateLabel.className = 'locked';
     bottomMap.textContent = MAPS[winnerIndex].name;
 
-    selectedMap     = MAPS[winnerIndex].name;
-    lastLockedIndex = winnerIndex;
+    selectedMap = MAPS[winnerIndex].name;
     console.log('Selected map:', selectedMap);
 
     resultRef.set(selectedMap);
@@ -158,6 +159,7 @@ function lock(winnerIndex) {
 }
 
 window.addEventListener('load', () => {
+  refillPool();
   const initIndex = Math.floor(Math.random() * MAPS.length);
   currentIndex = initIndex;
   showMap(initIndex);

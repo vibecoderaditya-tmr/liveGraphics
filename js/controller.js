@@ -102,61 +102,28 @@ ptsVisRef.on("value", function(snap) {
 });
 
 
-var COOLDOWN   = 3;
-var ALL_MAPS   = ["Bermuda", "Purgatory", "Kalahari", "Alpine", "Nexterra", "Solara"];
-var recentMaps = [];
-
 var mapStatusRef  = db.ref("/maprand/status");
 var mapCommandRef = db.ref("/maprand/command");
-var mapResultRef  = db.ref("/maprand/result");
-
-function getAvailableMaps() {
-  return ALL_MAPS.filter(function(m) { return recentMaps.indexOf(m) === -1; });
-}
-
-function updateMapStatusText() {
-  var avail = getAvailableMaps();
-  var st = document.getElementById("map-rand-status");
-  if (st) {
-    st.textContent = avail.length + " avail \u00b7 " + recentMaps.length + " on cooldown";
-  }
-}
 
 mapStatusRef.on("value", function(snap) {
   var btn = document.getElementById("btn-map-start");
-  btn.disabled = snap.val() === "spinning";
-});
-
-mapResultRef.on("value", function(snap) {
-  var val = snap.val();
-  var el = document.getElementById("map-rand-result");
-  el.textContent = (val && val !== "none") ? "\u2192 " + val : "";
+  if (btn) btn.disabled = snap.val() === "spinning";
 });
 
 function startMapRand() {
   var btn = document.getElementById("btn-map-start");
   if (btn.disabled) return;
 
-  var avail = getAvailableMaps();
-  if (avail.length === 0) { recentMaps = []; avail = ALL_MAPS.slice(); }
-
-  var chosen = avail[Math.floor(Math.random() * avail.length)];
-  recentMaps.push(chosen);
-  if (recentMaps.length > COOLDOWN) recentMaps.shift();
-
   btn.disabled = true;
   mapCommandRef.set("spin");
   mapStatusRef.set("spinning");
-  mapResultRef.set(chosen);
 
   setTimeout(function() {
     mapStatusRef.set("ready");
     btn.disabled = false;
-    updateMapStatusText();
   }, 3000);
 }
 window.startMapRand = startMapRand;
-updateMapStatusText();
 
 function setWinRateTest(cmd) {
   lgRef.child("winRate").set(cmd);
