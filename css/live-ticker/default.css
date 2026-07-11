@@ -1,5 +1,5 @@
 .row-wrap.top-frag-wrap {
-  z-index: 2;
+  z-index: 3;
 }
 .row-wrap.top-frag-wrap::after {
   content: "";

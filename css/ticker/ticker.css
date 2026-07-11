@@ -37,6 +37,7 @@
   --crown-gap:       5px;
   --crown-bg-size:   42px;
   --crown-size:      32px;
+  --col-team-bg:     #00499b;
 
   --col-rank-header: #000000;
   --col-rank-row: #ffffff;
@@ -106,11 +107,12 @@ html, body {
   right: 0;
   height: var(--row-height);
   transition: top 0.6s ease-in-out;
+  z-index: 2;
 }
 
 .row-wrap.top-frag-wrap {
   animation: top-frag-glow 2.5s ease-in-out infinite;
-  z-index: 2;
+  z-index: 3;
 }
 @keyframes top-frag-glow {
   0%, 100% { filter: drop-shadow(0 0 6px rgba(255,200,0,0.7)) drop-shadow(0 0 12px rgba(255,180,0,0.5)); }
@@ -277,12 +279,16 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  z-index: 1;
   pointer-events: none;
-  transition: top 0.6s ease-in-out;
-  right: calc(100% + var(--crown-gap));
+  transition: top 0.6s ease-in-out, left 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+  left: calc(0% - var(--crown-bg-size) - var(--crown-gap));
   background: var(--col-elims-bg);
+  box-shadow: inset 0 0 15px rgba(255,255,255,1);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
+.crown-badge.bts {
+  left: calc(100% + var(--crown-gap));
 }
 .crown-badge img {
   display: block;
@@ -290,7 +296,17 @@ html, body {
   height: var(--crown-size);
   object-fit: contain;
 }
+.crown-badge.eliminated::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+}
 .ticker-wrap.dir-left .crown-badge {
-  right: auto;
   left: calc(100% + var(--crown-gap));
+  background: var(--col-team-bg);
+}
+.ticker-wrap.dir-left .crown-badge.bts {
+  left: calc(0% - var(--crown-bg-size) - var(--crown-gap));
 }

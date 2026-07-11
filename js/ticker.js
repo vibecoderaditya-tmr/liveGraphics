@@ -273,7 +273,7 @@ function renderTicker() {
   }
 
   // Sync crown badges
-  var existing = rowsContainer.querySelectorAll('.crown-badge');
+  var existing = rowsContainer.querySelectorAll('.crown-badge:not(._removing)');
   var activeCrownTags = [];
   for (const wrap of rowEls) {
     var tag = wrap.dataset.tag;
@@ -284,18 +284,34 @@ function renderTicker() {
       var crown = rowsContainer.querySelector('.crown-badge[data-tag="' + tag + '"]');
       if (!crown) {
         crown = document.createElement('div');
-        crown.className = 'crown-badge';
+        crown.className = 'crown-badge bts';
         crown.dataset.tag = tag;
         var img = document.createElement('img');
         img.src = 'img/crown.webp';
         crown.appendChild(img);
         rowsContainer.appendChild(crown);
+        requestAnimationFrame(function() {
+          requestAnimationFrame(function() {
+            crown.classList.remove('bts');
+          });
+        });
       }
       if (wrap.style.top) crown.style.top = wrap.style.top;
+      var ld = liveData[tag];
+      if (!ld || ((Number(ld["3_playersAlive"]) || 0) === 0 || Number(ld["2_isTeamAlive"]) === 0)) {
+        crown.classList.add("eliminated");
+      } else {
+        crown.classList.remove("eliminated");
+      }
     }
   }
   for (var c = 0; c < existing.length; c++) {
-    if (activeCrownTags.indexOf(existing[c].dataset.tag) === -1) existing[c].remove();
+    var el = existing[c];
+    if (activeCrownTags.indexOf(el.dataset.tag) === -1) {
+      el._removing = true;
+      el.classList.add('bts');
+      setTimeout(function() { el.remove(); }, 500);
+    }
   }
 }
 

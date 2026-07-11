@@ -284,7 +284,7 @@ function renderTicker() {
   }
 
   // Sync crown badges
-  var existing = rowsContainer.querySelectorAll('.crown-badge');
+  var existing = rowsContainer.querySelectorAll('.crown-badge:not(._removing)');
   var activeCrownTags = [];
   for (const wrap of rowEls) {
     var tag = wrap.dataset.tag;
@@ -295,19 +295,41 @@ function renderTicker() {
       var crown = rowsContainer.querySelector('.crown-badge[data-tag="' + tag + '"]');
       if (!crown) {
         crown = document.createElement('div');
-        crown.className = 'crown-badge';
+        crown.className = 'crown-badge bts';
         crown.dataset.tag = tag;
         var img = document.createElement('img');
         img.src = 'img/crown.webp';
         crown.appendChild(img);
         rowsContainer.appendChild(crown);
+        if (_topFragVisible) {
+          requestAnimationFrame(function() {
+            requestAnimationFrame(function() {
+              crown.classList.remove('bts');
+            });
+          });
+        }
       }
       if (wrap.style.top) crown.style.top = wrap.style.top;
+      var ld = liveData[tag];
+      if (!ld || ((Number(ld["3_playersAlive"]) || 0) === 0 || Number(ld["2_isTeamAlive"]) === 0)) {
+        crown.classList.add("eliminated");
+      } else {
+        crown.classList.remove("eliminated");
+      }
     }
   }
   for (var c = 0; c < existing.length; c++) {
-    if (activeCrownTags.indexOf(existing[c].dataset.tag) === -1) existing[c].remove();
+    var el = existing[c];
+    if (activeCrownTags.indexOf(el.dataset.tag) === -1) {
+      el._removing = true;
+      el.classList.add('bts');
+      setTimeout(function() { el.remove(); }, 500);
+    }
   }
+}
+
+function revealCrowns() {
+  rowsContainer.querySelectorAll('.crown-badge.bts').forEach(function(c) { c.classList.remove('bts'); });
 }
 
 db.ref("/matches/2_teams").on("value", snap => {
@@ -409,6 +431,7 @@ function curtainIn() {
     setTimeout(() => {
       _topFragVisible = true;
       renderTicker();
+      revealCrowns();
       wrap.remove(); box.style.position = "";
     }, Math.ceil(maxDropFinish) + 100);
   }, afterStrips);
@@ -484,6 +507,15 @@ function resetAnimState() {
 }
 
 function applyAnim() {
+  if (animState === "out" && !window._crownsHiding) {
+    var crowns = rowsContainer.querySelectorAll('.crown-badge:not(.bts)');
+    if (crowns.length > 0) {
+      window._crownsHiding = true;
+      crowns.forEach(function(c) { c.classList.add('bts'); });
+      setTimeout(function() { window._crownsHiding = false; applyAnim(); }, 500);
+      return;
+    }
+  }
   if (animType === "curtain") {
     if (animState === "in") curtainIn();
     else curtainOut();
@@ -505,7 +537,7 @@ function applyAnim() {
       void header.offsetHeight; allTargets.forEach(function(el) { el.style.transition = ""; });
       header.classList.remove("trans-fade-out"); header.classList.add("trans-fade"); header.classList.remove("anim-fade-out"); header.classList.add("anim-fade-in");
       rowTargets.forEach(function(rowEl,i) { var t = setTimeout(function() { rowEl.classList.remove("trans-fade-out"); rowEl.classList.add("trans-fade"); rowEl.classList.remove("anim-fade-out"); rowEl.classList.add("anim-fade-in"); }, 80 + i * 60); animTimers.push(t); });
-      var topFragT = setTimeout(function() { _topFragVisible = true; renderTicker(); }, rowTargets.length * 60 + 80 + 500);
+      var topFragT = setTimeout(function() { _topFragVisible = true; renderTicker(); revealCrowns(); }, rowTargets.length * 60 + 80 + 500);
       animTimers.push(topFragT);
     } else {
       _topFragVisible = false;
@@ -535,7 +567,7 @@ function applyAnim() {
     void header.offsetHeight; allTargets.forEach(function(el) { el.style.transition = ""; });
     header.classList.remove("trans-anim-out"); header.classList.add("trans-anim"); header.classList.remove(hideCls); header.classList.add("anim-in");
     rowTargets.forEach(function(rowEl, i) { var t = setTimeout(function() { rowEl.classList.remove("trans-anim-out"); rowEl.classList.add("trans-anim"); rowEl.classList.remove(hideCls); rowEl.classList.add("anim-in"); }, 80 + i * 60); animTimers.push(t); });
-    var topFragT = setTimeout(function() { _topFragVisible = true; renderTicker(); }, rowTargets.length * 60 + 80 + 500);
+    var topFragT = setTimeout(function() { _topFragVisible = true; renderTicker(); revealCrowns(); }, rowTargets.length * 60 + 80 + 500);
     animTimers.push(topFragT);
   } else {
     _topFragVisible = false;
