@@ -15,7 +15,9 @@ var stateRef   = lgRef.child("state");
 var animRef    = lgRef.child("animate-from-to");
 var animTypeRef = lgRef.child("animation-type");
 var teamElimCmdRef = lgRef.child("teamEliminatedCommand");
+var hudAlignRef = lgRef.child("hud-align");
 var tickerState = null, tickerAnim = null, animType = "default";
+var hudAlign = "left";
 
 function setTicker(key, val) {
   if (key === "state") { stateRef.set(val); tickerState = val; }
@@ -41,6 +43,27 @@ function setTeamElimCmd(cmd) {
   setTimeout(function() { teamElimCmdRef.set(null); }, 100);
 }
 window.setTeamElimCmd = setTeamElimCmd;
+
+function setHudAlign(val) {
+  hudAlignRef.set(val);
+  hudAlign = val;
+  updateHudAlignUI();
+}
+window.setHudAlign = setHudAlign;
+
+function updateHudAlignUI() {
+  ["btn-hud-left","btn-hud-right"].forEach(function(id) {
+    var el = document.getElementById(id);
+    if (el) el.classList.remove("active");
+  });
+  if (hudAlign === "left") {
+    var el = document.getElementById("btn-hud-left");
+    if (el) el.classList.add("active");
+  } else {
+    var el = document.getElementById("btn-hud-right");
+    if (el) el.classList.add("active");
+  }
+}
 
 function updateTickerUI() {
   ["btn-left","btn-right"].forEach(function(id) {
@@ -79,11 +102,13 @@ lgRef.on("value", function(snap) {
   tickerState = val["state"]           || null;
   tickerAnim  = val["animate-from-to"] || null;
   animType    = val["animation-type"]  || "default";
+  hudAlign    = val["hud-align"]       || "left";
   var sel = document.getElementById("anim-type");
   if (sel) sel.value = animType;
   var elimSel = document.getElementById("team-elim-style");
   if (elimSel) elimSel.value = val["teamEliminatedStyle"] || "center";
   updateTickerUI();
+  updateHudAlignUI();
 });
 
 var ptsVisRef = db.ref("/live-graphics/status");
