@@ -32,6 +32,7 @@
       <button class="tab-btn" data-tab="eliminated-bmps">Eliminated · BMPS</button>
       <button class="tab-btn" data-tab="winrate">Win Rate</button>
       <button class="tab-btn" data-tab="winner">Winner</button>
+      <button class="tab-btn" data-tab="hud">HUD</button>
     </div>
 
     <div id="tabBody">
@@ -912,6 +913,139 @@
                 <input class="hex-text" type="text" id="hex-wnr-gameText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'wnr')">
                 <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
                 <button class="hex-copy-btn" onclick="copyHex('hex-wnr-gameText',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" data-tab="hud">
+        <div class="theme-group">
+          <div class="theme-group-label">HUD · Left Box</div>
+          <div class="theme-fields">
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Char BG</span>
+                <span class="theme-field-desc">character image wrap background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="hud-charBg" value="#1a1a2e" oninput="onColorPick(this,'hud')">
+                </div>
+                <input class="hex-text" type="text" id="hex-hud-charBg" value="#1A1A2E" maxlength="7" oninput="onHexType(this,'hud')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-hud-charBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Player Box BG</span>
+                <span class="theme-field-desc">player name box background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="hud-playerBg" value="#2d2d44" oninput="onColorPick(this,'hud')">
+                </div>
+                <input class="hex-text" type="text" id="hex-hud-playerBg" value="#2D2D44" maxlength="7" oninput="onHexType(this,'hud')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-hud-playerBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Name Box BG</span>
+                <span class="theme-field-desc">achievement text box background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="hud-nameBg" value="#3d3d5c" oninput="onColorPick(this,'hud')">
+                </div>
+                <input class="hex-text" type="text" id="hex-hud-nameBg" value="#3D3D5C" maxlength="7" oninput="onHexType(this,'hud')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-hud-nameBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field-sep">Left Box Borders &amp; Text</div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Left Text</span>
+                <span class="theme-field-desc">player name &amp; achievement text color</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="hud-leftText" value="#ffffff" oninput="onColorPick(this,'hud')">
+                </div>
+                <input class="hex-text" type="text" id="hex-hud-leftText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'hud')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-hud-leftText',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Left Border</span>
+                <span class="theme-field-desc">left box outer border</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="hud-leftBorder" value="#000000" oninput="onColorPick(this,'hud')">
+                </div>
+                <input class="hex-text" type="text" id="hex-hud-leftBorder" value="#000000" maxlength="7" oninput="onHexType(this,'hud')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-hud-leftBorder',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field-sep">HUD · Right Box</div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Right BG</span>
+                <span class="theme-field-desc">right info boxes &amp; killfeed background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="hud-rightBg" value="#000000" oninput="onColorPick(this,'hud')">
+                </div>
+                <input class="hex-text" type="text" id="hex-hud-rightBg" value="#000000" maxlength="7" oninput="onHexType(this,'hud')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-hud-rightBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Right Text</span>
+                <span class="theme-field-desc">right box text &amp; killfeed player names</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="hud-rightText" value="#ffffff" oninput="onColorPick(this,'hud')">
+                </div>
+                <input class="hex-text" type="text" id="hex-hud-rightText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'hud')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-hud-rightText',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Right Border</span>
+                <span class="theme-field-desc">right box &amp; killfeed row border</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="hud-rightBorder" value="#333333" oninput="onColorPick(this,'hud')">
+                </div>
+                <input class="hex-text" type="text" id="hex-hud-rightBorder" value="#333333" maxlength="7" oninput="onHexType(this,'hud')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-hud-rightBorder',this)" title="Copy">COPY COLOR</button>
               </div>
             </div>
 
