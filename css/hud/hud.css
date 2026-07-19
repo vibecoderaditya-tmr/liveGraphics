@@ -1,0 +1,234 @@
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  width: 1920px; height: 1080px;
+  overflow: hidden; background: transparent;
+  font-family: 'Oswald', sans-serif;
+}
+
+.hud-wrap {
+  position: relative;
+  width: 1920px; height: 1080px;
+}
+
+.hud-section {
+  position: absolute;
+  height: 30px;
+  overflow: hidden;
+  transition: top 0.4s ease-in-out;
+}
+
+.hud-left {
+  left: 0;
+  top: var(--hud-left-top, 0px);
+  width: var(--hud-left-w, 420px);
+  height: 115px;
+  color: var(--hud-left-text, #ffffff);
+  border: 1px solid var(--hud-left-border, transparent);
+  display: flex;
+  align-items: stretch;
+  overflow: visible;
+  transform: translateX(-100%);
+  transition: transform 0.4s ease;
+}
+
+.hud-left.show {
+  transform: translateX(0);
+}
+
+.hud-left.align-right {
+  left: auto;
+  right: 0;
+  top: var(--hud-right-ach-top, 220px);
+  flex-direction: row-reverse;
+  transform: translateX(100%);
+}
+
+.hud-left.align-right .hud-ach-area {
+  align-items: flex-end;
+}
+
+.hud-left.align-right .hud-ach-player-box {
+  justify-content: flex-start;
+  padding-left: 10px;
+  padding-right: 0;
+}
+
+.hud-left.align-right .hud-ach-player {
+  text-align: right;
+}
+
+.hud-left.align-right .hud-player-logo {
+  margin-left: 0;
+  margin-right: 6px;
+}
+
+.hud-left.align-right .hud-ach-name {
+  text-align: right;
+}
+
+.hud-left.align-right.show {
+  transform: translateX(0);
+}
+
+.hud-char-wrap {
+  display: flex;
+  align-items: flex-end;
+  flex-shrink: 0;
+  align-self: flex-end;
+  min-height: 220px;
+  background: var(--hud-char-bg, #1a1a2e);
+}
+
+.hud-char-img {
+  display: block;
+  height: var(--hud-char-img-h, 210px);
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.hud-ach-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  min-width: 0;
+}
+
+.hud-ach-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 0;
+}
+
+.hud-ach-player-box {
+  width: fit-content;
+  max-width: 420px;
+  flex: 35;
+  background: var(--hud-player-bg, #2d2d44);
+  justify-content: flex-start;
+  padding-left: 8px;
+}
+
+.hud-ach-player {
+  font-size: 23px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: left;
+  color: var(--hud-left-text, #ffffff);
+  padding-right: 10px;
+}
+
+.hud-player-logo {
+  display: block;
+  height: 45px;
+  width: auto;
+  object-fit: contain;
+  flex-shrink: 0;
+  margin-right: 6px;
+}
+
+.hud-ach-name-box {
+  flex: 65;
+  background: var(--hud-name-bg, #3d3d5c);
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+}
+
+.hud-ach-name {
+  font-size: 32px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  text-align: center;
+  color: var(--hud-left-text, #ffffff);
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.hud-right {
+  right: 24px;
+  top: var(--hud-right-top, 0px);
+  width: 278px;
+  height: 50px;
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.hud-rbox {
+  width: var(--hud-right-w, 130px);
+  background: var(--hud-right-bg, rgba(0,0,0,0.6));
+  color: var(--hud-right-text, #ffffff);
+  border: 1px solid var(--hud-right-border, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hud-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%; height: 100%;
+  font-size: 20px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.hud-right-bottom {
+  position: absolute;
+  right: 24px;
+  top: calc(var(--hud-right-top, 0px) + 55px);
+  width: 400px;
+  height: 156px;
+  transition: top 0.4s ease-in-out;
+  overflow: hidden;
+  padding: 0;
+}
+
+.hud-rb-row {
+  position: absolute;
+  right: 0;
+  width: fit-content;
+  max-width: 400px;
+  height: 34px;
+  background: var(--hud-right-bg, rgba(0,0,0,0.6));
+  border: 1px solid var(--hud-right-border, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+  padding: 0 6px;
+  transition: top 0.35s ease, opacity 1s ease;
+  opacity: 1;
+}
+
+.hud-rb-row.fading {
+  opacity: 0;
+}
+
+.rb-logo {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+}
+
+.rb-name {
+  font-size: 19px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--hud-right-text, #ffffff);
+}
