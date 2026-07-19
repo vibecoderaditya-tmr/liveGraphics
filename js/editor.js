@@ -187,6 +187,39 @@ var TABS = [
         ]
       }
     ]
+  },
+  {
+    id: 'hud',
+    label: 'HUD',
+    path: '/live-graphics/editor/hud',
+    groups: [
+      {
+        label: 'Left Box',
+        fields: [
+          { key: 'hud-left-top', label: 'Left Box Top', desc: 'Vertical position of the left achievement box', default: 635 },
+          { key: 'hud-left-w', label: 'Left Box Width', desc: 'Width of the left achievement box', default: 420 }
+        ]
+      },
+      {
+        label: 'Character',
+        fields: [
+          { key: 'hud-char-img-h', label: 'Char Img Height', desc: 'Character image height (overflows above box)', default: 210 }
+        ]
+      },
+      {
+        label: 'Right Box',
+        fields: [
+          { key: 'hud-right-top', label: 'Right Box Top', desc: 'Vertical position of the right team/player boxes', default: 0 },
+          { key: 'hud-right-w', label: 'Right Box Width', desc: 'Width of each right info box (teams/players)', default: 130 }
+        ]
+      },
+      {
+        label: 'Right Achievement',
+        fields: [
+          { key: 'hud-right-ach-top', label: 'Right Ach Top', desc: 'Achievement box top position when right-aligned (below killfeed)', default: 220 }
+        ]
+      }
+    ]
   }
 ];
 
