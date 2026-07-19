@@ -302,8 +302,7 @@ liveRef.on("value", function(snap) {
 
     row.innerHTML =
       '<div class="wr-meta">' +
-        '<span class="wr-tag">[' + escHtml(t.tag) + ']</span>' +
-        '<span class="wr-name">' + escHtml(t.name) + '</span>' +
+        '<span class="wr-tag">' + escHtml(t.tag) + '</span>' +
         '<span class="wr-stats">' + t.alive + '\u25b2 ' + t.kills + 'K</span>' +
       '</div>' +
       '<div class="wr-bar-wrap">' +

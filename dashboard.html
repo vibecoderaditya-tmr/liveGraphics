@@ -52,9 +52,6 @@
 
       <div class="left-panel-section">
         <div class="left-panel-label">Roster</div>
-        <div id="join-counter" style="display:none;font-size:11px;color:var(--text-mid);letter-spacing:1px;padding:6px 0 2px 0;">
-          <span id="join-count-val">0</span> players joined
-        </div>
         <button class="ticker-btn" id="btn-force-roster"
                 onclick="forceRoster()" disabled
                 style="width:100%;letter-spacing:2px;">
@@ -70,20 +67,24 @@
       <div id="log-box"></div>
       <div id="prompt-box"></div>
 
+      <div id="bottom-stats">
+        <div id="join-counter" style="display:none;font-size:11px;color:var(--text-mid);letter-spacing:1px;padding:4px 16px;">
+          <span id="join-count-val">0</span> players joined
+        </div>
+        <div id="winrate-panel">
+          <span class="wr-header">Win Rate · Final 4</span>
+          <div id="winrate-body">
+            <span class="wr-placeholder">Active when ≤ 4 teams remain</span>
+          </div>
+        </div>
+      </div>
+
       <div class="input-bar">
         <div class="input-prefix">OPR</div>
         <textarea id="op-input" rows="1"
                placeholder="Waiting for prompt…" disabled
                onkeydown="inputKeydown(event)"></textarea>
         <button id="send-btn" disabled onclick="sendReply()">Send</button>
-      </div>
-    </div>
-
-    <!-- WIN RATE ASIDE -->
-    <div id="winrate-panel">
-      <div class="wr-header">Win Rate · Final 4</div>
-      <div id="winrate-body">
-        <div class="wr-placeholder">Active when<br>≤ 4 teams remain</div>
       </div>
     </div>
 

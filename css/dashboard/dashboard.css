@@ -458,45 +458,57 @@ body {
     0 0 12px rgba(176,196,207,0.12);
 }
 
-/* ── WIN RATE ASIDE ───────────────────────────────────────── */
+/* ── BOTTOM STATS (join counter + winrate above input) ────── */
+#bottom-stats {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  min-height: 32px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  overflow: hidden;
+}
+
 #winrate-panel {
   display: flex;
-  width: 190px;
-  flex-shrink: 0;
-  flex-direction: column;
-  background: var(--surface);
-  border-left: 1px solid var(--border);
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
   overflow: hidden;
 }
 
 .wr-header {
-  padding: 12px 14px 8px;
   font-size: 8px;
   letter-spacing: 3px;
   color: var(--text-low);
   text-transform: uppercase;
-  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
   flex-shrink: 0;
 }
 
 #winrate-body {
-  flex: 1;
-  overflow-y: auto;
-  padding: 10px 10px;
   display: flex;
-  flex-direction: column;
-  gap: 10px;
+  flex-direction: row;
+  gap: 6px;
+  overflow-x: auto;
   scrollbar-width: thin;
   scrollbar-color: var(--border) transparent;
+  flex: 1;
+  min-width: 0;
+  padding: 2px 0;
 }
 
 .wr-row {
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  padding: 7px 8px;
+  align-items: center;
+  gap: 5px;
+  padding: 2px 6px;
   border: 1px solid var(--border);
   background: var(--bg);
+  flex-shrink: 0;
   transition: border-color 0.2s;
 }
 
@@ -508,7 +520,7 @@ body {
 .wr-meta {
   display: flex;
   align-items: baseline;
-  gap: 5px;
+  gap: 4px;
   min-width: 0;
 }
 
@@ -540,7 +552,8 @@ body {
 .wr-bar-wrap {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
+  width: 70px;
 }
 
 .wr-bar {
@@ -549,7 +562,6 @@ body {
   flex-shrink: 0;
   transition: width 0.4s ease;
   min-width: 4px;
-  max-width: calc(100% - 38px);
 }
 
 .wr-top .wr-bar { background: var(--text-hi); }
@@ -558,25 +570,21 @@ body {
   font-size: 10px;
   color: var(--text-mid);
   letter-spacing: 0.5px;
-  margin-left: auto;
   flex-shrink: 0;
 }
 
 .wr-top .wr-pct { color: var(--text-hi); font-weight: 500; }
 
 .wr-placeholder {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
   font-size: 9px;
   letter-spacing: 2px;
   color: var(--text-low);
   text-transform: uppercase;
-  line-height: 1.8;
   opacity: 0.5;
+  white-space: nowrap;
 }
+
+
 
 /* ── RIGHT PANEL ──────────────────────────────────────────── */
 .right-panel {
@@ -607,7 +615,6 @@ body {
 
 /* ── MOBILE ───────────────────────────────────────────────── */
 @media (max-width: 480px) {
-  #winrate-panel { display: none; }
   .pin-wordmark { font-size: 52px; }
   .pin-card     { width: calc(100vw - 40px); }
   .h-sub, .h-sep { display: none; }
@@ -629,9 +636,19 @@ body {
 
   .right-panel { position: relative; height: 100%; }
 
+  #bottom-stats {
+    position: fixed;
+    bottom: 52px; left: 0; right: 0;
+    z-index: 49;
+    border-top: 1px solid var(--c3);
+    padding: 4px 10px;
+    min-height: 28px;
+    background: var(--surface);
+  }
+
   #log-box {
     padding: 12px 14px;
-    padding-bottom: 80px;
+    padding-bottom: 100px;
   }
 
   .input-bar {
@@ -662,7 +679,7 @@ body {
 
   #prompt-box {
     position: fixed;
-    bottom: 52px; left: 0; right: 0;
+    bottom: 84px; left: 0; right: 0;
     margin: 0;
     border-left: none; border-right: none;
     border-top: 1px solid var(--c3);
