@@ -1,0 +1,104 @@
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  width: 1920px; height: 1080px;
+  overflow: hidden; background: transparent;
+  font-family: 'Oswald', sans-serif;
+}
+
+:root {
+  --bt-top-w: 1000px;
+  --bt-bottom-w: 650px;
+  --bt-img-h: 500px;
+  --bt-bg-img-h: 745px;
+  --bt-bg-img-x: -150px;
+  --bt-bg-img-y: -266px;
+  --bt-img-x: 0px;
+  --bt-img-y: 0px;
+  --bt-logo-x: 0px;
+  --bt-logo-y: 0px;
+  --bt-name-x: 0px;
+  --bt-name-y: 0px;
+  --bt-bottom-gap: 23px;
+  --bt-logo-h: 82px;
+  --bt-name-size: 55px;
+  --bt-text: #ffffff;
+}
+
+.bt-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(100%);
+  transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.bt-wrap.show {
+  transform: translateY(0);
+}
+
+.bt-top {
+  position: relative;
+  padding: 0px 60px;
+  width: var(--bt-top-w);
+  text-align: center;
+}
+
+.bt-bg-img {
+  display: block;
+  height: var(--bt-bg-img-h);
+  width: auto;
+  object-fit: contain;
+  margin: 0 auto;
+  position: absolute;
+  left: var(--bt-bg-img-x);
+  top: var(--bt-bg-img-y);
+  z-index: 0;
+}
+
+.bt-img {
+  display: block;
+  height: var(--bt-img-h);
+  width: auto;
+  object-fit: contain;
+  margin: 0 auto;
+  position: relative;
+  left: var(--bt-img-x);
+  top: var(--bt-img-y);
+  z-index: 1;
+}
+
+.bt-bottom {
+  background: #000000;
+  padding: 16px 40px;
+  width: var(--bt-bottom-w);
+  clip-path: polygon(11% 0, 100% 0%, 89% 100%, 0 100%);
+}
+.bt-bottom-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--bt-bottom-gap);
+}
+
+.bt-logo {
+  display: block;
+  height: var(--bt-logo-h);
+  width: auto;
+  object-fit: contain;
+  position: relative;
+  left: var(--bt-logo-x);
+  top: var(--bt-logo-y);
+}
+
+.bt-name {
+  font-size: var(--bt-name-size);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--bt-text);
+  position: relative;
+  left: var(--bt-name-x);
+  top: var(--bt-name-y);
+}
