@@ -97,6 +97,17 @@ function toggleWinner() {
 }
 window.toggleWinner = toggleWinner;
 
+var booyahState = "hide";
+
+function toggleBooyah() {
+  var next = booyahState === "show" ? "hide" : "show";
+  lgRef.child("booyahTeam").set(next);
+  booyahState = next;
+  var btn = document.getElementById("btn-booyah-toggle");
+  if (btn) btn.textContent = booyahState === "show" ? "HIDE" : "SHOW";
+}
+window.toggleBooyah = toggleBooyah;
+
 lgRef.on("value", function(snap) {
   var val = snap.val() || {};
   tickerState = val["state"]           || null;
@@ -109,6 +120,9 @@ lgRef.on("value", function(snap) {
   if (elimSel) elimSel.value = val["teamEliminatedStyle"] || "center";
   updateTickerUI();
   updateHudAlignUI();
+  booyahState = val["booyahTeam"] || "hide";
+  var bBtn = document.getElementById("btn-booyah-toggle");
+  if (bBtn) bBtn.textContent = booyahState === "show" ? "HIDE" : "SHOW";
 });
 
 var ptsVisRef = db.ref("/live-graphics/status");
