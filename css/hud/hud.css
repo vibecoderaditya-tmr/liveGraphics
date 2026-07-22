@@ -23,7 +23,6 @@ html, body {
   width: var(--hud-left-w, 420px);
   height: 115px;
   color: var(--hud-left-text, #ffffff);
-  border: 1px solid var(--hud-left-border, transparent);
   display: flex;
   align-items: stretch;
   overflow: visible;
@@ -166,7 +165,6 @@ html, body {
   width: var(--hud-right-w, 130px);
   background: var(--hud-right-bg, rgba(0,0,0,0.6));
   color: var(--hud-right-text, #ffffff);
-  border: 1px solid var(--hud-right-border, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -205,7 +203,6 @@ html, body {
   max-width: 400px;
   height: 34px;
   background: var(--hud-right-bg, rgba(0,0,0,0.6));
-  border: 1px solid var(--hud-right-border, transparent);
   display: flex;
   align-items: center;
   justify-content: flex-end;
