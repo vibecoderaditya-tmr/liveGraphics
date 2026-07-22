@@ -70,7 +70,7 @@ html, body {
 }
 
 .bt-bottom {
-  background: #000000;
+  background: #0b182f;
   padding: 16px 40px;
   width: var(--bt-bottom-w);
   clip-path: polygon(11% 0, 100% 0%, 89% 100%, 0 100%);
