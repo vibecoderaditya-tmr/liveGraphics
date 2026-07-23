@@ -2,7 +2,7 @@
 html, body {
   width: 1920px; height: 1080px;
   overflow: hidden; background: transparent;
-  font-family: 'Oswald', sans-serif;
+  font-family: var(--font-primary, 'Oswald', sans-serif);
 }
 
 :root {

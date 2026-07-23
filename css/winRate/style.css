@@ -7,7 +7,7 @@
   --upper-bg: #26b2f2;
   --lower-bg: #ff0000;
   --lower-w: 140px;
-  --font: 'Oswald', sans-serif;
+  --font: var(--font-primary, 'Oswald', sans-serif);
   --card-gap: 0;
   --bar-w: 5px;
   --bar-h: 23px;

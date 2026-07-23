@@ -121,6 +121,26 @@
         </div>
       </div>
 
+      <div class="ctrl-section">
+        <div class="section-label">Font Override</div>
+        <select class="ctrl-select" id="font-family-select" style="margin-bottom:5px">
+          <option value="">— Select font —</option>
+        </select>
+        <div class="section-label" style="font-size:9px;margin-bottom:3px">Apply to (select 2+):</div>
+        <div class="font-pages">
+          <label><input type="checkbox" value="hud"> HUD</label>
+          <label><input type="checkbox" value="booyahTeam"> Booyah</label>
+          <label><input type="checkbox" value="teamEliminated"> Team Elim</label>
+          <label><input type="checkbox" value="winner"> Winner</label>
+          <label><input type="checkbox" value="winRate"> WinRate</label>
+        </div>
+        <div class="btn-grid btn-grid-2" style="margin-top:6px">
+          <button class="ctrl-btn" onclick="applyFont()">APPLY</button>
+          <button class="ctrl-btn" onclick="resetFont()">RESET</button>
+        </div>
+        <div id="font-status" class="ctrl-status"></div>
+      </div>
+
     </div>
 
   </div>

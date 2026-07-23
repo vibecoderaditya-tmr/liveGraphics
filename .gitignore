@@ -8,4 +8,5 @@ robot.ico
 version.txt
 *.spec
 __pycache__
-
+*.py
+*.json

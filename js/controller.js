@@ -225,3 +225,80 @@ function exportToSheets() {
   });
 }
 window.exportToSheets = exportToSheets;
+
+var fontsRef = db.ref("/live-graphics/fonts");
+var fontStatusEl = document.getElementById("font-status");
+var _fontList = [];
+
+fontsRef.child("config").on("value", function(snap) {
+  var cfg = snap.val();
+  var sel = document.getElementById("font-family-select");
+  if (!sel) return;
+  if (cfg && cfg.fontFamily) {
+    sel.value = cfg.fontFamily;
+  } else {
+    sel.value = "";
+  }
+  var checks = document.querySelectorAll(".font-pages input[type=checkbox]");
+  for (var i = 0; i < checks.length; i++) {
+    checks[i].checked = cfg && cfg.pages && cfg.pages[checks[i].value] === true;
+  }
+});
+
+fontsRef.child("available").on("value", function(snap) {
+  var list = snap.val();
+  _fontList = list && list.length ? list : [];
+  var sel = document.getElementById("font-family-select");
+  if (!sel) return;
+  var current = sel.value;
+  sel.innerHTML = '<option value="">\u2014 Select font \u2014</option>';
+  for (var i = 0; i < _fontList.length; i++) {
+    var opt = document.createElement("option");
+    opt.value = _fontList[i].name;
+    opt.textContent = _fontList[i].name;
+    sel.appendChild(opt);
+  }
+  if (current) sel.value = current;
+});
+
+function applyFont() {
+  var sel = document.getElementById("font-family-select");
+  var fontFamily = sel.value;
+  if (!fontFamily) {
+    if (fontStatusEl) fontStatusEl.textContent = "Select a font first";
+    return;
+  }
+  var entry = null;
+  for (var i = 0; i < _fontList.length; i++) {
+    if (_fontList[i].name === fontFamily) { entry = _fontList[i]; break; }
+  }
+  if (!entry) {
+    if (fontStatusEl) fontStatusEl.textContent = "Font not found in list";
+    return;
+  }
+  var checks = document.querySelectorAll(".font-pages input[type=checkbox]:checked");
+  var pages = {};
+  var count = 0;
+  for (var i = 0; i < checks.length; i++) {
+    pages[checks[i].value] = true;
+    count++;
+  }
+  if (count < 2) {
+    if (fontStatusEl) fontStatusEl.textContent = "Select 2 or more pages";
+    return;
+  }
+  fontsRef.child("config").set({
+    fontFamily: fontFamily,
+    fontFile: "fonts/" + entry.file,
+    fontFormat: entry.format,
+    pages: pages
+  });
+  if (fontStatusEl) fontStatusEl.textContent = "Applied \u2192 " + fontFamily;
+}
+window.applyFont = applyFont;
+
+function resetFont() {
+  fontsRef.child("config").set(null);
+  if (fontStatusEl) fontStatusEl.textContent = "Font reset to default";
+}
+window.resetFont = resetFont;

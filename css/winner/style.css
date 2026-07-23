@@ -78,7 +78,7 @@
   --winner-mvp-ls: 11px;                 /* "MVP" badge letter spacing */
 
   /* ===== FONT ===== */
-  --font: 'Segoe UI', sans-serif;        /* Overall font family */
+  --font: var(--font-primary, 'Segoe UI', sans-serif);        /* Overall font family */
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }

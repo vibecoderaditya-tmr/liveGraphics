@@ -10,7 +10,7 @@
   --size-team: 30px;
   --size-elim: 16px;
   --logo-size: 68px;
-  --font: 'Oswald', sans-serif;
+  --font: var(--font-primary, 'Oswald', sans-serif);
 }
 html, body {
   width: 1920px;
