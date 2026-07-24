@@ -325,15 +325,6 @@ db.ref("/matches/live").on("value", snap => {
   renderTicker();
 });
 
-db.ref("/live-graphics/status").on("value", snap => {
-  const val = snap.val();
-  const box    = document.querySelector(".ticker-box");
-  const header = document.querySelector(".ticker-header");
-  const hide = val !== "show";
-  box.classList.toggle("pts-hidden", hide);
-  header.classList.toggle("pts-hidden", hide);
-});
-
 db.ref("/live-graphics/editor/ticker").on("value", function(snap) {
   var vals = snap.val();
   if (!vals) return;
