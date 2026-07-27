@@ -72,6 +72,13 @@
         </div>
       </div>
 
+      <div class="ctrl-section">
+        <div class="section-label">Win Rate</div>
+        <div class="btn-grid btn-grid-1">
+          <button class="ctrl-btn primary" onclick="setWinRateTest('in')">WR TEST</button>
+        </div>
+      </div>
+
     </div>
 
     <div class="col-match">
@@ -91,36 +98,6 @@
         <div id="export-sheets-status" class="ctrl-status"></div>
       </div>
 
-    </div>
-
-    <div class="col-util">
-
-      <div class="ctrl-section">
-        <div class="section-label">Win Rate</div>
-        <div class="btn-grid btn-grid-1">
-          <button class="ctrl-btn primary" onclick="setWinRateTest('in')">WR TEST</button>
-        </div>
-      </div>
-
-      <div class="ctrl-section">
-        <div class="section-label">Winner</div>
-        <div class="btn-grid btn-grid-1">
-          <button class="ctrl-btn" id="btn-winner-toggle" onclick="toggleWinner()">SHOW</button>
-        </div>
-        <div class="section-label" style="margin-top:10px">Tournament Stage</div>
-        <div style="display:flex;gap:5px">
-          <input type="text" id="winnerStageInput" placeholder="GRAND FINALS" style="flex:1;background:var(--card);border:1px solid var(--border);border-radius:var(--r-sm);color:var(--text-low);font-family:var(--font-mono);font-size:10px;letter-spacing:2px;text-transform:uppercase;padding:10px 8px;outline:none">
-          <button class="ctrl-btn" onclick="setTournamentStage()" style="flex-shrink:0">SET</button>
-        </div>
-      </div>
-
-      <div class="ctrl-section">
-        <div class="section-label">Booyah Team</div>
-        <div class="btn-grid btn-grid-1">
-          <button class="ctrl-btn" id="btn-booyah-toggle" onclick="toggleBooyah()">SHOW</button>
-        </div>
-      </div>
-
       <div class="ctrl-section">
         <div class="section-label">Font Override</div>
         <select class="ctrl-select" id="font-family-select" style="margin-bottom:5px">
@@ -133,12 +110,63 @@
           <label><input type="checkbox" value="teamEliminated"> Team Elim</label>
           <label><input type="checkbox" value="winner"> Winner</label>
           <label><input type="checkbox" value="winRate"> WinRate</label>
+          <label><input type="checkbox" value="crAlert"> CR Alert</label>
         </div>
         <div class="btn-grid btn-grid-2" style="margin-top:6px">
           <button class="ctrl-btn" onclick="applyFont()">APPLY</button>
           <button class="ctrl-btn" onclick="resetFont()">RESET</button>
         </div>
         <div id="font-status" class="ctrl-status"></div>
+      </div>
+
+    </div>
+
+    <div class="col-util">
+
+      <div class="ctrl-section">
+        <div class="section-label">Winner</div>
+        <div class="btn-grid btn-grid-1">
+          <button class="ctrl-btn" id="btn-winner-toggle" onclick="toggleWinner()">SHOW</button>
+        </div>
+        <div class="section-label" style="margin-top:10px">Tournament Stage</div>
+        <div style="display:flex;gap:5px">
+          <input type="text" id="winnerStageInput" class="ctrl-input" placeholder="GRAND FINALS" style="flex:1">
+          <button class="ctrl-btn" onclick="setTournamentStage()" style="flex-shrink:0">SET</button>
+        </div>
+      </div>
+
+      <div class="ctrl-section">
+        <div class="section-label">Booyah Team</div>
+        <div class="btn-grid btn-grid-1">
+          <button class="ctrl-btn" id="btn-booyah-toggle" onclick="toggleBooyah()">SHOW</button>
+        </div>
+      </div>
+
+      <div class="ctrl-section">
+        <div class="section-label">CR Alert</div>
+        <div class="btn-grid btn-grid-1" style="margin-bottom:6px">
+          <button class="ctrl-btn" id="btn-cr-crown" onclick="toggleCrCrown()">WHITE</button>
+        </div>
+        <div class="btn-grid btn-grid-1" style="margin-bottom:6px">
+          <button class="ctrl-btn primary" onclick="crAlertIn()">IN</button>
+        </div>
+        <input type="text" id="cr-ribbon-input" class="ctrl-input" placeholder="RIBBON TEXT" value="CHAMPION RUSH" style="margin-bottom:4px">
+        <div style="display:flex;gap:4px">
+          <input type="text" id="cr-main-input" class="ctrl-input" placeholder="MAIN TEXT" value="ACTIVATES IN NEXT MATCH" style="flex:1">
+          <button class="ctrl-btn" onclick="setCrText()" style="flex-shrink:0">SET</button>
+        </div>
+        <div class="btn-divider"></div>
+        <div class="section-label" style="margin-top:4px">Activated Teams</div>
+        <div class="btn-grid btn-grid-1" style="margin-bottom:6px">
+          <button class="ctrl-btn" id="btn-cr-act-crown" onclick="toggleCrActCrown()">WHITE</button>
+        </div>
+        <div class="btn-grid btn-grid-2" style="margin-bottom:6px">
+          <button class="ctrl-btn" id="btn-cr-act-left" onclick="setCrActivateDir('LEFT')">LEFT</button>
+          <button class="ctrl-btn" id="btn-cr-act-right" onclick="setCrActivateDir('RIGHT')">RIGHT</button>
+        </div>
+        <div class="btn-grid btn-grid-1">
+          <button class="ctrl-btn" id="btn-cr-activate-toggle" onclick="toggleCrActivate()">SHOW</button>
+        </div>
       </div>
 
     </div>

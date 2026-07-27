@@ -33,6 +33,8 @@
       <button class="tab-btn" data-tab="winrate">Win Rate</button>
       <button class="tab-btn" data-tab="winner">Winner</button>
       <button class="tab-btn" data-tab="hud">HUD</button>
+      <button class="tab-btn" data-tab="cralert">CR Alert</button>
+      <button class="tab-btn" data-tab="cractivated">CR Activated</button>
     </div>
 
     <div id="tabBody">
@@ -1046,6 +1048,202 @@
                 <input class="hex-text" type="text" id="hex-hud-rightBorder" value="#333333" maxlength="7" oninput="onHexType(this,'hud')">
                 <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
                 <button class="hex-copy-btn" onclick="copyHex('hex-hud-rightBorder',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" data-tab="cralert">
+        <div class="theme-group">
+          <div class="theme-group-label">CR Alert · Body</div>
+          <div class="theme-fields">
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Body BG</span>
+                <span class="theme-field-desc">alert body background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="cra-bodyBg" value="#2d0050" oninput="onColorPick(this,'cra')">
+                </div>
+                <input class="hex-text" type="text" id="hex-cra-bodyBg" value="#2D0050" maxlength="7" oninput="onHexType(this,'cra')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-cra-bodyBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="theme-group">
+          <div class="theme-group-label">CR Alert · Ribbon</div>
+          <div class="theme-fields">
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Ribbon BG</span>
+                <span class="theme-field-desc">ribbon background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="cra-ribbonBg" value="#1f6a00" oninput="onColorPick(this,'cra')">
+                </div>
+                <input class="hex-text" type="text" id="hex-cra-ribbonBg" value="#1F6A00" maxlength="7" oninput="onHexType(this,'cra')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-cra-ribbonBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Ribbon Text</span>
+                <span class="theme-field-desc">ribbon text color</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="cra-ribbonTxt" value="#ffffff" oninput="onColorPick(this,'cra')">
+                </div>
+                <input class="hex-text" type="text" id="hex-cra-ribbonTxt" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'cra')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-cra-ribbonTxt',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="theme-group">
+          <div class="theme-group-label">CR Alert · Text &amp; Logo</div>
+          <div class="theme-fields">
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Main Text</span>
+                <span class="theme-field-desc">main body text color</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="cra-mainTxt" value="#ffffff" oninput="onColorPick(this,'cra')">
+                </div>
+                <input class="hex-text" type="text" id="hex-cra-mainTxt" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'cra')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-cra-mainTxt',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Logo BG</span>
+                <span class="theme-field-desc">logo panel background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="cra-logoBg" value="#ffffff" oninput="onColorPick(this,'cra')">
+                </div>
+                <input class="hex-text" type="text" id="hex-cra-logoBg" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'cra')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-cra-logoBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" data-tab="cractivated">
+        <div class="theme-group">
+          <div class="theme-group-label">CR Activated · Header</div>
+          <div class="theme-fields">
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Header BG</span>
+                <span class="theme-field-desc">header background color</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="cract-hdrBg" value="#1f003a" oninput="onColorPick(this,'cract')">
+                </div>
+                <input class="hex-text" type="text" id="hex-cract-hdrBg" value="#1F003A" maxlength="7" oninput="onHexType(this,'cract')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-cract-hdrBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Header Text</span>
+                <span class="theme-field-desc">header text color</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="cract-hdrTxt" value="#ffffff" oninput="onColorPick(this,'cract')">
+                </div>
+                <input class="hex-text" type="text" id="hex-cract-hdrTxt" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'cract')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-cract-hdrTxt',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="theme-group">
+          <div class="theme-group-label">CR Activated · Rows</div>
+          <div class="theme-fields">
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Row BG</span>
+                <span class="theme-field-desc">activated row background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="cract-rowBgAct" value="#440080" oninput="onColorPick(this,'cract')">
+                </div>
+                <input class="hex-text" type="text" id="hex-cract-rowBgAct" value="#440080" maxlength="7" oninput="onHexType(this,'cract')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-cract-rowBgAct',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Row Text</span>
+                <span class="theme-field-desc">team name text color</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="cract-rowTxt" value="#ffffff" oninput="onColorPick(this,'cract')">
+                </div>
+                <input class="hex-text" type="text" id="hex-cract-rowTxt" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'cract')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-cract-rowTxt',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="theme-group">
+          <div class="theme-group-label">CR Activated · Logo</div>
+          <div class="theme-fields">
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Logo BG</span>
+                <span class="theme-field-desc">logo panel background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="cract-logoBg" value="#ffffff" oninput="onColorPick(this,'cract')">
+                </div>
+                <input class="hex-text" type="text" id="hex-cract-logoBg" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'cract')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-cract-logoBg',this)" title="Copy">COPY COLOR</button>
               </div>
             </div>
 

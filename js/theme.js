@@ -16,6 +16,8 @@ var elimBmpsThemeRef = db.ref("/live-graphics/theme/eliminated-bmps");
 var winRateThemeRef = db.ref("/live-graphics/theme/winRate");
 var winnerThemeRef = db.ref("/live-graphics/theme/winner");
 var hudThemeRef    = db.ref("/live-graphics/theme/hud");
+var crAlertThemeRef = db.ref("/live-graphics/theme/crAlert");
+var crActThemeRef = db.ref("/live-graphics/theme/crActivatedTeams");
 
 var TICKER_KEYS = ["headerBg","headerText","headerBorder","logoBg","rowBg","rowText","rowBorder","barAlive","barDead","rankHeader","teamHeader","aliveHeader","elimsHeader","ptsHeader","rankTeamRow","aliveRow","rightRow","rankTeamBg","rightBg","endBg","curtainColor","topFragColor"];
 var ELIM_KEYS   = ["bgLeft","bgRight","leftHash","rightTeam","rightElim"];
@@ -23,6 +25,8 @@ var ELIM_BMPS_KEYS = ["logoBg","elimsBg","elimTxtBg","hashTxt","elimsTxt","elimT
 var WINRATE_KEYS   = ["boxBg","upperBg","upperText","lowerBg","lowerText"];
 var WINNER_KEYS    = ["statsText","cardBorder","cardBadge","nameBarBg","statsBg","textColor","nameTextColor","labelColor","contriBar","contriNumber","mvpBg","mvpText","stageText","crBg","crText","gameBg","gameText"];
 var HUD_KEYS       = ["charBg","playerBg","nameBg","leftText","leftBorder","rightBg","rightText","rightBorder"];
+var CRALERT_KEYS   = ["bodyBg","ribbonBg","ribbonTxt","mainTxt","logoBg"];
+var CRACT_KEYS     = ["hdrBg","hdrTxt","rowBgAct","rowTxt","logoBg"];
 
 function isValidHex(str) {
   return /^#?[0-9a-fA-F]{6}$/.test(str.trim());
@@ -67,6 +71,8 @@ function scheduleWrite(prefix) {
     else if (prefix === "elmBmps") writeElimBmpsTheme();
     else if (prefix === "wr") writeWinRateTheme();
     else if (prefix === "hud") writeHudTheme();
+    else if (prefix === "cra") writeCrAlertTheme();
+    else if (prefix === "cract") writeCrActTheme();
     else writeWinnerTheme();
   }, 120);
 }
@@ -125,6 +131,24 @@ function writeHudTheme() {
   hudThemeRef.set(data);
 }
 
+function writeCrAlertTheme() {
+  var data = {};
+  CRALERT_KEYS.forEach(function(k) {
+    var el = document.getElementById("cra-" + k);
+    if (el) data[k] = el.value;
+  });
+  crAlertThemeRef.set(data);
+}
+
+function writeCrActTheme() {
+  var data = {};
+  CRACT_KEYS.forEach(function(k) {
+    var el = document.getElementById("cract-" + k);
+    if (el) data[k] = el.value;
+  });
+  crActThemeRef.set(data);
+}
+
 function loadThemeVals(ref, keys, prefix) {
   ref.once("value", function(snap) {
     var val = snap.val() || {};
@@ -147,6 +171,8 @@ loadThemeVals(elimBmpsThemeRef, ELIM_BMPS_KEYS, "elmBmps");
 loadThemeVals(winRateThemeRef, WINRATE_KEYS, "wr");
 loadThemeVals(winnerThemeRef, WINNER_KEYS, "wnr");
 loadThemeVals(hudThemeRef,    HUD_KEYS,    "hud");
+loadThemeVals(crAlertThemeRef, CRALERT_KEYS, "cra");
+loadThemeVals(crActThemeRef, CRACT_KEYS, "cract");
 
 function copyHex(inputId, btn) {
   var el = document.getElementById(inputId);

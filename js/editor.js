@@ -220,6 +220,104 @@ var TABS = [
         ]
       }
     ]
+  },
+  {
+    id: 'crAlert',
+    label: 'CR Alert',
+    path: '/live-graphics/editor/crAlert',
+    groups: [
+      {
+        label: 'Body & Layout',
+        fields: [
+          { key: 'cra-alert-height', label: 'Alert Height', desc: 'Total alert container height', default: 115 },
+          { key: 'cra-alert-bottom', label: 'Bottom Offset', desc: 'Distance from bottom of screen', default: 60 },
+          { key: 'cra-crown-w', label: 'Crown Col Width', desc: 'Crown column width', default: 69 },
+          { key: 'cra-text-w', label: 'Text Col Width', desc: 'Text column width', default: 323 },
+          { key: 'cra-logo-w', label: 'Logo Col Width', desc: 'Logo panel width', default: 100 },
+          { key: 'cra-crown-size', label: 'Crown Img Size', desc: 'Crown image width & height', default: 69 }
+        ]
+      },
+      {
+        label: 'Typography',
+        fields: [
+          { key: 'cra-title-size', label: 'Title Size', desc: 'Main text font size', default: 28 }
+        ]
+      },
+      {
+        label: 'Ribbon',
+        fields: [
+          { key: 'cra-ribbon-left', label: 'Ribbon Left', desc: 'Ribbon left offset', default: 90 },
+          { key: 'cra-ribbon-h', label: 'Ribbon Height', desc: 'Ribbon bar height', default: 28 },
+          { key: 'cra-ribbon-pad', label: 'Ribbon Pad', desc: 'Ribbon horizontal padding', default: 14 }
+        ]
+      },
+      {
+        label: 'Team Logo',
+        fields: [
+          { key: 'cra-logo-size', label: 'Logo Size', desc: 'Team logo image size', default: 69 }
+        ]
+      },
+      {
+        label: 'Timing',
+        fields: [
+          { key: 'cra-show-duration', label: 'Show Duration', desc: 'Seconds to stay visible before fade', default: 10 }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'crActivatedTeams',
+    label: 'CR Activated',
+    path: '/live-graphics/editor/crActivatedTeams',
+    groups: [
+      {
+        label: 'Header',
+        fields: [
+          { key: 'cract-hdr-w', label: 'Header Width', desc: 'Header bar width', default: 260 },
+          { key: 'cract-hdr-h', label: 'Header Height', desc: 'Header bar height', default: 32 },
+          { key: 'cract-hdr-txt-w', label: 'Header Text Width', desc: 'Header text area width', default: 120 },
+          { key: 'cract-hdr-txt-x', label: 'Header Text Left', desc: 'Header text left offset', default: 10 }
+        ]
+      },
+      {
+        label: 'Rows',
+        fields: [
+          { key: 'cract-row-w', label: 'Row Width', desc: 'Each row width', default: 230 },
+          { key: 'cract-row-h', label: 'Row Height', desc: 'Each row height', default: 30 },
+          { key: 'cract-name-x', label: 'Name Left', desc: 'Team name left offset', default: 10 }
+        ]
+      },
+      {
+        label: 'Crown',
+        fields: [
+          { key: 'cract-crown-w', label: 'Crown Col Width', desc: 'Crown column width', default: 50 },
+          { key: 'cract-crown-x', label: 'Crown Left', desc: 'Crown left offset', default: 14 },
+          { key: 'cract-crown-img', label: 'Crown Img Size', desc: 'Crown image size', default: 30 }
+        ]
+      },
+      {
+        label: 'Logo',
+        fields: [
+          { key: 'cract-logo-w', label: 'Logo Col Width', desc: 'Logo column width', default: 50 },
+          { key: 'cract-logo-h', label: 'Logo Col Height', desc: 'Logo column height', default: 30 },
+          { key: 'cract-logo-x', label: 'Logo Left', desc: 'Logo left offset', default: 3 },
+          { key: 'cract-logo-size', label: 'Logo Img Size', desc: 'Team logo image size', default: 30 }
+        ]
+      },
+      {
+        label: 'Typography',
+        fields: [
+          { key: 'cract-title-size', label: 'Title Size', desc: 'Header title font size', default: 20 },
+          { key: 'cract-team-size', label: 'Team Name Size', desc: 'Team name font size', default: 23 }
+        ]
+      },
+      {
+        label: 'Position',
+        fields: [
+          { key: 'cract-wrap-y', label: 'Vertical Position', desc: 'Distance from top of screen', default: 200 }
+        ]
+      }
+    ]
   }
 ];
 

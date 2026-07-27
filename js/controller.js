@@ -108,6 +108,82 @@ function toggleBooyah() {
 }
 window.toggleBooyah = toggleBooyah;
 
+var crCrownRef = lgRef.child("cr").child("crownType");
+var crCrownType = "crown";
+
+function toggleCrCrown() {
+  var next = crCrownType === "crown" ? "Wcrown" : "crown";
+  crCrownRef.set(next);
+}
+window.toggleCrCrown = toggleCrCrown;
+
+crCrownRef.on("value", function(snap) {
+  crCrownType = snap.val() || "crown";
+  var btn = document.getElementById("btn-cr-crown");
+  if (btn) btn.textContent = crCrownType === "crown" ? "WHITE" : "BLACK";
+});
+
+var crActCrownRef = lgRef.child("crActivateTeams").child("crownType");
+var crActCrownType = "crown";
+
+function toggleCrActCrown() {
+  var next = crActCrownType === "crown" ? "Wcrown" : "crown";
+  crActCrownRef.set(next);
+}
+window.toggleCrActCrown = toggleCrActCrown;
+
+crActCrownRef.on("value", function(snap) {
+  crActCrownType = snap.val() || "crown";
+  var btn = document.getElementById("btn-cr-act-crown");
+  if (btn) btn.textContent = crActCrownType === "crown" ? "WHITE" : "BLACK";
+});
+
+var crRibbonRef = lgRef.child("cr").child("ribbonText");
+var crMainRef = lgRef.child("cr").child("mainText");
+
+var crAlertCmdRef = lgRef.child("cr").child("alertCmd");
+
+function crAlertIn() {
+  crAlertCmdRef.set("in");
+  setTimeout(function() { crAlertCmdRef.set(null); }, 100);
+}
+window.crAlertIn = crAlertIn;
+
+var crActState = "out";
+var crActDir = "left";
+
+function setCrActivateDir(val) {
+  lgRef.child("crActivateTeams").child("direction").set(val);
+}
+window.setCrActivateDir = setCrActivateDir;
+
+function toggleCrActivate() {
+  var next = crActState === "in" ? "out" : "in";
+  lgRef.child("crActivateTeams").child("state").set(next.toUpperCase());
+}
+window.toggleCrActivate = toggleCrActivate;
+
+lgRef.child("crActivateTeams").on("value", function(snap) {
+  var val = snap.val() || {};
+  crActState = (val.state || "out").toLowerCase();
+  crActDir = (val.direction || "left").toLowerCase();
+  var btn = document.getElementById("btn-cr-activate-toggle");
+  if (btn) btn.textContent = crActState === "in" ? "HIDE" : "SHOW";
+  ["btn-cr-act-left","btn-cr-act-right"].forEach(function(id) {
+    document.getElementById(id).classList.remove("active");
+  });
+  if (crActDir === "left") document.getElementById("btn-cr-act-left").classList.add("active");
+  else document.getElementById("btn-cr-act-right").classList.add("active");
+});
+
+function setCrText() {
+  var rib = document.getElementById("cr-ribbon-input");
+  var main = document.getElementById("cr-main-input");
+  if (rib) crRibbonRef.set(rib.value || "CHAMPION RUSH");
+  if (main) crMainRef.set(main.value || "ACTIVATES IN NEXT MATCH");
+}
+window.setCrText = setCrText;
+
 lgRef.on("value", function(snap) {
   var val = snap.val() || {};
   tickerState = val["state"]           || null;
