@@ -55,7 +55,10 @@ function willCrDoShow(tag) {
     crAlertEl.classList.add("cr-out");
     setTimeout(function() {
       crAlertEl.classList.remove("cr-out");
-      if (tag) willCrShown.push(tag);
+      if (tag && willCrShown.indexOf(tag) === -1) {
+        willCrShown.push(tag);
+        willCrShownRef.set(willCrShown);
+      }
       willCrCurrIdx = willCrCurrIdx + 1;
       if (willCrCurrIdx < willCrQueue.length) {
         willCrCycleTimer = setTimeout(function() {
@@ -141,42 +144,48 @@ crMainRef.on("value", function(snap) {
   if (t && mainEl) mainEl.innerHTML = t;
 });
 
-var prevWillCrQueue = "";
+var willCrShownRef = db.ref("/live-graphics/cr/shownTeams");
 var willCrShown = [];
-db.ref("/matches/2_teams").on("value", function(snap) {
-  var data = snap.val() || {};
+var willCrPrevTags = "";
+var willCrTeamsData = {};
+var willCrReady = false;
+
+function willCrProcess() {
+  if (!willCrReady) return;
   var tags = [];
-  Object.keys(data).forEach(function(key) {
-    if (data[key] && data[key].willCrActivates == 1) tags.push(key);
+  Object.keys(willCrTeamsData).forEach(function(key) {
+    if (willCrTeamsData[key] && willCrTeamsData[key].willCrActivates == 1) tags.push(key);
   });
-  var qStr = tags.join(",");
-  if (qStr === prevWillCrQueue) return;
-  prevWillCrQueue = qStr;
-  willCrShown = [];
-  willCrQueue = tags;
+  var tagStr = tags.join(",");
+  if (tagStr === willCrPrevTags) return;
+  willCrPrevTags = tagStr;
+  var newTags = tags.filter(function(t) { return willCrShown.indexOf(t) === -1; });
+  if (newTags.length === 0) return;
+  willCrQueue = newTags;
   willCrCurrIdx = 0;
   if (willCrCycleTimer) { clearTimeout(willCrCycleTimer); willCrCycleTimer = null; }
   var isShowing = crAlertEl.classList.contains("cr-in");
-  if (willCrQueue.length > 0) {
-    if (isShowing) {
-      if (crOutTimer) { clearTimeout(crOutTimer); crOutTimer = null; }
-      crAlertEl.classList.remove("cr-in");
-      void crAlertEl.offsetWidth;
-      crAlertEl.classList.add("cr-out");
-      setTimeout(function() {
-        crAlertEl.classList.remove("cr-out");
-        willCrDoShow(willCrQueue[0]);
-      }, 450);
-    } else {
+  if (isShowing) {
+    if (crOutTimer) { clearTimeout(crOutTimer); crOutTimer = null; }
+    crAlertEl.classList.remove("cr-in");
+    void crAlertEl.offsetWidth;
+    crAlertEl.classList.add("cr-out");
+    setTimeout(function() {
+      crAlertEl.classList.remove("cr-out");
       willCrDoShow(willCrQueue[0]);
-    }
+    }, 450);
   } else {
-    if (isShowing) {
-      if (crOutTimer) { clearTimeout(crOutTimer); crOutTimer = null; }
-      crAlertEl.classList.remove("cr-in");
-      void crAlertEl.offsetWidth;
-      crAlertEl.classList.add("cr-out");
-      setTimeout(function() { crAlertEl.classList.remove("cr-out"); }, 450);
-    }
+    willCrDoShow(willCrQueue[0]);
   }
+}
+
+willCrShownRef.on("value", function(snap) {
+  willCrShown = snap.val() || [];
+  willCrReady = true;
+  willCrProcess();
+});
+
+db.ref("/matches/2_teams").on("value", function(snap) {
+  willCrTeamsData = snap.val() || {};
+  willCrProcess();
 });
