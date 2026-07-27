@@ -55,6 +55,7 @@ function willCrDoShow(tag) {
     crAlertEl.classList.add("cr-out");
     setTimeout(function() {
       crAlertEl.classList.remove("cr-out");
+      if (tag) willCrShown.push(tag);
       willCrCurrIdx = willCrCurrIdx + 1;
       if (willCrCurrIdx < willCrQueue.length) {
         willCrCycleTimer = setTimeout(function() {
@@ -141,6 +142,7 @@ crMainRef.on("value", function(snap) {
 });
 
 var prevWillCrQueue = "";
+var willCrShown = [];
 db.ref("/matches/2_teams").on("value", function(snap) {
   var data = snap.val() || {};
   var tags = [];
@@ -150,6 +152,7 @@ db.ref("/matches/2_teams").on("value", function(snap) {
   var qStr = tags.join(",");
   if (qStr === prevWillCrQueue) return;
   prevWillCrQueue = qStr;
+  willCrShown = [];
   willCrQueue = tags;
   willCrCurrIdx = 0;
   if (willCrCycleTimer) { clearTimeout(willCrCycleTimer); willCrCycleTimer = null; }
