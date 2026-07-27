@@ -185,6 +185,15 @@ willCrShownRef.on("value", function(snap) {
   willCrProcess();
 });
 
+db.ref("/live-graphics/cr/shownTeamsReset").on("value", function(snap) {
+  if (snap.val() == 1) {
+    willCrShown = [];
+    willCrPrevTags = "";
+    willCrShownRef.set([]);
+    snap.ref.set(0);
+  }
+});
+
 db.ref("/matches/2_teams").on("value", function(snap) {
   willCrTeamsData = snap.val() || {};
   willCrProcess();
