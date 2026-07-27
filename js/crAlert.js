@@ -55,8 +55,8 @@ function willCrDoShow(tag) {
     crAlertEl.classList.add("cr-out");
     setTimeout(function() {
       crAlertEl.classList.remove("cr-out");
-      if (willCrQueue.length > 0) {
-        willCrCurrIdx = (willCrCurrIdx + 1) % willCrQueue.length;
+      willCrCurrIdx = willCrCurrIdx + 1;
+      if (willCrCurrIdx < willCrQueue.length) {
         willCrCycleTimer = setTimeout(function() {
           willCrDoShow(willCrQueue[willCrCurrIdx]);
         }, 2000);
