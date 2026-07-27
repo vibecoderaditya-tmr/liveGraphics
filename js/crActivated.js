@@ -219,6 +219,7 @@ crActDirRef.on("value", function(snap) {
   if (animState === "in") applyAnim();
 });
 
+var prevActTags = "";
 db.ref("/matches/2_teams").on("value", function(snap) {
   var data = snap.val() || {};
   var newList = [];
@@ -228,6 +229,9 @@ db.ref("/matches/2_teams").on("value", function(snap) {
       newList.push({ tag: key });
     }
   });
+  var tagStr = newList.map(function(t) { return t.tag; }).join(",");
+  if (tagStr === prevActTags) return;
+  prevActTags = tagStr;
   teamsList = newList;
   totalPages = teamsList.length > 0 ? Math.ceil(teamsList.length / PAGE_SIZE) : 0;
   applyAnim();
