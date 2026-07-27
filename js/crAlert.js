@@ -18,21 +18,59 @@ crCrownRef.on("value", function(snap) {
 var crAlertCmdRef = db.ref("/live-graphics/cr/alertCmd");
 var crAlertEl = document.getElementById("cr-going-alert");
 var crOutTimer = null;
+var willCrQueue = [];
+var willCrCurrIdx = 0;
+var willCrCycleTimer = null;
+var willCrLogoImg = document.querySelector(".cr-ga-logo-panel img");
+
+function loadLogo(imgEl, tag) {
+  var variants = [tag.toLowerCase(), tag.toUpperCase(), tag];
+  var attempt = 0;
+  (function tryNext() {
+    if (attempt >= variants.length) {
+      imgEl.style.display = "none";
+      imgEl.onerror = null;
+      return;
+    }
+    imgEl.src = "img/logos/" + variants[attempt] + ".webp";
+    attempt++;
+    imgEl.onerror = tryNext;
+  })();
+}
+
+function willCrDoShow(tag) {
+  if (willCrCycleTimer) { clearTimeout(willCrCycleTimer); willCrCycleTimer = null; }
+  if (willCrLogoImg) {
+    if (tag) { willCrLogoImg.style.display = ""; loadLogo(willCrLogoImg, tag); }
+    else { willCrLogoImg.style.display = "none"; }
+  }
+  if (crOutTimer) { clearTimeout(crOutTimer); crOutTimer = null; }
+  crAlertEl.classList.remove("cr-out", "cr-in");
+  void crAlertEl.offsetWidth;
+  crAlertEl.classList.add("cr-in");
+  var showDur = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cr-show-duration')) * 1000 + 800;
+  crOutTimer = setTimeout(function() {
+    crAlertEl.classList.remove("cr-in");
+    void crAlertEl.offsetWidth;
+    crAlertEl.classList.add("cr-out");
+    setTimeout(function() {
+      crAlertEl.classList.remove("cr-out");
+      if (willCrQueue.length > 0) {
+        willCrCurrIdx = (willCrCurrIdx + 1) % willCrQueue.length;
+        willCrCycleTimer = setTimeout(function() {
+          willCrDoShow(willCrQueue[willCrCurrIdx]);
+        }, 2000);
+      }
+    }, 450);
+    crOutTimer = null;
+  }, showDur);
+}
 
 crAlertCmdRef.on("value", function(snap) {
   var cmd = snap.val();
   if (cmd === "in") {
-    if (crOutTimer) { clearTimeout(crOutTimer); crOutTimer = null; }
-    crAlertEl.classList.remove("cr-out", "cr-in");
-    void crAlertEl.offsetWidth;
-    crAlertEl.classList.add("cr-in");
-    crOutTimer = setTimeout(function() {
-      crAlertEl.classList.remove("cr-in");
-      void crAlertEl.offsetWidth;
-      crAlertEl.classList.add("cr-out");
-      setTimeout(function() { crAlertEl.classList.remove("cr-out"); }, 450);
-      crOutTimer = null;
-    }, parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--cr-show-duration')) * 1000 + 800);
+    var tag = willCrQueue.length > 0 ? willCrQueue[willCrCurrIdx % willCrQueue.length] : null;
+    willCrDoShow(tag);
     crAlertCmdRef.set(null);
   }
 });
@@ -100,4 +138,42 @@ crRibbonRef.on("value", function(snap) {
 crMainRef.on("value", function(snap) {
   var t = snap.val();
   if (t && mainEl) mainEl.innerHTML = t;
+});
+
+var prevWillCrQueue = "";
+db.ref("/matches/2_teams").on("value", function(snap) {
+  var data = snap.val() || {};
+  var tags = [];
+  Object.keys(data).forEach(function(key) {
+    if (data[key] && data[key].willCrActivates == 1) tags.push(key);
+  });
+  var qStr = tags.join(",");
+  if (qStr === prevWillCrQueue) return;
+  prevWillCrQueue = qStr;
+  willCrQueue = tags;
+  willCrCurrIdx = 0;
+  if (willCrCycleTimer) { clearTimeout(willCrCycleTimer); willCrCycleTimer = null; }
+  var isShowing = crAlertEl.classList.contains("cr-in");
+  if (willCrQueue.length > 0) {
+    if (isShowing) {
+      if (crOutTimer) { clearTimeout(crOutTimer); crOutTimer = null; }
+      crAlertEl.classList.remove("cr-in");
+      void crAlertEl.offsetWidth;
+      crAlertEl.classList.add("cr-out");
+      setTimeout(function() {
+        crAlertEl.classList.remove("cr-out");
+        willCrDoShow(willCrQueue[0]);
+      }, 450);
+    } else {
+      willCrDoShow(willCrQueue[0]);
+    }
+  } else {
+    if (isShowing) {
+      if (crOutTimer) { clearTimeout(crOutTimer); crOutTimer = null; }
+      crAlertEl.classList.remove("cr-in");
+      void crAlertEl.offsetWidth;
+      crAlertEl.classList.add("cr-out");
+      setTimeout(function() { crAlertEl.classList.remove("cr-out"); }, 450);
+    }
+  }
 });
