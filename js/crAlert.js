@@ -146,55 +146,49 @@ crMainRef.on("value", function(snap) {
 
 var willCrShownRef = db.ref("/live-graphics/cr/shownTeams");
 var willCrShown = [];
-var willCrPrevTags = "";
-var willCrTeamsData = {};
 var willCrReady = false;
+var champRushThreshold = 0;
+var thresholdReady = false;
+var liveDataCache = null;
 
-function willCrProcess() {
-  if (!willCrReady) return;
-  var tags = [];
-  Object.keys(willCrTeamsData).forEach(function(key) {
-    if (willCrTeamsData[key] && willCrTeamsData[key].willCrActivates == 1) tags.push(key);
+function checkChampRush() {
+  if (!willCrReady || !thresholdReady || !liveDataCache) return;
+  Object.keys(liveDataCache).forEach(function(tag) {
+    var team = liveDataCache[tag];
+    var pts = Number(team["5_totalPoints"]) || 0;
+    if (pts >= champRushThreshold) {
+      if (willCrShown.indexOf(tag) === -1 && willCrQueue.indexOf(tag) === -1) {
+        willCrQueue.push(tag);
+        if (!crAlertEl.classList.contains("cr-in") && !willCrCycleTimer) {
+          willCrCurrIdx = willCrQueue.length - 1;
+          willCrDoShow(tag);
+        }
+      }
+    }
   });
-  var tagStr = tags.join(",");
-  if (tagStr === willCrPrevTags) return;
-  willCrPrevTags = tagStr;
-  var newTags = tags.filter(function(t) { return willCrShown.indexOf(t) === -1; });
-  if (newTags.length === 0) return;
-  willCrQueue = newTags;
-  willCrCurrIdx = 0;
-  if (willCrCycleTimer) { clearTimeout(willCrCycleTimer); willCrCycleTimer = null; }
-  var isShowing = crAlertEl.classList.contains("cr-in");
-  if (isShowing) {
-    if (crOutTimer) { clearTimeout(crOutTimer); crOutTimer = null; }
-    crAlertEl.classList.remove("cr-in");
-    void crAlertEl.offsetWidth;
-    crAlertEl.classList.add("cr-out");
-    setTimeout(function() {
-      crAlertEl.classList.remove("cr-out");
-      willCrDoShow(willCrQueue[0]);
-    }, 450);
-  } else {
-    willCrDoShow(willCrQueue[0]);
-  }
 }
 
 willCrShownRef.on("value", function(snap) {
   willCrShown = snap.val() || [];
   willCrReady = true;
-  willCrProcess();
+  checkChampRush();
 });
 
 db.ref("/live-graphics/cr/shownTeamsReset").on("value", function(snap) {
   if (snap.val() == 1) {
     willCrShown = [];
-    willCrPrevTags = "";
     willCrShownRef.set([]);
     snap.ref.set(0);
   }
 });
 
-db.ref("/matches/2_teams").on("value", function(snap) {
-  willCrTeamsData = snap.val() || {};
-  willCrProcess();
+db.ref("/matches/0_championRushPoints").on("value", function(snap) {
+  champRushThreshold = parseInt(snap.val()) || 80;
+  thresholdReady = true;
+  checkChampRush();
+});
+
+db.ref("/matches/live").on("value", function(snap) {
+  liveDataCache = snap.val() || {};
+  checkChampRush();
 });
