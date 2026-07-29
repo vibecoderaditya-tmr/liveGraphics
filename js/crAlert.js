@@ -149,12 +149,12 @@ var willCrShown = [];
 var willCrReady = false;
 var champRushThreshold = 0;
 var thresholdReady = false;
-var liveDataCache = null;
+var teamsDataCache = null;
 
 function checkChampRush() {
-  if (!willCrReady || !thresholdReady || !liveDataCache) return;
-  Object.keys(liveDataCache).forEach(function(tag) {
-    var team = liveDataCache[tag];
+  if (!willCrReady || !thresholdReady || !teamsDataCache) return;
+  Object.keys(teamsDataCache).forEach(function(tag) {
+    var team = teamsDataCache[tag];
     var pts = Number(team["5_totalPoints"]) || 0;
     if (pts >= champRushThreshold) {
       if (willCrShown.indexOf(tag) === -1 && willCrQueue.indexOf(tag) === -1) {
@@ -188,7 +188,7 @@ db.ref("/matches/0_championRushPoints").on("value", function(snap) {
   checkChampRush();
 });
 
-db.ref("/matches/live").on("value", function(snap) {
-  liveDataCache = snap.val() || {};
+db.ref("/matches/2_teams").on("value", function(snap) {
+  teamsDataCache = snap.val() || {};
   checkChampRush();
 });
