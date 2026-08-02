@@ -55,6 +55,21 @@ const standardLogo = standardCard.querySelector('.standard-logo img');
 const standardElimsCount = standardCard.querySelector('.standard-elims-count');
 standardCard.style.visibility = 'hidden';
 
+function setTeamLogo(imgEl, tag) {
+  var file = window.logoFile ? window.logoFile(tag) : null;
+  if (!file) {
+    imgEl.style.display = "none";
+    imgEl.onerror = null;
+    return;
+  }
+  imgEl.style.display = "";
+  imgEl.onerror = function() {
+    imgEl.style.display = "none";
+    imgEl.onerror = null;
+  };
+  imgEl.src = './img/logos/' + file + '.webp';
+}
+
 const prevAlive = {};
 const queue = [];
 let showing = false;
@@ -92,20 +107,20 @@ function showCard(tag, hash, name, kills) {
     hashEl.textContent = '#' + hash;
     teamNameEl.textContent = name;
     elimCountEl.textContent = kills + ' ELIMINATIONS';
-    logoImg.src = './img/logos/' + tag.toLowerCase() + '.webp';
+    setTeamLogo(logoImg, tag);
     card.style.display = 'flex';
     void card.offsetWidth;
     card.classList.add('show');
   } else if (currentDesign === "bmps") {
     bmpsCard.style.visibility = 'hidden';
     bmpsHash.textContent = '#' + hash;
-    bmpsLogo.src = './img/logos/' + tag.toLowerCase() + '.webp';
+    setTeamLogo(bmpsLogo, tag);
     bmpsElimsCount.textContent = kills;
     bmpsCurtainIn(bmpsCard);
   } else {
     standardCard.style.visibility = 'hidden';
     standardHash.textContent = '#' + hash;
-    standardLogo.src = './img/logos/' + tag.toLowerCase() + '.webp';
+    setTeamLogo(standardLogo, tag);
     standardElimsCount.textContent = kills;
     standardCurtainIn(standardCard);
   }

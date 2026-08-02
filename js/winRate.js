@@ -36,8 +36,23 @@ function hideAllCards() {
   cardTags = [null, null, null, null];
 }
 
+function setTeamLogo(imgEl, tag) {
+  var file = window.logoFile ? window.logoFile(tag) : null;
+  if (!file) {
+    imgEl.style.display = "none";
+    imgEl.onerror = null;
+    return;
+  }
+  imgEl.style.display = "";
+  imgEl.onerror = function() {
+    imgEl.style.display = "none";
+    imgEl.onerror = null;
+  };
+  imgEl.src = 'img/logos/' + file + '.webp';
+}
+
 function populateCard(card, team) {
-  card.querySelector('.winrate-box img').src = 'img/logos/' + team.tag.toLowerCase() + '.webp';
+  setTeamLogo(card.querySelector('.winrate-box img'), team.tag);
   card.querySelector('.bar-label').textContent = team.tag;
   card.querySelector('.winrate-lower').textContent = 'WR\u00a0\u00a0\u00a0' + team.winRate + '%';
 

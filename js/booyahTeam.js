@@ -24,9 +24,18 @@ function shuffleArray(arr) {
 }
 
 function loadLogo(imgEl, tag) {
-  var s = String(tag).trim().toLowerCase().replace(/[^a-zA-Z0-9_-]/g, "");
-  imgEl.onerror = function() { imgEl.style.display = "none"; };
-  imgEl.src = "img/logos/" + s + ".webp";
+  var file = window.logoFile ? window.logoFile(tag) : null;
+  if (!file) {
+    imgEl.style.display = "none";
+    imgEl.onerror = null;
+    return;
+  }
+  imgEl.style.display = "";
+  imgEl.onerror = function() {
+    imgEl.style.display = "none";
+    imgEl.onerror = null;
+  };
+  imgEl.src = "img/logos/" + file + ".webp";
 }
 
 function setBooyahImage() {

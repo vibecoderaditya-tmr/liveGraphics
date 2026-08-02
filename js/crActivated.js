@@ -28,18 +28,18 @@ var pageTimer = null;
 var crCrownType = "crown";
 
 function loadLogo(imgEl, tag) {
-  var variants = [tag.toLowerCase(), tag.toUpperCase(), tag];
-  var attempt = 0;
-  (function tryNext() {
-    if (attempt >= variants.length) {
-      imgEl.style.display = "none";
-      imgEl.onerror = null;
-      return;
-    }
-    imgEl.src = "img/logos/" + variants[attempt] + ".webp";
-    attempt++;
-    imgEl.onerror = tryNext;
-  })();
+  var file = window.logoFile ? window.logoFile(tag) : null;
+  if (!file) {
+    imgEl.style.display = "none";
+    imgEl.onerror = null;
+    return;
+  }
+  imgEl.style.display = "";
+  imgEl.onerror = function() {
+    imgEl.style.display = "none";
+    imgEl.onerror = null;
+  };
+  imgEl.src = "img/logos/" + file + ".webp";
 }
 
 function buildRowsForPage(page) {

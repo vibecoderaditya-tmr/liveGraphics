@@ -6,28 +6,19 @@ function fileRelativeDir() {
 const LOGO_BASE = isFileProtocol ? `${fileRelativeDir()}img/logos/` : "/img/logos/";
 const LOGO_EXT  = ".webp";
 
-function buildCaseVariants(name) {
-  const clean = String(name).trim().replace(/[^a-zA-Z0-9_-]/g, "");
-  const lower = clean.toLowerCase();
-  const upper = clean.toUpperCase();
-  const capitalized = lower.charAt(0).toUpperCase() + lower.slice(1);
-  return [...new Set([lower, upper, capitalized])];
-}
-
 function loadLogo(imgEl, tag) {
-  const variants = buildCaseVariants(tag);
-  let attempt = 0;
-  function tryNext() {
-    if (attempt >= variants.length) {
-      imgEl.style.display = "none";
-      imgEl.onerror = null;
-      return;
-    }
-    imgEl.src = LOGO_BASE + variants[attempt] + LOGO_EXT;
-    attempt++;
-    imgEl.onerror = tryNext;
+  var file = window.logoFile ? window.logoFile(tag) : null;
+  if (!file) {
+    imgEl.style.display = "none";
+    imgEl.onerror = null;
+    return;
   }
-  tryNext();
+  imgEl.style.display = "";
+  imgEl.onerror = function() {
+    imgEl.style.display = "none";
+    imgEl.onerror = null;
+  };
+  imgEl.src = LOGO_BASE + file + LOGO_EXT;
 }
 
 const NUM_ROWS = 12;
