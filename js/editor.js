@@ -318,6 +318,43 @@ var TABS = [
         ]
       }
     ]
+  },
+  {
+    id: 'booyahTeam',
+    label: 'Booyah Team',
+    path: '/live-graphics/editor/booyahTeam',
+    groups: [
+      {
+        label: 'Top Section',
+        fields: [
+          { key: 'bt-top-w', label: 'Top Width', desc: 'Top section width', default: 1000 },
+          { key: 'bt-img-h', label: 'Booyah Img Height', desc: 'Booyah image height', default: 500 },
+          { key: 'bt-img-x', label: 'Booyah Img X', desc: 'Booyah image left offset', default: 0 },
+          { key: 'bt-img-y', label: 'Booyah Img Y', desc: 'Booyah image top offset', default: 0 },
+          { key: 'bt-bg-img-h', label: 'BG Img Height', desc: 'Background image height', default: 745 },
+          { key: 'bt-bg-img-x', label: 'BG Img X', desc: 'Background left offset', default: -150 },
+          { key: 'bt-bg-img-y', label: 'BG Img Y', desc: 'Background top offset', default: -266 }
+        ]
+      },
+      {
+        label: 'Name Bar',
+        fields: [
+          { key: 'bt-bottom-w', label: 'Name Bar Width', desc: 'Team name bg bar width', default: 650 },
+          { key: 'bt-bottom-gap', label: 'Logo-Name Gap', desc: 'Gap between logo and name', default: 23 },
+          { key: 'bt-logo-h', label: 'Logo Height', desc: 'Team logo image height', default: 82 },
+          { key: 'bt-logo-x', label: 'Logo X', desc: 'Logo left offset', default: 0 },
+          { key: 'bt-logo-y', label: 'Logo Y', desc: 'Logo top offset', default: 0 }
+        ]
+      },
+      {
+        label: 'Typography',
+        fields: [
+          { key: 'bt-name-size', label: 'Team Name Size', desc: 'Team name font size', default: 55 },
+          { key: 'bt-name-x', label: 'Team Name X', desc: 'Team name left offset', default: 0 },
+          { key: 'bt-name-y', label: 'Team Name Y', desc: 'Team name top offset', default: 0 }
+        ]
+      }
+    ]
   }
 ];
 
