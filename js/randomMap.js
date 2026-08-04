@@ -192,3 +192,17 @@ window.addEventListener('load', () => {
     });
   });
 });
+
+db.ref("/live-graphics/fonts/config").on("value", function(snap) {
+  var cfg = snap.val();
+  var root = document.documentElement;
+  if (!cfg || !cfg.pages || !cfg.pages.randomMap) { root.style.removeProperty("--font-primary"); return; }
+  if (!cfg.fontFamily || !cfg.fontFile) return;
+  var s = document.createElement("style");
+  s.id = "dyn-font-rmap";
+  s.textContent = "@font-face{font-family:'" + cfg.fontFamily + "';src:url('" + cfg.fontFile + "') format('" + cfg.fontFormat + "');}";
+  var old = document.getElementById("dyn-font-rmap");
+  if (old) old.remove();
+  document.head.appendChild(s);
+  root.style.setProperty("--font-primary", cfg.fontFamily);
+});

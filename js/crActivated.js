@@ -291,3 +291,17 @@ db.ref("/live-graphics/theme/crActivatedTeams").on("value", function(snap) {
   if (_h(t.rowTxt))   root.style.setProperty("--cr-row-txt", t.rowTxt);
   if (_h(t.logoBg))   root.style.setProperty("--cr-logo-bg", t.logoBg);
 });
+
+db.ref("/live-graphics/fonts/config").on("value", function(snap) {
+  var cfg = snap.val();
+  var root = document.documentElement;
+  if (!cfg || !cfg.pages || !cfg.pages.crActivatedTeams) { root.style.removeProperty("--font-primary"); return; }
+  if (!cfg.fontFamily || !cfg.fontFile) return;
+  var s = document.createElement("style");
+  s.id = "dyn-font-cract";
+  s.textContent = "@font-face{font-family:'" + cfg.fontFamily + "';src:url('" + cfg.fontFile + "') format('" + cfg.fontFormat + "');}";
+  var old = document.getElementById("dyn-font-cract");
+  if (old) old.remove();
+  document.head.appendChild(s);
+  root.style.setProperty("--font-primary", cfg.fontFamily);
+});

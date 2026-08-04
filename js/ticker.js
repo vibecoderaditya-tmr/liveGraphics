@@ -355,3 +355,17 @@ db.ref("/live-graphics/theme/ticker").on("value", function(snap) {
   if (_h(t.topFragColor))  root.style.setProperty("--top-frag-color", t.topFragColor);
 });
 
+db.ref("/live-graphics/fonts/config").on("value", function(snap) {
+  var cfg = snap.val();
+  var root = document.documentElement;
+  if (!cfg || !cfg.pages || !cfg.pages.ticker) { root.style.removeProperty("--font-primary"); return; }
+  if (!cfg.fontFamily || !cfg.fontFile) return;
+  var s = document.createElement("style");
+  s.id = "dyn-font-ticker";
+  s.textContent = "@font-face{font-family:'" + cfg.fontFamily + "';src:url('" + cfg.fontFile + "') format('" + cfg.fontFormat + "');}";
+  var old = document.getElementById("dyn-font-ticker");
+  if (old) old.remove();
+  document.head.appendChild(s);
+  root.style.setProperty("--font-primary", cfg.fontFamily);
+});
+

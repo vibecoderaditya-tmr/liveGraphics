@@ -108,7 +108,7 @@ db.ref("/live-graphics/editor/crAlert").on("value", function(snap) {
 db.ref("/live-graphics/fonts/config").on("value", function(snap) {
   var cfg = snap.val();
   var root = document.documentElement;
-  if (!cfg || !cfg.pages || !cfg.pages.crAlert) { root.style.removeProperty("--font-primary"); return; }
+  if (!cfg || !cfg.pages || !(cfg.pages.crAlert || cfg.pages.willCrActivates)) { root.style.removeProperty("--font-primary"); return; }
   if (!cfg.fontFamily || !cfg.fontFile) return;
   var s = document.createElement("style");
   s.id = "dyn-font-cra";
