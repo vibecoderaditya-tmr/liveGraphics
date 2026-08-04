@@ -67,7 +67,7 @@ html, body {
 .cr-hdr-txt {
   width: var(--cr-hdr-txt-w);
   margin-left: var(--cr-hdr-txt-x);
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: var(--font-primary, 'Barlow Condensed'), sans-serif;
   font-weight: 800;
   font-size: var(--cr-size-title);
   color: var(--cr-hdr-txt);
@@ -114,7 +114,7 @@ html, body {
   flex: 1; height: 100%;
   display: flex; align-items: center;
   margin-left: var(--cr-name-x);
-  font-family: 'Rajdhani', sans-serif;
+  font-family: var(--font-primary, 'Rajdhani'), sans-serif;
   font-weight: 700;
   font-size: var(--cr-size-team);
   color: var(--cr-row-txt);

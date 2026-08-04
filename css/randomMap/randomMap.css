@@ -16,7 +16,7 @@ html, body {
 
 body {
   background: var(--bg);
-  font-family: 'Barlow Condensed', sans-serif;
+  font-family: var(--font-primary, 'Barlow Condensed'), sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
