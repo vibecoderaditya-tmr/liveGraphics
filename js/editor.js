@@ -355,6 +355,62 @@ var TABS = [
         ]
       }
     ]
+  },
+  {
+    id: 'perMatchPt',
+    label: 'perMatchPt',
+    path: '/live-graphics/editor/perMatchPt',
+    groups: [
+      {
+        label: 'Top Section',
+        fields: [
+          { key: 'pmt-top-w', label: 'Top Width', desc: 'Top section width', default: 1850 },
+          { key: 'pmt-top-h', label: 'Top Height', desc: 'Top section height', default: 300 },
+          { key: 'pmt-top-img-w', label: 'BooyahTeam Img W', desc: 'BooyahTeam image width', default: 600 },
+          { key: 'pmt-top-img-h', label: 'BooyahTeam Img H', desc: 'BooyahTeam image height', default: 600 },
+          { key: 'pmt-top-img-x', label: 'BooyahTeam Img X', desc: 'BooyahTeam image left offset', default: 100 },
+          { key: 'pmt-top-img-y', label: 'BooyahTeam Img Y', desc: 'BooyahTeam image top offset', default: -172 },
+          { key: 'pmt-top-logo', label: 'Team Logo Size', desc: 'Team logo size', default: 169 },
+          { key: 'pmt-top-logo-x', label: 'Team Logo X', desc: 'Team logo left offset', default: 220 },
+          { key: 'pmt-top-logo-y', label: 'Team Logo Y', desc: 'Team logo top offset', default: 80 },
+          { key: 'pmt-top-title-w', label: 'Booyah Img W', desc: 'Booyah image width', default: 600 },
+          { key: 'pmt-top-title-h', label: 'Booyah Img H', desc: 'Booyah image height', default: 600 },
+          { key: 'pmt-top-title-x', label: 'Booyah Img X', desc: 'Booyah image left offset', default: -128 },
+          { key: 'pmt-top-title-y', label: 'Booyah Img Y', desc: 'Booyah image top offset', default: -144 }
+        ]
+      },
+      {
+        label: 'Columns',
+        fields: [
+          { key: 'pmt-cols-w', label: 'Columns Width', desc: 'Leaderboard width', default: 1850 },
+          { key: 'pmt-cols-h', label: 'Columns Height', desc: 'Leaderboard height', default: 505 },
+          { key: 'pmt-col-gap', label: 'Column Gap', desc: 'Gap between the two columns', default: 20 },
+          { key: 'pmt-x', label: 'Layout X', desc: 'Layout left offset', default: 210 },
+          { key: 'pmt-y', label: 'Layout Y', desc: 'Layout top offset', default: 110 },
+          { key: 'pmt-gap-y', label: 'Vertical Gap', desc: 'Gap between top section and columns', default: 20 }
+        ]
+      },
+      {
+        label: 'Sizes',
+        fields: [
+          { key: 'pmt-hdr-h', label: 'Header Height', desc: 'Column header height', default: 69 },
+          { key: 'pmt-row-h', label: 'Row Height', desc: 'Leaderboard row height', default: 69 },
+          { key: 'pmt-rank-w', label: 'Rank Width', desc: 'Rank cell width', default: 100 },
+          { key: 'pmt-elim-w', label: 'Elim Width', desc: 'Elim points cell width', default: 110 },
+          { key: 'pmt-place-w', label: 'Place Width', desc: 'Place points cell width', default: 110 },
+          { key: 'pmt-total-w', label: 'Total Width', desc: 'Total points cell width', default: 110 },
+          { key: 'pmt-pad-rank', label: 'Rank Padding', desc: 'Rank cell padding', default: 14 },
+          { key: 'pmt-pad-team', label: 'Team Padding', desc: 'Team cell right padding', default: 14 },
+          { key: 'pmt-pad-elim', label: 'Elim Padding', desc: 'Elim cell padding', default: 14 },
+          { key: 'pmt-pad-place', label: 'Place Padding', desc: 'Place cell padding', default: 14 },
+          { key: 'pmt-pad-total', label: 'Total Padding', desc: 'Total cell padding', default: 14 },
+          { key: 'pmt-name-x', label: 'Name Left Offset', desc: 'Team name left offset', default: 12 },
+          { key: 'pmt-row-size', label: 'Row Font Size', desc: 'Row text size', default: 28 },
+          { key: 'pmt-hdr-size', label: 'Header Font Size', desc: 'Header text size', default: 20 },
+          { key: 'pmt-logo-gap', label: 'Logo-Name Gap', desc: 'Gap between logo and name', default: 28 }
+        ]
+      }
+    ]
   }
 ];
 
