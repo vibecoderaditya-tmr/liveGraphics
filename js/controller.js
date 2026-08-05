@@ -108,6 +108,98 @@ function toggleBooyah() {
 }
 window.toggleBooyah = toggleBooyah;
 
+var perMptState = "hide";
+
+function togglePerMatchPt() {
+  var next = perMptState === "show" ? "hide" : "show";
+  lgRef.child("perMatchPt").set(next);
+  perMptState = next;
+  var btn = document.getElementById("btn-permpt-toggle");
+  if (btn) btn.textContent = perMptState === "show" ? "HIDE" : "SHOW";
+}
+window.togglePerMatchPt = togglePerMatchPt;
+
+// --- perMatchPt data reference ---
+var _refTeams = {};
+var _refMatchKey = "";
+
+function refEnsure(tag, name) {
+  if (!_refTeams[tag]) _refTeams[tag] = { tag: tag, name: name || tag, kills: 0, place: 0 };
+  else if (name && (!_refTeams[tag].name || _refTeams[tag].name === tag)) _refTeams[tag].name = name;
+}
+
+function refApplyMatch(node) {
+  if (!node || typeof node !== "object" || !node["1_teamTag"]) return;
+  var tag = node["1_teamTag"];
+  refEnsure(tag, node["4_teamName"] || node["1_teamName"] || tag);
+  var k = Number(node["5_totalKills"]) || Number(node["3_killPoints"]) || 0;
+  var p = Number(node["6_placementPoints"]) || Number(node["4_placePoints"]) || 0;
+  if (k) _refTeams[tag].kills = k;
+  if (p) _refTeams[tag].place = p;
+}
+
+function renderMatchRef() {
+  var statusEl = document.getElementById("pmt-ref-status");
+  var refEl = document.getElementById("pmt-ref");
+  if (!statusEl || !refEl) return;
+  if (!_refMatchKey) {
+    statusEl.textContent = "No match data";
+    refEl.innerHTML = "";
+    return;
+  }
+  var entries = Object.keys(_refTeams).map(function(tag) {
+    var k = _refTeams[tag].kills || 0;
+    var p = _refTeams[tag].place || 0;
+    return { tag: tag, name: _refTeams[tag].name, kills: k, place: p, total: k + p };
+  });
+  entries.sort(function(a, b) { return b.total - a.total; });
+  entries = entries.slice(0, 12);
+  var num = _refMatchKey.replace(/^match/i, "");
+  statusEl.textContent = "Showing: Match " + num + " data now \u00b7 " + new Date().toLocaleTimeString();
+  var html = '<div class="pmt-ref-row pmt-ref-hdr"><span>RANK</span><span>TEAM</span><span>ELIM</span><span>PLACE</span><span>TOTAL</span></div>';
+  for (var i = 0; i < entries.length; i++) {
+    var e = entries[i];
+    var place = Math.max(0, e.place);
+    var cls = place === 12 ? " pmt-ref-boy" : "";
+    html += '<div class="pmt-ref-row' + cls + '"><span>#' + (i + 1) + '</span><span class="pmt-ref-team">' + e.tag + '</span><span>' + e.kills + '</span><span>' + place + '</span><span>' + e.total + '</span></div>';
+  }
+  refEl.innerHTML = html;
+}
+
+db.ref("/matches").on("value", function(snap) {
+  var data = snap.val();
+  if (!data) return;
+  var highestNum = 0, matchKey = "";
+  for (var key in data) {
+    var m = key.match(/^match(\d+)$/);
+    if (m) { var n = parseInt(m[1], 10); if (n > highestNum) { highestNum = n; matchKey = key; } }
+  }
+  if (matchKey && data[matchKey]) {
+    _refMatchKey = matchKey;
+    for (var key in data[matchKey]) refApplyMatch(data[matchKey][key]);
+    renderMatchRef();
+  }
+});
+
+db.ref("/matches/2_teams").on("value", function(snap) {
+  var td = snap.val() || {};
+  for (var tag in td) {
+    var n = td[tag];
+    refEnsure(tag, n && (n["1_teamName"] || n["4_teamName"]));
+  }
+  renderMatchRef();
+});
+
+db.ref("/matches/live").on("value", function(snap) {
+  var ld = snap.val() || {};
+  for (var tag in ld) {
+    if (!_refTeams[tag] || !ld[tag]) continue;
+    var k = Number(ld[tag]["5_totalKills"]);
+    if (isFinite(k)) _refTeams[tag].kills = k;
+  }
+  renderMatchRef();
+});
+
 var crCrownRef = lgRef.child("cr").child("crownType");
 var crCrownType = "crown";
 
@@ -199,6 +291,9 @@ lgRef.on("value", function(snap) {
   booyahState = val["booyahTeam"] || "hide";
   var bBtn = document.getElementById("btn-booyah-toggle");
   if (bBtn) bBtn.textContent = booyahState === "show" ? "HIDE" : "SHOW";
+  perMptState = val["perMatchPt"] || "hide";
+  var pBtn = document.getElementById("btn-permpt-toggle");
+  if (pBtn) pBtn.textContent = perMptState === "show" ? "HIDE" : "SHOW";
 });
 
 var ptsVisRef = db.ref("/live-graphics/status");

@@ -111,6 +111,12 @@
           <label><input type="checkbox" value="winner"> Winner</label>
           <label><input type="checkbox" value="winRate"> WinRate</label>
           <label><input type="checkbox" value="crAlert"> CR Alert</label>
+          <label><input type="checkbox" value="willCrActivates"> Will CR</label>
+          <label><input type="checkbox" value="crActivatedTeams"> CR Activated</label>
+          <label><input type="checkbox" value="ticker"> Ticker</label>
+          <label><input type="checkbox" value="liveTicker"> Live Ticker</label>
+          <label><input type="checkbox" value="randomMap"> Random Map</label>
+          <label><input type="checkbox" value="perMatchPt"> perMatchPt</label>
         </div>
         <div class="btn-grid btn-grid-2" style="margin-top:6px">
           <button class="ctrl-btn" onclick="applyFont()">APPLY</button>
@@ -167,6 +173,19 @@
         <div class="btn-grid btn-grid-1">
           <button class="ctrl-btn" id="btn-cr-activate-toggle" onclick="toggleCrActivate()">SHOW</button>
         </div>
+      </div>
+
+    </div>
+
+    <div class="col-permpt">
+
+      <div class="ctrl-section">
+        <div class="section-label">perMatchPt</div>
+        <div class="btn-grid btn-grid-1">
+          <button class="ctrl-btn" id="btn-permpt-toggle" onclick="togglePerMatchPt()">SHOW</button>
+        </div>
+        <div class="pmt-ref-status" id="pmt-ref-status">No match data</div>
+        <div class="pmt-ref" id="pmt-ref"></div>
       </div>
 
     </div>
