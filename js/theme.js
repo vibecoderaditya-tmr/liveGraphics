@@ -18,6 +18,7 @@ var winnerThemeRef = db.ref("/live-graphics/theme/winner");
 var hudThemeRef    = db.ref("/live-graphics/theme/hud");
 var crAlertThemeRef = db.ref("/live-graphics/theme/crAlert");
 var crActThemeRef = db.ref("/live-graphics/theme/crActivatedTeams");
+var perMptThemeRef = db.ref("/live-graphics/theme/perMatchPt");
 
 var TICKER_KEYS = ["headerBg","headerText","headerBorder","logoBg","rowBg","rowText","rowBorder","barAlive","barDead","rankHeader","teamHeader","aliveHeader","elimsHeader","ptsHeader","rankTeamRow","aliveRow","rightRow","rankTeamBg","rightBg","endBg","curtainColor","topFragColor"];
 var ELIM_KEYS   = ["bgLeft","bgRight","leftHash","rightTeam","rightElim"];
@@ -27,6 +28,7 @@ var WINNER_KEYS    = ["statsText","cardBorder","cardBadge","nameBarBg","statsBg"
 var HUD_KEYS       = ["charBg","playerBg","nameBg","leftText","leftBorder","rightBg","rightText","rightBorder"];
 var CRALERT_KEYS   = ["bodyBg","ribbonBg","ribbonTxt","mainTxt","logoBg"];
 var CRACT_KEYS     = ["hdrBg","hdrTxt","rowBgAct","rowTxt","logoBg"];
+var PERMPT_KEYS    = ["topBg","hdrBg","hdrText","leftBg","leftText","rightBg","rightText","booyahHighlight","booyahText"];
 
 function isValidHex(str) {
   return /^#?[0-9a-fA-F]{6}$/.test(str.trim());
@@ -73,6 +75,7 @@ function scheduleWrite(prefix) {
     else if (prefix === "hud") writeHudTheme();
     else if (prefix === "cra") writeCrAlertTheme();
     else if (prefix === "cract") writeCrActTheme();
+    else if (prefix === "pmt") writePerMptTheme();
     else writeWinnerTheme();
   }, 120);
 }
@@ -149,6 +152,15 @@ function writeCrActTheme() {
   crActThemeRef.set(data);
 }
 
+function writePerMptTheme() {
+  var data = {};
+  PERMPT_KEYS.forEach(function(k) {
+    var el = document.getElementById("pmt-" + k);
+    if (el) data[k] = el.value;
+  });
+  perMptThemeRef.set(data);
+}
+
 function loadThemeVals(ref, keys, prefix) {
   ref.once("value", function(snap) {
     var val = snap.val() || {};
@@ -173,6 +185,7 @@ loadThemeVals(winnerThemeRef, WINNER_KEYS, "wnr");
 loadThemeVals(hudThemeRef,    HUD_KEYS,    "hud");
 loadThemeVals(crAlertThemeRef, CRALERT_KEYS, "cra");
 loadThemeVals(crActThemeRef, CRACT_KEYS, "cract");
+loadThemeVals(perMptThemeRef, PERMPT_KEYS, "pmt");
 
 function copyHex(inputId, btn) {
   var el = document.getElementById(inputId);
