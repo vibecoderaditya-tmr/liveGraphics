@@ -411,6 +411,42 @@ var TABS = [
         ]
       }
     ]
+  },
+  {
+    id: 'osPt',
+    label: 'osPt',
+    path: '/live-graphics/editor/osPt',
+    groups: [
+      {
+        label: 'Columns',
+        fields: [
+          { key: 'osx-cols-w', label: 'Columns Width', desc: 'Leaderboard width', default: 1820 },
+          { key: 'osx-cols-h', label: 'Columns Height', desc: 'Leaderboard height', default: 505 },
+          { key: 'osx-col-gap', label: 'Column Gap', desc: 'Gap between the two columns', default: 20 },
+          { key: 'osx-gap-y', label: 'Vertical Gap', desc: 'Gap between header and rows', default: 20 }
+        ]
+      },
+      {
+        label: 'Sizes',
+        fields: [
+          { key: 'osx-hdr-h', label: 'Header Height', desc: 'Column header height', default: 69 },
+          { key: 'osx-row-h', label: 'Row Height', desc: 'Leaderboard row height', default: 69 },
+          { key: 'osx-rank-w', label: 'Rank Width', desc: 'Rank cell width', default: 100 },
+          { key: 'osx-elim-w', label: 'Elim Width', desc: 'Elim points cell width', default: 100 },
+          { key: 'osx-place-w', label: 'Place Width', desc: 'Place points cell width', default: 100 },
+          { key: 'osx-total-w', label: 'Total Width', desc: 'Total points cell width', default: 100 },
+          { key: 'osx-pad-rank', label: 'Rank Padding', desc: 'Rank cell padding', default: 14 },
+          { key: 'osx-pad-team', label: 'Team Padding', desc: 'Team cell right padding', default: 14 },
+          { key: 'osx-pad-elim', label: 'Elim Padding', desc: 'Elim cell padding', default: 14 },
+          { key: 'osx-pad-place', label: 'Place Padding', desc: 'Place cell padding', default: 14 },
+          { key: 'osx-pad-total', label: 'Total Padding', desc: 'Total cell padding', default: 14 },
+          { key: 'osx-name-x', label: 'Name Left Offset', desc: 'Team name left offset', default: 12 },
+          { key: 'osx-row-size', label: 'Row Font Size', desc: 'Row text size', default: 28 },
+          { key: 'osx-hdr-size', label: 'Header Font Size', desc: 'Header text size', default: 20 },
+          { key: 'osx-logo-gap', label: 'Logo-Name Gap', desc: 'Gap between logo and name', default: 28 }
+        ]
+      }
+    ]
   }
 ];
 
