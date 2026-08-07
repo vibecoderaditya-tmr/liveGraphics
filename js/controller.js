@@ -119,6 +119,69 @@ function togglePerMatchPt() {
 }
 window.togglePerMatchPt = togglePerMatchPt;
 
+var osxState = "hide";
+
+function toggleOsPt() {
+  var next = osxState === "show" ? "hide" : "show";
+  lgRef.child("osPt").set(next);
+  osxState = next;
+  var btn = document.getElementById("btn-ospt-toggle");
+  if (btn) btn.textContent = osxState === "show" ? "HIDE" : "SHOW";
+}
+window.toggleOsPt = toggleOsPt;
+
+// --- osPt data reference (from 2_teams only) ---
+var _osxTeams = {};
+var _osxMatchNum = 0;
+
+function osxEnsure(tag, name) {
+  if (!_osxTeams[tag]) _osxTeams[tag] = { tag: tag, name: name || tag, kills: 0, place: 0 };
+  else if (name && (!_osxTeams[tag].name || _osxTeams[tag].name === tag)) _osxTeams[tag].name = name;
+}
+
+function osxApplyTeam(node, tag) {
+  if (!node) return;
+  osxEnsure(tag, node["1_teamName"] || node["4_teamName"] || tag);
+  var k = Number(node["3_killPoints"]) || 0;
+  var p = Number(node["4_placePoints"]) || 0;
+  if (k) _osxTeams[tag].kills = k;
+  if (p) _osxTeams[tag].place = p;
+}
+
+function renderOsxRef() {
+  var statusEl = document.getElementById("osx-ref-status");
+  var refEl = document.getElementById("osx-ref");
+  if (!statusEl || !refEl) return;
+  var entries = Object.keys(_osxTeams).map(function(tag) {
+    var k = _osxTeams[tag].kills || 0;
+    var p = _osxTeams[tag].place || 0;
+    return { tag: tag, name: _osxTeams[tag].name, kills: k, place: p, total: k + p };
+  });
+  if (!entries.length) {
+    statusEl.textContent = "No team data";
+    refEl.innerHTML = "";
+    return;
+  }
+  entries.sort(function(a, b) { return b.total - a.total; });
+  entries = entries.slice(0, 12);
+  statusEl.textContent = "Total Match " + _osxMatchNum + " data showing";
+  var html = '<div class="osx-ref-row osx-ref-hdr"><span>#</span><span>TEAM</span><span>ELIM</span><span>PLACE</span><span>TOTAL</span></div>';
+  for (var i = 0; i < entries.length; i++) {
+    var e = entries[i];
+    var place = Math.max(0, e.place);
+    html += '<div class="osx-ref-row"><span>' + (i + 1) + '</span><span class="osx-ref-team">' + e.tag + '</span><span>' + e.kills + '</span><span>' + place + '</span><span>' + e.total + '</span></div>';
+  }
+  refEl.innerHTML = html;
+}
+
+db.ref("/matches/2_teams").on("value", function(snap) {
+  var td = snap.val() || {};
+  for (var tag in td) {
+    osxApplyTeam(td[tag], tag);
+  }
+  renderOsxRef();
+});
+
 // --- perMatchPt data reference ---
 var _refTeams = {};
 var _refMatchKey = "";
@@ -155,7 +218,7 @@ function renderMatchRef() {
   entries.sort(function(a, b) { return b.total - a.total; });
   entries = entries.slice(0, 12);
   var num = _refMatchKey.replace(/^match/i, "");
-  statusEl.textContent = "Showing: Match " + num + " data now \u00b7 " + new Date().toLocaleTimeString();
+  statusEl.textContent = "Match " + num + " data now";
   var html = '<div class="pmt-ref-row pmt-ref-hdr"><span>RANK</span><span>TEAM</span><span>ELIM</span><span>PLACE</span><span>TOTAL</span></div>';
   for (var i = 0; i < entries.length; i++) {
     var e = entries[i];
@@ -176,8 +239,10 @@ db.ref("/matches").on("value", function(snap) {
   }
   if (matchKey && data[matchKey]) {
     _refMatchKey = matchKey;
+    _osxMatchNum = highestNum;
     for (var key in data[matchKey]) refApplyMatch(data[matchKey][key]);
     renderMatchRef();
+    renderOsxRef();
   }
 });
 
@@ -294,6 +359,9 @@ lgRef.on("value", function(snap) {
   perMptState = val["perMatchPt"] || "hide";
   var pBtn = document.getElementById("btn-permpt-toggle");
   if (pBtn) pBtn.textContent = perMptState === "show" ? "HIDE" : "SHOW";
+  osxState = val["osPt"] || "hide";
+  var oBtn = document.getElementById("btn-ospt-toggle");
+  if (oBtn) oBtn.textContent = osxState === "show" ? "HIDE" : "SHOW";
 });
 
 var ptsVisRef = db.ref("/live-graphics/status");
