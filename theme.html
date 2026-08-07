@@ -36,6 +36,7 @@
       <button class="tab-btn" data-tab="cralert">CR Alert</button>
       <button class="tab-btn" data-tab="cractivated">CR Activated</button>
       <button class="tab-btn" data-tab="perMatchPt">perMatchPt</button>
+      <button class="tab-btn" data-tab="osPt">osPt</button>
     </div>
 
     <div id="tabBody">
@@ -1410,6 +1411,112 @@
                 <input class="hex-text" type="text" id="hex-pmt-booyahText" value="#141414" maxlength="7" oninput="onHexType(this,'pmt')">
                 <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
                 <button class="hex-copy-btn" onclick="copyHex('hex-pmt-booyahText',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" data-tab="osPt">
+        <div class="theme-group">
+          <div class="theme-group-label">osPt · Header</div>
+          <div class="theme-fields">
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Header BG</span>
+                <span class="theme-field-desc">column header background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="osx-hdrBg" value="#1f2937" oninput="onColorPick(this,'osx')">
+                </div>
+                <input class="hex-text" type="text" id="hex-osx-hdrBg" value="#1F2937" maxlength="7" oninput="onHexType(this,'osx')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-osx-hdrBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Header Text</span>
+                <span class="theme-field-desc">header text color</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="osx-hdrText" value="#ffffff" oninput="onColorPick(this,'osx')">
+                </div>
+                <input class="hex-text" type="text" id="hex-osx-hdrText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'osx')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-osx-hdrText',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="theme-group" style="margin-top:18px">
+          <div class="theme-group-label">osPt · Rows</div>
+          <div class="theme-fields">
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Left BG</span>
+                <span class="theme-field-desc">rank + team cell background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="osx-leftBg" value="#00499b" oninput="onColorPick(this,'osx')">
+                </div>
+                <input class="hex-text" type="text" id="hex-osx-leftBg" value="#00499B" maxlength="7" oninput="onHexType(this,'osx')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-osx-leftBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Left Text</span>
+                <span class="theme-field-desc">rank + team cell text</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="osx-leftText" value="#ffffff" oninput="onColorPick(this,'osx')">
+                </div>
+                <input class="hex-text" type="text" id="hex-osx-leftText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'osx')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-osx-leftText',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Right BG</span>
+                <span class="theme-field-desc">elim + place + total cell background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="osx-rightBg" value="#0f0f0f" oninput="onColorPick(this,'osx')">
+                </div>
+                <input class="hex-text" type="text" id="hex-osx-rightBg" value="#0F0F0F" maxlength="7" oninput="onHexType(this,'osx')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-osx-rightBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Right Text</span>
+                <span class="theme-field-desc">elim + place + total cell text</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="osx-rightText" value="#ffffff" oninput="onColorPick(this,'osx')">
+                </div>
+                <input class="hex-text" type="text" id="hex-osx-rightText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'osx')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-osx-rightText',this)" title="Copy">COPY COLOR</button>
               </div>
             </div>
 
