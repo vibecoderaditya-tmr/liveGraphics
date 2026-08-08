@@ -7,7 +7,7 @@ html, body {
 
 :root {
   /* --- osPt layout --- */
-  --osx-cols-w: 1820px;
+  --osx-cols-w: 1920px;
   --osx-cols-h: 505px;
   --osx-col-gap: 20px;
   --osx-hdr-h: 69px;
@@ -15,20 +15,24 @@ html, body {
   --osx-gap-y: 20px;
   --osx-x: 210px;
   --osx-y: 110px;
-  --osx-rank-w: 100px;
+  --osx-rank-w: 82px;
+  --osx-mp-w: 69px;
+  --osx-booyah-w: 69px;
   --osx-elim-w: 100px;
   --osx-place-w: 100px;
   --osx-total-w: 100px;
   --osx-pad-rank: 14px;
+  --osx-pad-mp: 14px;
   --osx-pad-team: 14px;
   --osx-pad-elim: 14px;
   --osx-pad-place: 14px;
   --osx-pad-total: 14px;
-  --osx-name-x: 12px;
+  --osx-booyah: calc(var(--osx-hdr-h) - 10px);
+  --osx-name-x: 0px;
   --osx-row-size: 28px;
   --osx-hdr-size: 20px;
   --osx-logo: calc(var(--osx-row-h) - 5px);
-  --osx-logo-gap: 28px;
+  --osx-logo-gap: 11px;
   --osx-hdr-bg: #1f2937;
   --osx-hdr-text: #ffffff;
   --osx-left-bg: #00499b;
@@ -86,7 +90,7 @@ html, body {
   font-size: var(--osx-hdr-size);
   font-weight: 700;
   display: grid;
-  grid-template-columns: var(--osx-rank-w) 1fr var(--osx-elim-w) var(--osx-place-w) var(--osx-total-w);
+  grid-template-columns: var(--osx-rank-w) 1fr var(--osx-mp-w) var(--osx-booyah-w) var(--osx-elim-w) var(--osx-place-w) var(--osx-total-w);
   align-items: center;
   text-align: center;
 }
@@ -99,9 +103,19 @@ html, body {
 }
 
 .osx-hdr .osx-hdr-rank { padding: 0 var(--osx-pad-rank); }
+.osx-hdr .osx-hdr-mp { padding: 0 var(--osx-pad-mp); }
 .osx-hdr .osx-hdr-elim { padding: 0 var(--osx-pad-elim); }
 .osx-hdr .osx-hdr-place { padding: 0 var(--osx-pad-place); }
 .osx-hdr .osx-hdr-total { padding: 0 var(--osx-pad-total); }
+
+.osx-hdr-booyah img.osx-booyah-img,
+.osx-booyah img.osx-booyah-img {
+  height: var(--osx-booyah);
+  width: auto;
+  object-fit: contain;
+  display: block;
+  margin: auto;
+}
 
 .osx-row {
   height: var(--osx-row-h);
@@ -109,7 +123,7 @@ html, body {
   font-size: var(--osx-row-size);
   font-weight: 500;
   display: grid;
-  grid-template-columns: var(--osx-rank-w) 1fr var(--osx-elim-w) var(--osx-place-w) var(--osx-total-w);
+  grid-template-columns: var(--osx-rank-w) 1fr var(--osx-mp-w) var(--osx-booyah-w) var(--osx-elim-w) var(--osx-place-w) var(--osx-total-w);
   align-items: center;
   text-align: center;
 }
@@ -122,6 +136,7 @@ html, body {
 }
 
 .osx-row .osx-rank { padding: 0 var(--osx-pad-rank); }
+.osx-row .osx-mp { padding: 0 var(--osx-pad-mp); }
 .osx-row .osx-elim { padding: 0 var(--osx-pad-elim); }
 .osx-row .osx-place { padding: 0 var(--osx-pad-place); }
 .osx-row .osx-total { padding: 0 var(--osx-pad-total); }

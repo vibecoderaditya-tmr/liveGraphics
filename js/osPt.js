@@ -39,7 +39,7 @@ function cssVarSec(name) {
 }
 
 function osxEnsure(tag, name) {
-  if (!_osxTeams[tag]) _osxTeams[tag] = { tag: tag, name: name || tag, kills: 0, place: 0 };
+  if (!_osxTeams[tag]) _osxTeams[tag] = { tag: tag, name: name || tag, kills: 0, place: 0, mp: 0, booyah: 0 };
   else if (name && (!_osxTeams[tag].name || _osxTeams[tag].name === tag)) _osxTeams[tag].name = name;
 }
 
@@ -56,7 +56,7 @@ function osxEntries() {
   return Object.keys(_osxTeams).map(function(tag) {
     var k = _osxTeams[tag].kills || 0;
     var p = _osxTeams[tag].place || 0;
-    return { tag: tag, name: _osxTeams[tag].name, kills: k, place: p, total: k + p };
+    return { tag: tag, name: _osxTeams[tag].name, kills: k, place: p, total: k + p, mp: _osxTeams[tag].mp || 0, booyah: _osxTeams[tag].booyah || 0 };
   });
 }
 
@@ -96,6 +96,8 @@ function osxRender(animate) {
         row.innerHTML =
           "<span class=\"osx-rank\"><span class=\"osx-txt\">#" + (idx + 1) + "</span></span>" +
           "<div class=\"osx-team\"><div class=\"osx-logo-wrap\"><img class=\"osx-logo\" alt=\"\"></div><span class=\"osx-name\"></span></div>" +
+          "<span class=\"osx-num osx-mp\"><span class=\"osx-txt\">" + e.mp + "</span></span>" +
+          "<span class=\"osx-num osx-booyah\"><span class=\"osx-txt\">" + (e.booyah > 0 ? e.booyah : "") + "</span></span>" +
           "<span class=\"osx-num osx-elim\"><span class=\"osx-txt\">" + e.kills + "</span></span>" +
           "<span class=\"osx-num osx-place\"><span class=\"osx-txt\">" + place + "</span></span>" +
           "<span class=\"osx-num osx-total\"><span class=\"osx-txt\">" + e.total + "</span></span>";
@@ -136,6 +138,23 @@ db.ref("/matches/2_teams").on("value", function(snap) {
   var td = snap.val() || {};
   for (var tag in td) {
     osxApplyTeam(td[tag], tag);
+  }
+  osxScheduleRender();
+});
+
+db.ref("/matches").on("value", function(snap) {
+  var data = snap.val() || {};
+  for (var key in data) {
+    if (!/^match\d+$/.test(key)) continue;
+    var node = data[key];
+    if (!node || typeof node !== "object") continue;
+    for (var tag in node) {
+      var tn = node[tag];
+      if (!tn || typeof tn !== "object" || tn["0_hash"] === undefined) continue;
+      osxEnsure(tag, tn["4_teamName"] || tn["1_teamName"] || tag);
+      _osxTeams[tag].mp++;
+      if (Number(tn["0_hash"]) === 1) _osxTeams[tag].booyah++;
+    }
   }
   osxScheduleRender();
 });
