@@ -44,6 +44,14 @@ function setTeamElimCmd(cmd) {
 }
 window.setTeamElimCmd = setTeamElimCmd;
 
+var gameInfoCmdRef = lgRef.child("gameInfoCommand");
+
+function setGameInfoCmd(cmd) {
+  gameInfoCmdRef.set(cmd);
+  setTimeout(function() { gameInfoCmdRef.set(null); }, 100);
+}
+window.setGameInfoCmd = setGameInfoCmd;
+
 function setHudAlign(val) {
   hudAlignRef.set(val);
   hudAlign = val;
