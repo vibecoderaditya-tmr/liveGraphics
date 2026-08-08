@@ -447,6 +447,28 @@ var TABS = [
         ]
       }
     ]
+  },
+  {
+    id: 'gameInfo',
+    label: 'Game Info',
+    path: '/live-graphics/editor/gameInfo',
+    groups: [
+      {
+        label: 'Sizes',
+        fields: [
+          { key: 'box-w', label: 'Box Width', desc: 'Outer box width', default: 500 },
+          { key: 'row-h', label: 'Row Height', desc: 'Each row height', default: 55 },
+          { key: 'gi-row-gap', label: 'Row Gap', desc: 'Gap between the 3 rows', default: 0 },
+          { key: 'gi-top', label: 'Top Offset', desc: 'Wrapper distance from top', default: 0 }
+        ]
+      },
+      {
+        label: 'Typography',
+        fields: [
+          { key: 'row-size', label: 'Row Text Size', desc: 'Row text font size', default: 28 }
+        ]
+      }
+    ]
   }
 ];
 

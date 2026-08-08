@@ -20,10 +20,12 @@ var crAlertThemeRef = db.ref("/live-graphics/theme/crAlert");
 var crActThemeRef = db.ref("/live-graphics/theme/crActivatedTeams");
 var perMptThemeRef = db.ref("/live-graphics/theme/perMatchPt");
 var osPtThemeRef   = db.ref("/live-graphics/theme/osPt");
+var gameInfoThemeRef = db.ref("/live-graphics/theme/gameInfo");
 
 var TICKER_KEYS = ["headerBg","headerText","headerBorder","logoBg","rowBg","rowText","rowBorder","barAlive","barDead","rankHeader","teamHeader","aliveHeader","elimsHeader","ptsHeader","rankTeamRow","aliveRow","rightRow","rankTeamBg","rightBg","endBg","curtainColor","topFragColor"];
 var ELIM_KEYS   = ["bgLeft","bgRight","leftHash","rightTeam","rightElim"];
 var ELIM_BMPS_KEYS = ["logoBg","elimsBg","elimTxtBg","hashTxt","elimsTxt","elimTxt"];
+var GAMEINFO_KEYS  = ["rowBg","rowText"];
 var WINRATE_KEYS   = ["boxBg","upperBg","upperText","lowerBg","lowerText"];
 var WINNER_KEYS    = ["statsText","cardBorder","cardBadge","nameBarBg","statsBg","textColor","nameTextColor","labelColor","contriBar","contriNumber","mvpBg","mvpText","stageText","crBg","crText","gameBg","gameText"];
 var HUD_KEYS       = ["charBg","playerBg","nameBg","leftText","leftBorder","rightBg","rightText","rightBorder"];
@@ -79,6 +81,7 @@ function scheduleWrite(prefix) {
     else if (prefix === "cract") writeCrActTheme();
     else if (prefix === "pmt") writePerMptTheme();
     else if (prefix === "osx") writeOsPtTheme();
+    else if (prefix === "gi") writeGameInfoTheme();
     else writeWinnerTheme();
   }, 120);
 }
@@ -173,6 +176,15 @@ function writeOsPtTheme() {
   osPtThemeRef.set(data);
 }
 
+function writeGameInfoTheme() {
+  var data = {};
+  GAMEINFO_KEYS.forEach(function(k) {
+    var el = document.getElementById("gi-" + k);
+    if (el) data[k] = el.value;
+  });
+  gameInfoThemeRef.set(data);
+}
+
 function loadThemeVals(ref, keys, prefix) {
   ref.once("value", function(snap) {
     var val = snap.val() || {};
@@ -199,6 +211,7 @@ loadThemeVals(crAlertThemeRef, CRALERT_KEYS, "cra");
 loadThemeVals(crActThemeRef, CRACT_KEYS, "cract");
 loadThemeVals(perMptThemeRef, PERMPT_KEYS, "pmt");
 loadThemeVals(osPtThemeRef, OSPT_KEYS, "osx");
+loadThemeVals(gameInfoThemeRef, GAMEINFO_KEYS, "gi");
 
 function copyHex(inputId, btn) {
   var el = document.getElementById(inputId);

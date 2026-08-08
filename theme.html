@@ -37,6 +37,7 @@
       <button class="tab-btn" data-tab="cractivated">CR Activated</button>
       <button class="tab-btn" data-tab="perMatchPt">perMatchPt</button>
       <button class="tab-btn" data-tab="osPt">osPt</button>
+      <button class="tab-btn" data-tab="gameInfo">Game Info</button>
     </div>
 
     <div id="tabBody">
@@ -1517,6 +1518,45 @@
                 <input class="hex-text" type="text" id="hex-osx-rightText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'osx')">
                 <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
                 <button class="hex-copy-btn" onclick="copyHex('hex-osx-rightText',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" data-tab="gameInfo">
+        <div class="theme-group">
+          <div class="theme-group-label">Game Info · Rows</div>
+          <div class="theme-fields">
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Row BG</span>
+                <span class="theme-field-desc">each row background</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="gi-rowBg" value="#141414" oninput="onColorPick(this,'gi')">
+                </div>
+                <input class="hex-text" type="text" id="hex-gi-rowBg" value="#141414" maxlength="7" oninput="onHexType(this,'gi')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-gi-rowBg',this)" title="Copy">COPY COLOR</button>
+              </div>
+            </div>
+
+            <div class="theme-field">
+              <div class="theme-field-label">
+                <span class="theme-field-name">Row Text</span>
+                <span class="theme-field-desc">row text color</span>
+              </div>
+              <div class="color-pair">
+                <div class="color-swatch-wrap">
+                  <input type="color" id="gi-rowText" value="#ffffff" oninput="onColorPick(this,'gi')">
+                </div>
+                <input class="hex-text" type="text" id="hex-gi-rowText" value="#FFFFFF" maxlength="7" oninput="onHexType(this,'gi')">
+                <button class="eyedropper-btn" onclick="pickColor(this)" title="Pick from screen">PICK A COLOR</button>
+                <button class="hex-copy-btn" onclick="copyHex('hex-gi-rowText',this)" title="Copy">COPY COLOR</button>
               </div>
             </div>
 
