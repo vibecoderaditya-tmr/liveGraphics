@@ -65,6 +65,13 @@
       </div>
 
       <div class="ctrl-section">
+        <div class="section-label">Game Info</div>
+        <div class="btn-grid btn-grid-1">
+          <button class="ctrl-btn primary" id="btn-game-info-in" onclick="setGameInfoCmd('in')">IN</button>
+        </div>
+      </div>
+
+      <div class="ctrl-section">
         <div class="section-label">HUD Alignment</div>
         <div class="btn-grid btn-grid-2">
           <button class="ctrl-btn" id="btn-hud-left" onclick="setHudAlign('left')">LEFT</button>
@@ -118,6 +125,7 @@
           <label><input type="checkbox" value="randomMap"> Random Map</label>
           <label><input type="checkbox" value="perMatchPt"> perMatchPt</label>
           <label><input type="checkbox" value="osPt"> osPt</label>
+          <label><input type="checkbox" value="gameInfo"> Game Info</label>
         </div>
         <div class="btn-grid btn-grid-2" style="margin-top:6px">
           <button class="ctrl-btn" onclick="applyFont()">APPLY</button>
