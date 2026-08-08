@@ -1,0 +1,75 @@
+:root {
+  --box-w: 500px;
+  --row-h: 55px;
+  --row-bg: #141414;
+  --row-text: #ffffff;
+  --row-size: 32px;
+  --gi-row-gap: 0px;
+  --gi-top: 500px;
+  --gi-curtain-strip-count: 50;
+  --gi-strip-height: 3px;
+  --font: 'Oswald', sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+  width: 1920px; height: 1080px;
+  overflow: hidden; background: transparent;
+  font-family: var(--font-primary, var(--font), 'Oswald'), sans-serif;
+}
+.gi-wrap {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: var(--gi-top);
+}
+.gi-wrap.shown {
+  display: flex;
+}
+.gi-box {
+  width: max-content;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gi-row-gap);
+}
+.gi-row {
+  height: var(--row-h);
+  background: var(--row-bg);
+  color: var(--row-text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--row-size);
+  font-weight: 700;
+  letter-spacing: 3px;
+  padding: 0 55px;
+}
+
+/* Game Info curtain animation */
+.gi-curtain-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  overflow: hidden;
+}
+.gi-curtain-wrap.dir-in .gi-curtain-strip {
+  left: 0;
+  right: auto;
+  width: 0;
+}
+.gi-curtain-wrap.dir-out .gi-curtain-strip {
+  right: 0;
+  left: auto;
+  width: 0;
+}
+.gi-curtain-wrap.strips-grow .gi-curtain-strip {
+  width: 100%;
+}
+.gi-curtain-strip {
+  position: absolute;
+  height: var(--gi-strip-height, 3px);
+  background: var(--curtain-color, #26b2f2);
+  transition: width var(--strip-dur, 0.5s) cubic-bezier(0.4, 0, 0.2, 1);
+}
