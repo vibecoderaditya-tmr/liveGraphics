@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>TMR · Buttons</title>
+<link rel="icon" href="icon.ico" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<link rel="stylesheet" href="css/buttons/buttons.css">
+</head>
+<body>
+
+<div class="deck-wrap">
+  <div class="deck-header">
+    <div class="deck-badge"><div class="deck-badge-dot"></div><span>Live</span></div>
+    <div class="deck-logo">TM<em>R</em></div>
+    <div class="deck-title">Stream Deck</div>
+    <div class="deck-size" id="deck-size"></div>
+    <button class="deck-fullscreen" id="btn-fullscreen" onclick="toggleFullscreen()">⛶</button>
+  </div>
+  <div class="deck-grid" id="deck-grid"></div>
+</div>
+
+<script src="js/buttons.js"></script>
+</body>
+</html>

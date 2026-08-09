@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>TMR · Buttons Admin</title>
+<link rel="icon" href="icon.ico" type="image/x-icon">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
+<link rel="stylesheet" href="css/buttonsAdmin/buttonsAdmin.css">
+</head>
+<body>
+
+<div class="adm-wrap">
+  <div class="adm-header">
+    <div class="adm-title">Buttons <em>Admin</em></div>
+    <div class="adm-hint">Click a tile to assign its action &amp; colors. Grid size is live-editable.</div>
+  </div>
+
+  <div class="adm-controls">
+    <div class="adm-grid-control">
+      <label>ROWS</label>
+      <div class="stepper">
+        <button onclick="stepRows(-1)">−</button>
+        <span id="rows-val">2</span>
+        <button onclick="stepRows(1)">+</button>
+      </div>
+    </div>
+    <div class="adm-grid-control">
+      <label>COLS</label>
+      <div class="stepper">
+        <button onclick="stepCols(-1)">−</button>
+        <span id="cols-val">4</span>
+        <button onclick="stepCols(1)">+</button>
+      </div>
+    </div>
+    <div class="adm-save" id="save-status">config saved</div>
+  </div>
+
+  <div class="adm-grid" id="adm-grid"></div>
+</div>
+
+<div class="modal-mask hidden" id="editor-mask">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Assign Button</div>
+    <div class="modal-body">
+      <label class="modal-label">Button Label</label>
+      <input type="text" id="btn-label" class="hex-input" placeholder="MY BUTTON">
+      <label class="modal-label">Function</label>
+      <select id="action-select"></select>
+      <label class="modal-label">Button Background</label>
+      <div class="color-row">
+        <input type="color" id="bg-color" value="#1f2937">
+        <input type="text" id="bg-text" class="hex-input" value="#1f2937">
+      </div>
+      <label class="modal-label">Text Color</label>
+      <div class="color-row">
+        <input type="color" id="text-color" value="#ffffff">
+        <input type="text" id="text-text" class="hex-input" value="#ffffff">
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn danger" onclick="deleteButton()" id="delete-btn">DELETE</button>
+      <span style="flex:1"></span>
+      <button class="btn secondary" onclick="closeEditor()">CANCEL</button>
+      <button class="btn primary" onclick="saveEditor()">ASSIGN</button>
+    </div>
+  </div>
+</div>
+
+<script src="js/buttonsAdmin.js"></script>
+</body>
+</html>
