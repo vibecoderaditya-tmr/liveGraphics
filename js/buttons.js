@@ -22,7 +22,7 @@ var ACTIONS = {
   gameInfo_IN:           { label: "Game Info",  sub: "IN",          pulse: lgRef.child("gameInfoCommand"), send: "in" },
   teamElim_IN:           { label: "Team Elim",  sub: "IN",          pulse: lgRef.child("teamEliminatedCommand"), send: "in" },
   crAlert_IN:            { label: "CR Alert",   sub: "IN",          pulse: lgRef.child("cr").child("alertCmd"), send: "in" },
-  winner_SHOW:           { label: "Winner",     sub: "SHOW",        pulse: lgRef.child("winner"), send: "show" },
+  winner_SHOW:           { label: "Winner",     sub: "SHOW / HIDE", toggle: lgRef.child("winner"), on: "show",             off: "hide" },
   exportToSheets:        { label: "Export",     sub: "SHEETS",      fn: exportToSheets }
 };
 
@@ -58,16 +58,6 @@ function exportToSheets() {
 var RED = "#dc2626";
 var state = {};
 var els = {};
-
-function toggleFullscreen() {
-  if (document.fullscreenElement) {
-    document.exitFullscreen();
-  } else {
-    var el = document.documentElement;
-    if (el.requestFullscreen) el.requestFullscreen();
-  }
-}
-window.toggleFullscreen = toggleFullscreen;
 
 function buildEl(id, cfg) {
   var a = cfg.action ? ACTIONS[cfg.action] : null;

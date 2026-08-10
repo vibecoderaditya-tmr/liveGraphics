@@ -25,7 +25,7 @@ var ACTION_OPTIONS = [
   { id: "gameInfo_IN",          label: "Game Info — IN" },
   { id: "teamElim_IN",          label: "Team Eliminated — IN" },
   { id: "crAlert_IN",           label: "CR Alert — IN" },
-  { id: "winner_SHOW",          label: "Winner — SHOW" },
+  { id: "winner_SHOW",          label: "Winner — Show / Hide" },
   { id: "exportToSheets",       label: "Export — Sheets" }
 ];
 
