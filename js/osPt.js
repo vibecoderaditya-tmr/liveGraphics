@@ -52,6 +52,7 @@ function osxApplyTeam(node, tag) {
   if (p) _osxTeams[tag].place = p;
   _osxTeams[tag].cr = node.isCrActivated == 1 ? 1 : 0;
   _osxTeams[tag].wcr = node.wonByCR == 1 ? 1 : 0;
+  _osxTeams[tag].booyah = Number(node["2_booyahs"]) || 0;
 }
 
 function osxEntries() {
@@ -149,6 +150,7 @@ db.ref("/matches/2_teams").on("value", function(snap) {
 
 db.ref("/matches").on("value", function(snap) {
   var data = snap.val() || {};
+  for (var tag in _osxTeams) _osxTeams[tag].mp = 0;
   for (var key in data) {
     if (!/^match\d+$/.test(key)) continue;
     var node = data[key];
@@ -158,7 +160,6 @@ db.ref("/matches").on("value", function(snap) {
       if (!tn || typeof tn !== "object" || tn["0_hash"] === undefined) continue;
       osxEnsure(tag, tn["4_teamName"] || tn["1_teamName"] || tag);
       _osxTeams[tag].mp++;
-      if (Number(tn["0_hash"]) === 1) _osxTeams[tag].booyah++;
     }
   }
   osxScheduleRender();
