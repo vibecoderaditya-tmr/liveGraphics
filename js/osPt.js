@@ -39,7 +39,7 @@ function cssVarSec(name) {
 }
 
 function osxEnsure(tag, name) {
-  if (!_osxTeams[tag]) _osxTeams[tag] = { tag: tag, name: name || tag, kills: 0, place: 0, mp: 0, booyah: 0 };
+  if (!_osxTeams[tag]) _osxTeams[tag] = { tag: tag, name: name || tag, kills: 0, place: 0, mp: 0, booyah: 0, cr: 0, wcr: 0 };
   else if (name && (!_osxTeams[tag].name || _osxTeams[tag].name === tag)) _osxTeams[tag].name = name;
 }
 
@@ -50,13 +50,15 @@ function osxApplyTeam(node, tag) {
   var p = Number(node["4_placePoints"]) || 0;
   if (k) _osxTeams[tag].kills = k;
   if (p) _osxTeams[tag].place = p;
+  _osxTeams[tag].cr = node.isCrActivated == 1 ? 1 : 0;
+  _osxTeams[tag].wcr = node.wonByCR == 1 ? 1 : 0;
 }
 
 function osxEntries() {
   return Object.keys(_osxTeams).map(function(tag) {
     var k = _osxTeams[tag].kills || 0;
     var p = _osxTeams[tag].place || 0;
-    return { tag: tag, name: _osxTeams[tag].name, kills: k, place: p, total: k + p, mp: _osxTeams[tag].mp || 0, booyah: _osxTeams[tag].booyah || 0 };
+    return { tag: tag, name: _osxTeams[tag].name, kills: k, place: p, total: k + p, mp: _osxTeams[tag].mp || 0, booyah: _osxTeams[tag].booyah || 0, cr: _osxTeams[tag].cr || 0, wcr: _osxTeams[tag].wcr || 0 };
   });
 }
 
@@ -89,7 +91,10 @@ function osxRender(animate) {
     for (var r = 0; r < rowsPerCol; r++) {
       var idx = c * rowsPerCol + r;
       var row = document.createElement("div");
-      row.className = "osx-row";
+      var rowCls = "osx-row";
+      if (entries[idx].wcr === 1) rowCls += " osx-row-wcr";
+      else if (entries[idx].cr === 1) rowCls += " osx-row-cr";
+      row.className = rowCls;
       if (idx < entries.length) {
         var e = entries[idx];
         var place = Math.max(0, e.place);

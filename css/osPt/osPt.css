@@ -40,6 +40,8 @@ html, body {
   --osx-right-bg: #0f0f0f;
   --osx-right-text: #ffffff;
   --osx-border: 1px solid rgba(255,255,255,0.4);
+  --booyahHighlight: #ffd700;
+  --booyahText: #141414;
 
   /* --- osPt animations --- */
   --osx-anim-hdr-dur: 0.5s;
@@ -50,6 +52,7 @@ html, body {
   --osx-anim-text-stagger: 0.08s;
   --osx-anim-text-start: 0.8;
   --osx-anim-hide-dur: 1s;
+  --osx-anim-hl-dur: 0.7s;
 }
 
 .osPrm {
@@ -158,6 +161,70 @@ html, body {
 
 .osx-txt {
   display: inline-block;
+}
+
+.osx-row.osx-row-wcr {
+  background: #301E10;
+  border-color: #301E10;
+  transition: background-color var(--osx-anim-hl-dur) ease,
+              border-color var(--osx-anim-hl-dur) ease;
+}
+
+.osx-row.osx-row-wcr .osx-rank,
+.osx-row.osx-row-wcr .osx-team,
+.osx-row.osx-row-wcr .osx-num {
+  background: #301E10;
+  color: #ffffff;
+  transition: background-color var(--osx-anim-hl-dur) ease,
+              color var(--osx-anim-hl-dur) ease;
+}
+
+.osx-anim .osx-row.osx-row-wcr {
+  background: transparent;
+  border: var(--osx-border);
+}
+
+.osx-anim .osx-row.osx-row-wcr .osx-rank,
+.osx-anim .osx-row.osx-row-wcr .osx-team {
+  background: var(--osx-left-bg);
+  color: var(--osx-left-text);
+}
+
+.osx-anim .osx-row.osx-row-wcr .osx-num {
+  background: var(--osx-right-bg);
+  color: var(--osx-right-text);
+}
+
+.osx-row.osx-row-cr {
+  background: var(--booyahHighlight);
+  border-color: var(--booyahHighlight);
+  transition: background-color var(--osx-anim-hl-dur) ease,
+              border-color var(--osx-anim-hl-dur) ease;
+}
+
+.osx-row.osx-row-cr .osx-rank,
+.osx-row.osx-row-cr .osx-team,
+.osx-row.osx-row-cr .osx-num {
+  background: var(--booyahHighlight);
+  color: var(--booyahText);
+  transition: background-color var(--osx-anim-hl-dur) ease,
+              color var(--osx-anim-hl-dur) ease;
+}
+
+.osx-anim .osx-row.osx-row-cr {
+  background: transparent;
+  border: var(--osx-border);
+}
+
+.osx-anim .osx-row.osx-row-cr .osx-rank,
+.osx-anim .osx-row.osx-row-cr .osx-team {
+  background: var(--osx-left-bg);
+  color: var(--osx-left-text);
+}
+
+.osx-anim .osx-row.osx-row-cr .osx-num {
+  background: var(--osx-right-bg);
+  color: var(--osx-right-text);
 }
 
 .osx-team {
