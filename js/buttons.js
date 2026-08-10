@@ -59,6 +59,16 @@ var RED = "#dc2626";
 var state = {};
 var els = {};
 
+function toggleFullscreen() {
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  } else {
+    var el = document.documentElement;
+    if (el.requestFullscreen) el.requestFullscreen();
+  }
+}
+window.toggleFullscreen = toggleFullscreen;
+
 function buildEl(id, cfg) {
   var a = cfg.action ? ACTIONS[cfg.action] : null;
   var el = document.createElement("div");
