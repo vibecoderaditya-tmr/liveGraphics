@@ -7,7 +7,7 @@ html, body {
 
 :root {
   /* --- osPt layout --- */
-  --osx-cols-w: 1920px;
+  --osx-cols-w: 1820px;
   --osx-cols-h: 505px;
   --osx-col-gap: 20px;
   --osx-hdr-h: 69px;

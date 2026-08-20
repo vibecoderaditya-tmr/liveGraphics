@@ -369,14 +369,14 @@ var TABS = [
           { key: 'pmt-top-img-w', label: 'BooyahTeam Img W', desc: 'BooyahTeam image width', default: 600 },
           { key: 'pmt-top-img-h', label: 'BooyahTeam Img H', desc: 'BooyahTeam image height', default: 600 },
           { key: 'pmt-top-img-x', label: 'BooyahTeam Img X', desc: 'BooyahTeam image left offset', default: 100 },
-          { key: 'pmt-top-img-y', label: 'BooyahTeam Img Y', desc: 'BooyahTeam image top offset', default: -172 },
+          { key: 'pmt-top-img-y', label: 'BooyahTeam Img Y', desc: 'BooyahTeam image top offset', default: -127 },
           { key: 'pmt-top-logo', label: 'Team Logo Size', desc: 'Team logo size', default: 169 },
           { key: 'pmt-top-logo-x', label: 'Team Logo X', desc: 'Team logo left offset', default: 220 },
           { key: 'pmt-top-logo-y', label: 'Team Logo Y', desc: 'Team logo top offset', default: 80 },
           { key: 'pmt-top-title-w', label: 'Booyah Img W', desc: 'Booyah image width', default: 600 },
           { key: 'pmt-top-title-h', label: 'Booyah Img H', desc: 'Booyah image height', default: 600 },
           { key: 'pmt-top-title-x', label: 'Booyah Img X', desc: 'Booyah image left offset', default: -128 },
-          { key: 'pmt-top-title-y', label: 'Booyah Img Y', desc: 'Booyah image top offset', default: -144 }
+          { key: 'pmt-top-title-y', label: 'Booyah Img Y', desc: 'Booyah image top offset', default: -127 }
         ]
       },
       {
@@ -385,8 +385,8 @@ var TABS = [
           { key: 'pmt-cols-w', label: 'Columns Width', desc: 'Leaderboard width', default: 1850 },
           { key: 'pmt-cols-h', label: 'Columns Height', desc: 'Leaderboard height', default: 505 },
           { key: 'pmt-col-gap', label: 'Column Gap', desc: 'Gap between the two columns', default: 20 },
-          { key: 'pmt-x', label: 'Layout X', desc: 'Layout left offset', default: 210 },
-          { key: 'pmt-y', label: 'Layout Y', desc: 'Layout top offset', default: 110 },
+          { key: 'pmt-x', label: 'Layout X', desc: 'Layout horizontal offset from center', default: 0 },
+          { key: 'pmt-y', label: 'Layout Y', desc: 'Layout vertical offset from center', default: 0 },
           { key: 'pmt-gap-y', label: 'Vertical Gap', desc: 'Gap between top section and columns', default: 20 }
         ]
       },

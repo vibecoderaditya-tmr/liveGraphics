@@ -15,8 +15,8 @@ html, body {
   --pmt-hdr-h: 69px;
   --pmt-row-h: 69px;
   --pmt-gap-y: 20px;
-  --pmt-x: 210px;
-  --pmt-y: 110px;
+  --pmt-x: 0px;
+  --pmt-y: 0px;
   --pmt-rank-w: 100px;
   --pmt-elim-w: 100px;
   --pmt-place-w: 100px;
@@ -35,14 +35,14 @@ html, body {
   --pmt-top-img-w: 600px;
   --pmt-top-img-h: 600px;
   --pmt-top-img-x: 100px;
-  --pmt-top-img-y: -172px;
+  --pmt-top-img-y: -127px;
   --pmt-top-logo: 169px;
   --pmt-top-logo-x: 220px;
   --pmt-top-logo-y: 80px;
   --pmt-top-title-w: 600px;
   --pmt-top-title-h: 600px;
   --pmt-top-title-x: -128px;
-  --pmt-top-title-y: -144px;
+  --pmt-top-title-y: -127px;
   --pmt-hdr-bg: #1f2937;
   --pmt-hdr-text: #ffffff;
   --pmt-left-bg: #00499b;
@@ -76,8 +76,9 @@ html, body {
 
 .pmt-wrap {
   position: absolute;
-  left: var(--pmt-x);
-  top: var(--pmt-y);
+  left: calc(50% + var(--pmt-x));
+  top: calc(50% + var(--pmt-y));
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   gap: var(--pmt-gap-y);
